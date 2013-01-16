@@ -1,0 +1,24 @@
+TODO
+====
+
+* the script locations should be changed in the next version so they don't sit
+   next to teh rPi's example development code that ships with teh stock rPi
+* the system isn't optimised and should be : cleanup and making it as close to
+  stock as possible
+* Starting process should be more obfuscated
+* strip exif data and leave it in a .txt file next to the image it came from
+  => exiftool
+* set filesystem of OS in RO (physical switch and/or remount OS)
+* mount source key in RO and noexec
+* mount target key with noexec
+* convert spreadsheets in csv ?
+* convert documents (pdfs/*office/...) in images ?
+* Have a look at Ghostscript to work on PDFs (.pdf -> .eps -> .png?)
+* do not run the conversions as root
+* take eth0 down in /etc/netowrk/interfaces or in the groomer script disable the
+  interface before anything happens
+* hdmi should stay up: solveable by poking the power management timer
+  (better not to disable the PM completely)
+* get rid of pdfbox ?
+* scripts to generate a SD card automatically (win/mac/linux)
+* move the scripts away from /opt/
