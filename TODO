@@ -14,11 +14,12 @@ TODO
 * convert spreadsheets in csv ?
 * convert documents (pdfs/*office/...) in images ?
 * Have a look at Ghostscript to work on PDFs (.pdf -> .eps -> .png?)
-* do not run the conversions as root
+* do not run the conversions as root -> run in chroot
 * take eth0 down in /etc/netowrk/interfaces or in the groomer script disable the
   interface before anything happens
 * hdmi should stay up: solveable by poking the power management timer
   (better not to disable the PM completely)
-* get rid of pdfbox ?
+* get rid of pdfbox. remove need for java
 * scripts to generate a SD card automatically (win/mac/linux)
 * move the scripts away from /opt/
+* strip back libreoffice to minimum required packages. in particular, if possible, remove libreoffice-java-common package
