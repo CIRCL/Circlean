@@ -23,3 +23,4 @@ TODO
 * scripts to generate a SD card automatically (win/mac/linux)
 * move the scripts away from /opt/
 * strip back libreoffice to minimum required packages. in particular, if possible, remove libreoffice-java-common package
+* Write the groomer log on the destination key
