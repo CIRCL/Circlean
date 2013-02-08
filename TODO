@@ -9,8 +9,8 @@ TODO
 * strip exif data and leave it in a .txt file next to the image it came from
   => exiftool
 * set filesystem of OS in RO (physical switch and/or remount OS)
-* mount source key in RO and noexec
-* mount target key with noexec
+[OK] mount source key in RO and noexec <= also nosuid and nodev
+[OK] mount target key with noexec <= also nosuid and nodev
 * convert spreadsheets in csv ?
 * convert documents (pdfs/*office/...) in images ?
 * Have a look at Ghostscript to work on PDFs (.pdf -> .eps -> .png?)
