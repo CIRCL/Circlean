@@ -68,7 +68,7 @@ fi
 if mount|grep $DST; then
     umount $DST || true
 fi
-mount -o noexec ${DEV_DST} ${DST}
+mount -o noexec,nosuid,nodev ${DEV_DST} ${DST}
 if [ $? -ne 0 ]; then
     echo Unable to mount ${DEV_DST} on ${DST}
     exit
@@ -98,7 +98,7 @@ do
         umount $SRC
     fi
 
-    mount -o noexec -r $partition $SRC
+    mount -o noexec,nosuid,nodev -r $partition $SRC
     if [ $? -ne 0 ]; then
         echo Unable to mount ${partition} on $SRC
     else
