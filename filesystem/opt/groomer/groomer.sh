@@ -3,12 +3,7 @@
 set -e
 set -x
 
-#Constraints
-DEV_SRC='/dev/sdf'
-DEV_DST='/dev/sdg1'
-HOME=testing
-############
-
+source ./constraint.sh
 
 SRC=${HOME}/src
 DST=${HOME}/dst
@@ -20,20 +15,19 @@ LOGS=${DST}/logs
 
 clean(){
     echo Cleaning.
-    sync
+    ${SUDO} ${SYNC}
 
     # Cleanup source
-    umount $SRC
+    ${SUDO} ${UMOUNT} $SRC || true
     rm -rf $SRC
 
     # Cleanup destination
     rm -rf ${TEMP}
     rm -rf ${ZIPTEMP}
-    umount $DST
+    ${SUDO} ${UMOUNT} $DST || true
     rm -rf $DST
 
-    # Only if running on a rPi
-    #/sbin/shutdown -h now
+    exit
 }
 
 trap clean EXIT TERM INT
@@ -64,13 +58,14 @@ if [ ! -d $DST ]; then
     mkdir $DST
 fi
 
-# Mount and prepare destination device
-if mount|grep $DST; then
-    umount $DST || true
+# mount and prepare destination device
+if ${MOUNT}|grep $DST; then
+    ${SUDO} ${UMOUNT} $DST || true
 fi
-mount -o noexec,nosuid,nodev ${DEV_DST} ${DST}
+# uid= only works on a vfat FS. What should wedo if we get an ext* FS ?
+${SUDO} ${MOUNT} -t vfat -o user,noexec,nosuid,nodev,rw,uid=`${ID}` ${DEV_DST} ${DST}
 if [ $? -ne 0 ]; then
-    echo Unable to mount ${DEV_DST} on ${DST}
+    echo Unable to ${MOUNT} ${DEV_DST} on ${DST}
     exit
 else
     echo 'Target USB device ('${DEV_DST}') mounted at '${DST}
@@ -94,13 +89,13 @@ for partition in ${DEV_PARTITIONS}
 do
     # Processing a partition
     echo Processing partition: ${partition}
-    if mount|grep $SRC; then
-        umount $SRC
+    if ${MOUNT}|grep $SRC; then
+        ${SUDO} ${UMOUNT} $SRC
     fi
 
-    mount -o noexec,nosuid,nodev -r $partition $SRC
+    ${SUDO} ${MOUNT} -o noexec,nosuid,nodev -r $partition $SRC
     if [ $? -ne 0 ]; then
-        echo Unable to mount ${partition} on $SRC
+        echo Unable to ${MOUNT} ${partition} on $SRC
     else
         echo $partition mounted at $SRC
 
