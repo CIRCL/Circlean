@@ -22,5 +22,8 @@ TODO
 * get rid of pdfbox. remove need for java
 * scripts to generate a SD card automatically (win/mac/linux)
 * move the scripts away from /opt/
-* strip back libreoffice to minimum required packages. in particular, if possible, remove libreoffice-java-common package
+* strip back libreoffice to minimum required packages. in particular, if possible,
+  remove libreoffice-java-common package
 * Write the groomer log on the destination key
+* use /etc/mime.types and file -b --mime-type <filename> to find out the type of
+  the file
