@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -e
+set -x
+
+if [ $# -eq 2 ]; then
+    mount -o noexec,nosuid,nodev,ro "${1}" "${2}"
+    exit 0
+else
+    echo 'Invalid number of arguments.'
+    exit 1
+fi

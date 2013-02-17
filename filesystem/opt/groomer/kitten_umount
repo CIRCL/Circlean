@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -e
+set -x
+
+if [ $# -eq 1 ]; then
+    umount $1
+    exit 0
+else
+    echo "Invalid number of arguments."
+    exit 1
+fi

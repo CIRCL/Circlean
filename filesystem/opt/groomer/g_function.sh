@@ -3,15 +3,6 @@
 set -e
 set -x
 
-# groom da kitteh!
-
-SRC='/dev/sdb'
-PARTITIONS=`ls '${SRC}' | grep '${SRC}[1-9][0-6]*'`
-DST='/dev/sdc1'
-
-GH=/opt/groomer/
-JAVA=/usr/bin/java
-
 pdfCopyDirty()
 {
     # copy all pdf's over to their relative same locations
@@ -84,83 +75,4 @@ unpackZip()
 	rm -rf ${ZIPTEMP}/*
     fi
 }
-
-SRC=/src
-DST=/dst
-if [ ! -d $SRC ]; then
-    mkdir $SRC
-fi
-if [ ! -d $DST ]; then
-    mkdir $DST
-fi
-
-TEMP=/dst/temp
-ZIPTEMP=/dst/ziptemp
-FL=${DST}/filelist.txt
-
-umount $DST 2> /dev/null
-mount /dev/sdb1 $DST
-if [ $? -ne 0 ]; then
-#    echo Could not mount target USB stick!
-    exit 1
-else
-    echo Target USB device mounted at $DST
-    rm -rf $DST/FROM_PARTITION_*
-
-    # mount temp and make sure it's empty
-    mkdir -p $TEMP
-    mkdir -p $ZIPTEMP
-
-    rm -rf ${TEMP}/*
-    rm -rf ${ZIPTEMP}/*
-
-    echo Full file list from source USB > $FL
-fi
-
-COPYDIRTYPDF=0
-PARTCOUNT=1
-PARTITIONS=`ls /dev/sda* | grep '/dev/sda[1-9][0-6]*'`
-for partition in $PARTITIONS
-do
-    echo Processing partition: ${PARTCOUNT} $partition
-    umount $SRC 2> /dev/null
-    mount -r $partition $SRC
-    if [ $? -ne 0 ]; then
-	echo could not mount $partition at /$SRC
-    else
-	echo $partition mounted at $SRC
-
-	echo PARTITION $PARTCOUNT >> $FL
-	find $SRC/* -printf 'echo %p | sed s:$SRC:: >> $FL \n' | while read l; do eval $l; done
-
-	# create a director on sdb named PARTION_n
-	targetDir=${DST}/FROM_PARTITION_${PARTCOUNT}
-	echo copying to: $targetDir
-	mkdir -p $targetDir
-
-	if [ $COPYDIRTYPDF -eq 1 ]; then
-	    pdfCopyDirty $SRC $targetDir
-	else
-	    pdfCopyClean $SRC $targetDir
-	fi
-
-	# copy stuff
-	copySafeFiles $SRC $targetDir
-	convertCopyFiles $SRC $targetDir $TEMP
-	rm -rf ${TEMP}/*
-
-	# unpack and process archives
-	unpackZip $SRC $targetDir $TEMP
-    fi
-    let PARTCOUNT=$PARTCOUNT+1
-done
-
-#cleanup
-rm -rf ${TEMP}*
-rm -rf ${ZIPTEMP}*
-sync
-umount $SRC
-umount $DST
-
-/sbin/shutdown -h now
 
