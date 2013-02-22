@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -e
-set -x
+#set -x
 
 source ./constraint.sh
 if ! [ "${ID}" -ge "1000" ]; then
@@ -9,14 +9,7 @@ if ! [ "${ID}" -ge "1000" ]; then
     exit
 fi
 
-
-SRC="${HOME}/src"
-DST="${HOME}/dst"
-
-TEMP="${DST}/temp"
-ZIPTEMP="${DST}/ziptemp"
-LOGS="${DST}/logs"
-
+source ./functions.sh
 
 clean(){
     echo Cleaning.
@@ -111,6 +104,8 @@ do
         target_dir="${DST}/FROM_PARTITION_${PARTCOUNT}"
         echo "copying to: ${target_dir}"
         mkdir -p "${target_dir}"
+
+        main ${target_dir}
 
         #if [ $COPYDIRTYPDF -eq 1 ]; then
         #    pdfCopyDirty ${SRC} $targetDir

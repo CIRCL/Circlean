@@ -8,13 +8,13 @@ TODO
 * Starting process should be more obfuscated
 * strip exif data and leave it in a .txt file next to the image it came from
   => exiftool
-* set filesystem of OS in RO (physical switch and/or remount OS)
+[Done with remount] set filesystem of OS in RO (physical switch and/or remount OS)
 [OK] mount source key in RO and noexec <= also nosuid and nodev
 [OK] mount target key with noexec <= also nosuid and nodev
 * convert spreadsheets in csv ?
 * convert documents (pdfs/*office/...) in images ?
 * Have a look at Ghostscript to work on PDFs (.pdf -> .eps -> .png?)
-* do not run the conversions as root -> run in chroot
+[do everything as user] do not run the conversions as root -> run in chroot
 * take eth0 down in /etc/netowrk/interfaces or in the groomer script disable the
   interface before anything happens
 * hdmi should stay up: solveable by poking the power management timer

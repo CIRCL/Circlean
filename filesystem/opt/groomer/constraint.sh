@@ -1,8 +1,17 @@
-DEV_SRC='/dev/sdb'
-DEV_DST='/dev/sdc1'
+DEV_SRC='/dev/sdf'
+DEV_DST='/dev/sdg1'
 # User allowed to do the following commands without password
 USERNAME='kitten'
 HOME="/home/${USERNAME}"
+
+# Paths used in multiple scripts
+SRC="${HOME}/src"
+
+DST="${HOME}/dst"
+TEMP="${DST}/temp"
+ZIPTEMP="${DST}/ziptemp"
+LOGS="${DST}/logs"
+
 
 # commands
 SUDO='/usr/bin/sudo'
