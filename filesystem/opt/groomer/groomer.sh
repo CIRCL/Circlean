@@ -120,6 +120,7 @@ do
 
         # unpack and process archives
         #unpackZip ${SRC} $targetDir $TEMP
+        ls -lR "${target_dir}"
     fi
     let PARTCOUNT=${PARTCOUNT}+1
 done

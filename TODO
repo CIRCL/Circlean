@@ -25,5 +25,6 @@ TODO
 * strip back libreoffice to minimum required packages. in particular, if possible,
   remove libreoffice-java-common package
 * Write the groomer log on the destination key
-* use /etc/mime.types and file -b --mime-type <filename> to find out the type of
+[Done] use /etc/mime.types and file -b --mime-type <filename> to find out the type of
   the file
+* Extract metadata from all the files => https://mat.boum.org/
