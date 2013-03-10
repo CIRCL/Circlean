@@ -1,6 +1,11 @@
 #!/bin/bash
 
 source ./constraint.sh
+source ./constraint_conv.sh
+
+# https://blogs.msdn.com/b/vsofficedeveloper/archive/2008/05/08/office-2007-open-xml-mime-types.aspx
+# http://plan-b-for-openoffice.org/glossary/term/mime-type
+OFFICE_MIME="msword|vnd.openxmlformats-officedocument.*|vnd.ms-*|vnd.oasis.opendocument*"
 
 copy(){
     src_file=${1}
@@ -12,6 +17,7 @@ copy(){
 # Plain text
 text(){
     echo Text file ${1}
+    # XXX: append .txt ?
     copy ${1} ${2}${1##$SRC}
 }
 
@@ -40,17 +46,33 @@ application(){
     dst_file=${2}${1##$SRC}
     mime_details=${3}
     case ${mime_details} in
-        "pdf")
+        pdf)
             echo "Got a pdf"
-            # WARNING: This command randomly fails, and loop indefinitely...
-            pdf2ps -dSAFER -sOutputFile="%stdout" ${src_file} | ps2pdfwr - ${dst_file}
+            ${PDF} --dest-dir ${2} ${src_file}
+            ;;
+        ${OFFICE_MIME})
+            echo "MS Office or ODF document"
+            temp=${2}/temp
+            mkdir ${temp}
+            ${LO} --convert-to pdf --outdir ${temp} ${src_file}
+            ${PDF} --dest-dir ${2} ${temp}/*.pdf
+            rm -rf ${temp}
             ;;
         *xml*)
             echo "Got an XML"
-            text ${1} ${2}
+            text ${src_file} ${2}
+            ;;
+        x-dosexec)
+            echo "Win executable"
+            copy ${src_file} ${dst_file}_DANGEROUS
+            ;;
+        octet-stream)
+            echo "Unknown type."
+            copy ${src_file} ${dst_file}.bin
             ;;
         *)
-            echo "Unknown type."
+            echo "Unhandled type"
+            copy ${src_file} ${dst_file}
             ;;
     esac
 

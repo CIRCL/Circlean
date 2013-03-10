@@ -28,3 +28,9 @@ TODO
 [Done] use /etc/mime.types and file -b --mime-type <filename> to find out the type of
   the file
 * Extract metadata from all the files => https://mat.boum.org/
+
+HTML Files
+==========
+
+- disable JS
+- cleanup external imports (js/css/images)
