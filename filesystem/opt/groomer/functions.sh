@@ -3,9 +3,6 @@
 source ./constraint.sh
 source ./constraint_conv.sh
 
-# https://blogs.msdn.com/b/vsofficedeveloper/archive/2008/05/08/office-2007-open-xml-mime-types.aspx
-# http://plan-b-for-openoffice.org/glossary/term/mime-type
-OFFICE_MIME="msword|vnd.openxmlformats-officedocument.*|vnd.ms-*|vnd.oasis.opendocument*"
 
 copy(){
     src_file=${1}
@@ -50,11 +47,13 @@ application(){
             echo "Got a pdf"
             ${PDF} --dest-dir ${2} ${src_file}
             ;;
-        ${OFFICE_MIME})
+        msword|vnd.openxmlformats-officedocument.*|vnd.ms-*|vnd.oasis.opendocument*)
+            # https://blogs.msdn.com/b/vsofficedeveloper/archive/2008/05/08/office-2007-open-xml-mime-types.aspx
+            # http://plan-b-for-openoffice.org/glossary/term/mime-type
             echo "MS Office or ODF document"
             temp=${2}/temp
             mkdir ${temp}
-            ${LO} --convert-to pdf --outdir ${temp} ${src_file}
+            ${LO} --headless --convert-to pdf --outdir ${temp} ${src_file}
             ${PDF} --dest-dir ${2} ${temp}/*.pdf
             rm -rf ${temp}
             ;;
