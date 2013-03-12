@@ -3,6 +3,8 @@
 source ./constraint.sh
 source ./constraint_conv.sh
 
+RECURSIVE_ARCHIVE_MAX=3
+RECURSIVE_ARCHIVE_CURRENT=0
 
 copy(){
     src_file=${1}
@@ -36,6 +38,10 @@ video(){
 }
 
 # Random - Used
+
+archive(){
+}
+
 
 application(){
     echo App file ${1}
@@ -107,6 +113,19 @@ main(){
     fi
     # first param is the destination dir
     dest=${1}
+
+
+    if [ ${2} ]; then
+        RECURSIVE_ARCHIVE_CURRENT=${RECURSIVE_ARCHIVE_CURRENT}+1
+        SRC=${3}
+        if [ ${RECURSIVE_ARCHIVE_CURRENT} -gt ${RECURSIVE_ARCHIVE_MAX} ]; then
+            echo Archive bomb.
+            rm -rf ${SRC}
+            exit
+        fi
+    else
+        RECURSIVE_ARCHIVE_CURRENT=0
+    fi
 
     FILE_COMMAND='file -b --mime-type'
     FILE_LIST=`find ${SRC} -type f`
