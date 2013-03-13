@@ -1,5 +1,8 @@
 #!/bin/bash
 
+set -e
+set -x
+
 source ./constraint.sh
 source ./constraint_conv.sh
 
@@ -17,36 +20,44 @@ copy(){
 text(){
     echo Text file ${1}
     # XXX: append .txt ?
-    copy ${1} ${2}${1##$SRC}
+    copy ${1} ${2}${1##$CURRENT_SRC}
 }
 
 # Multimedia
 ## WARNING: They are assumed safe.
 audio(){
     echo Audio file ${1}
-    copy ${1} ${2}${1##$SRC}
+    copy ${1} ${2}${1##$CURRENT_SRC}
 }
 
 image(){
     echo Image file ${1}
-    copy ${1} ${2}${1##$SRC}
+    copy ${1} ${2}${1##$CURRENT_SRC}
 }
 
 video(){
     echo Video file ${1}
-    copy ${1} ${2}${1##$SRC}
+    copy ${1} ${2}${1##$CURRENT_SRC}
 }
 
 # Random - Used
 
 archive(){
+    echo Archive file ${1}
+    src_file=${1}
+    dst_dir=${2}
+    temp_extract_dir=${dst_dir}_temp
+    mkdir -p ${temp_extract_dir}
+    ${UNPACKER} x ${src_file} -o${temp_extract_dir} -bd
+    main ${dst_dir} ${RECURSIVE_ARCHIVE_CURRENT} ${temp_extract_dir}
+    rm -rf ${temp_extract_dir}
 }
 
 
 application(){
     echo App file ${1}
     src_file=${1}
-    dst_file=${2}${1##$SRC}
+    dst_file=${2}${1##$CURRENT_SRC}
     mime_details=${3}
     case ${mime_details} in
         pdf)
@@ -71,6 +82,10 @@ application(){
             echo "Win executable"
             copy ${src_file} ${dst_file}_DANGEROUS
             ;;
+        x-gzip|x-7z-compressed)
+            echo "Compressed file"
+            archive ${src_file} ${dst_file}
+            ;;
         octet-stream)
             echo "Unknown type."
             copy ${src_file} ${dst_file}.bin
@@ -88,22 +103,22 @@ application(){
 
 example(){
     echo Example file ${1}
-    copy ${1} ${2}${1##$SRC}
+    copy ${1} ${2}${1##$CURRENT_SRC}
 }
 
 message(){
     echo Message file ${1}
-    copy ${1} ${2}${1##$SRC}
+    copy ${1} ${2}${1##$CURRENT_SRC}
 }
 
 model(){
     echo Model file ${1}
-    copy ${1} ${2}${1##$SRC}
+    copy ${1} ${2}${1##$CURRENT_SRC}
 }
 
 multipart(){
     echo Multipart file ${1}
-    copy ${1} ${2}${1##$SRC}
+    copy ${1} ${2}${1##$CURRENT_SRC}
 }
 
 main(){
@@ -114,21 +129,29 @@ main(){
     # first param is the destination dir
     dest=${1}
 
+    if [ -z ${2} ]; then
+        CURRENT_SRC=${SRC}
+    else
+        CURRENT_SRC=${2}
+    fi
 
-    if [ ${2} ]; then
-        RECURSIVE_ARCHIVE_CURRENT=${RECURSIVE_ARCHIVE_CURRENT}+1
-        SRC=${3}
+
+    if [ -z ${2} ]; then
+        RECURSIVE_ARCHIVE_CURRENT=0
+    else
+        RECURSIVE_ARCHIVE_CURRENT=${2}
+        CURRENT_SRC=${3}
         if [ ${RECURSIVE_ARCHIVE_CURRENT} -gt ${RECURSIVE_ARCHIVE_MAX} ]; then
             echo Archive bomb.
-            rm -rf ${SRC}
-            exit
+            rm -rf ${CURRENT_SRC}
+            return
+        else
+            RECURSIVE_ARCHIVE_CURRENT=`expr ${RECURSIVE_ARCHIVE_CURRENT} + 1`
         fi
-    else
-        RECURSIVE_ARCHIVE_CURRENT=0
     fi
 
     FILE_COMMAND='file -b --mime-type'
-    FILE_LIST=`find ${SRC} -type f`
+    FILE_LIST=`find ${CURRENT_SRC} -type f`
     for file in ${FILE_LIST}; do
         mime=`$FILE_COMMAND ${file}`
         echo ${mime}
