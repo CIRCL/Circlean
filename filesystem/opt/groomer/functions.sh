@@ -1,13 +1,14 @@
 #!/bin/bash
 
 set -e
-set -x
+#set -x
 
 source ./constraint.sh
 source ./constraint_conv.sh
 
 RECURSIVE_ARCHIVE_MAX=3
 RECURSIVE_ARCHIVE_CURRENT=0
+ARCHIVE_BOMB=0
 
 copy(){
     src_file=${1}
@@ -44,13 +45,18 @@ video(){
 
 archive(){
     echo Archive file ${1}
-    src_file=${1}
-    dst_dir=${2}
-    temp_extract_dir=${dst_dir}_temp
-    mkdir -p ${temp_extract_dir}
-    ${UNPACKER} x ${src_file} -o${temp_extract_dir} -bd
-    main ${dst_dir} ${RECURSIVE_ARCHIVE_CURRENT} ${temp_extract_dir}
-    rm -rf ${temp_extract_dir}
+    if [ ${ARCHIVE_BOMB} -eq 0 ]; then
+        temp_extract_dir=${2}_temp
+        mkdir -p ${temp_extract_dir}
+        ${UNPACKER} x ${1} -o${temp_extract_dir} -bd
+        main ${2} ${RECURSIVE_ARCHIVE_CURRENT} ${temp_extract_dir} || true
+        rm -rf ${temp_extract_dir}
+    fi
+    if [ ${ARCHIVE_BOMB} -eq 1 ]; then
+        rm -rf ${2}
+        rm -rf ${2}_temp
+    fi
+    CURRENT_SRC=${SRC}
 }
 
 
@@ -82,7 +88,7 @@ application(){
             echo "Win executable"
             copy ${src_file} ${dst_file}_DANGEROUS
             ;;
-        x-gzip|x-7z-compressed)
+        x-gzip|x-tar|x-7z-compressed)
             echo "Compressed file"
             archive ${src_file} ${dst_file}
             ;;
@@ -126,24 +132,17 @@ main(){
         echo "Please specify the destination directory."
         exit
     fi
-    # first param is the destination dir
-    dest=${1}
 
     if [ -z ${2} ]; then
         CURRENT_SRC=${SRC}
-    else
-        CURRENT_SRC=${2}
-    fi
-
-
-    if [ -z ${2} ]; then
         RECURSIVE_ARCHIVE_CURRENT=0
+        ARCHIVE_BOMB=0
     else
         RECURSIVE_ARCHIVE_CURRENT=${2}
         CURRENT_SRC=${3}
         if [ ${RECURSIVE_ARCHIVE_CURRENT} -gt ${RECURSIVE_ARCHIVE_MAX} ]; then
             echo Archive bomb.
-            rm -rf ${CURRENT_SRC}
+            ARCHIVE_BOMB=1
             return
         else
             RECURSIVE_ARCHIVE_CURRENT=`expr ${RECURSIVE_ARCHIVE_CURRENT} + 1`
@@ -153,11 +152,14 @@ main(){
     FILE_COMMAND='file -b --mime-type'
     FILE_LIST=`find ${CURRENT_SRC} -type f`
     for file in ${FILE_LIST}; do
+        # first param is the destination dir
+        dest=${1}
+
         mime=`$FILE_COMMAND ${file}`
         echo ${mime}
-        main=`echo ${mime} | cut -f1 -d/`
+        main_mime=`echo ${mime} | cut -f1 -d/`
         details=`echo ${mime} | cut -f2 -d/`
-        case "${main}" in
+        case "${main_mime}" in
             "text")
                 text ${file} ${dest}
                 ;;
@@ -187,7 +189,7 @@ main(){
                 ;;
             *)
                 echo "This should never happen... :]"
-                echo $mime $main $details
+                echo $mime $main_mime $details
                 ;;
         esac
     done
