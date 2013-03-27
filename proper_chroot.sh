@@ -46,6 +46,8 @@ else
     exit
 fi
 
+# only needed at first chroot, but it does not hurt.
+#resize2fs /dev/loop1
 
 cp /usr/bin/qemu*arm* ${CHROOT_PATH}/usr/bin/
 
