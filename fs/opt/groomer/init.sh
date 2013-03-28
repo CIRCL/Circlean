@@ -12,7 +12,7 @@ fi
 
 clean(){
     echo Done, cleaning.
-    mount -o remount,rw /
+    #mount -o remount,rw /
     ${SYNC}
     # shutdown -h now
 }
@@ -20,7 +20,9 @@ clean(){
 trap clean EXIT TERM INT
 
 # Remount the root filesystem in RO mode
-mount -o remount,ro /
+#mount -o remount,ro /
+
+chown -R kitten:kitten /home/${USERNAME}/
 
 su  ${USERNAME} -c ./groomer.sh
 

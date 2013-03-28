@@ -19,7 +19,8 @@ fi
 
 if [ -e /dev/sda ]; then
   if [ -e /dev/sdb ]; then
-    /opt/groomer/init.sh
+    cd /opt/groomer
+    ./init.sh
     /sbin/shutdown -h now
   fi
 fi
