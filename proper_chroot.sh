@@ -1,8 +1,17 @@
 #!/bin/bash
 
+if [ "$(id -u)" != "0" ]; then
+   echo "This script must be run as root" 1>&2
+   exit 1
+fi
+ls /usr/bin/qemu*arm* > /dev/null 2>&1
+if [ ! -e ${?} ]; then
+    echo "You need qemu user static binaries." 1>&2
+    exit 1
+fi
+
 set -e
 set -x
-
 
 # If you use a partition...
 PARTITION_ROOTFS='/dev/mmcblk0p2'
@@ -46,9 +55,6 @@ else
     exit
 fi
 
-# only needed at first chroot, but it does not hurt.
-#resize2fs /dev/loop1
-
 cp /usr/bin/qemu*arm* ${CHROOT_PATH}/usr/bin/
 
 mount -o bind /dev ${CHROOT_PATH}/dev
@@ -59,6 +65,7 @@ mount -o bind /sys ${CHROOT_PATH}/sys
 mount -o bind /tmp ${CHROOT_PATH}/tmp
 
 cp -pf /etc/resolv.conf ${CHROOT_PATH}/etc
+
 mv ${CHROOT_PATH}/etc/ld.so.preload ${CHROOT_PATH}/etc/ld.so.preload_bkp
 
 chroot ${CHROOT_PATH}

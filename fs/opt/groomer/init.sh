@@ -12,8 +12,7 @@ fi
 
 clean(){
     echo Done, cleaning.
-    # Only if running on a rPi
-    # mount -o remount,rw /
+    mount -o remount,rw /
     ${SYNC}
     # shutdown -h now
 }
@@ -21,7 +20,7 @@ clean(){
 trap clean EXIT TERM INT
 
 # Remount the root filesystem in RO mode
-# mount -o remount,ro /
+mount -o remount,ro /
 
 su  ${USERNAME} -c ./groomer.sh
 

@@ -17,11 +17,9 @@ if [ "$_IP" ]; then
   printf "My IP address is %s\n" "$_IP"
 fi
 
-PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-
 if [ -e /dev/sda ]; then
   if [ -e /dev/sdb ]; then
-    /opt/groomer/groomer.sh
+    /opt/groomer/init.sh
     /sbin/shutdown -h now
   fi
 fi

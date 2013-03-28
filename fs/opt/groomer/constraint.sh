@@ -1,5 +1,5 @@
-DEV_SRC='/dev/sdf'
-DEV_DST='/dev/sdg1'
+DEV_SRC='/dev/sda'
+DEV_DST='/dev/sdb1'
 # User allowed to do the following commands without password
 USERNAME='kitten'
 HOME="/home/${USERNAME}"
