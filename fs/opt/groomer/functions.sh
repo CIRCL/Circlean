@@ -1,7 +1,7 @@
 #!/bin/bash
 
-set -e
-#set -x
+#set -e
+set -x
 
 source ./constraint.sh
 source ./constraint_conv.sh
@@ -149,13 +149,14 @@ main(){
         fi
     fi
 
-    FILE_COMMAND='file -b --mime-type'
     FILE_LIST=`find ${CURRENT_SRC} -type f`
+    SAVEIFS=$IFS
+    IFS=$(echo -en "\n\b")
     for file in ${FILE_LIST}; do
         # first param is the destination dir
         dest=${1}
 
-        mime=`$FILE_COMMAND ${file}`
+        mime=`file -b --mime-type ${file}`
         echo ${mime}
         main_mime=`echo ${mime} | cut -f1 -d/`
         details=`echo ${mime} | cut -f2 -d/`
@@ -193,5 +194,6 @@ main(){
                 ;;
         esac
     done
+    IFS=$SAVEIFS
 }
 
