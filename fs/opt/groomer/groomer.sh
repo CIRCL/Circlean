@@ -122,7 +122,7 @@ do
         #unpackZip ${SRC} $targetDir $TEMP
         ls -lR "${target_dir}"
     fi
-    let PARTCOUNT=${PARTCOUNT}+1
+    let PARTCOUNT=`expr $PARTCOUNT + 1`
 done
 
 # The cleanup is automatically done in the function clean called when

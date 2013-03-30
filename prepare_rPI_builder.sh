@@ -8,7 +8,9 @@ apt-get update
 apt-get dist-upgrade
 apt-get autoremove
 # System stuff to build
-apt-get install git devscripts cmake debhelper
+apt-get install git devscripts cmake debhelper vim
+# Needed dependencies for building libpoppler
+# TODO
 # Deps of pdf2htmlEX
 echo "deb http://ftp.de.debian.org/debian experimental" >> /etc/apt/sources.list
 apt-get update
