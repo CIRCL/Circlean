@@ -10,7 +10,10 @@ apt-get autoremove
 # System stuff to build
 apt-get install git devscripts cmake debhelper vim
 # Needed dependencies for building libpoppler
-# TODO
+apt-get install debhelper dpkg autotools-dev libglib2.0-dev libgtk2.0-dev \
+    libfontconfig1-dev libqt4-dev libcairo2-dev libopenjpeg-dev libjpeg-dev \
+    libpng-dev libtiff-dev liblcms2-dev libfreetype6-dev gtk-doc-tools pkg-config \
+    libgirepository1.0-dev gobject-introspection libglib2.0-doc libcairo2-doc
 # Deps of pdf2htmlEX
 echo "deb http://ftp.de.debian.org/debian experimental" >> /etc/apt/sources.list
 apt-get update
