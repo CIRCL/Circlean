@@ -17,9 +17,15 @@ set -x
 PARTITION_ROOTFS='/dev/mmcblk0p2'
 PARTITION_BOOT='/dev/mmcblk0p1'
 # If you use the img
+##### Debian
 IMAGE='2013-02-09-wheezy-raspbian.img'
 OFFSET_ROOTFS=$((122880 * 512))
 OFFSET_BOOT=$((8192 * 512))
+##### Arch
+#IMAGE='archlinux-hf-2013-02-11.img'
+#OFFSET_ROOTFS=$((186368 * 512))
+#OFFSET_BOOT=$((2048 * 512))
+############
 
 CHROOT_PATH='/mnt/arm_rPi'
 
@@ -29,8 +35,9 @@ clean(){
     rm ${CHROOT_PATH}/usr/bin/qemu*arm*
 
     umount ${CHROOT_PATH}/dev/pts
-    umount ${CHROOT_PATH}/dev/shm
+    #umount ${CHROOT_PATH}/dev/shm
     umount ${CHROOT_PATH}/dev
+    umount ${CHROOT_PATH}/run
     umount ${CHROOT_PATH}/proc
     umount ${CHROOT_PATH}/sys
     umount ${CHROOT_PATH}/tmp
@@ -41,6 +48,9 @@ clean(){
 }
 
 trap clean EXIT TERM INT
+
+export QEMU_CPU=arm1176
+#export QEMU_STRACE=1
 
 mkdir -p ${CHROOT_PATH}
 
@@ -57,11 +67,12 @@ fi
 
 cp /usr/bin/qemu*arm* ${CHROOT_PATH}/usr/bin/
 
+mount -o bind /run ${CHROOT_PATH}/run
 mount -o bind /dev ${CHROOT_PATH}/dev
-mount -o bind /dev/pts ${CHROOT_PATH}/dev/pts
-mount -o bind /dev/shm ${CHROOT_PATH}/dev/shm
-mount -o bind /proc ${CHROOT_PATH}/proc
-mount -o bind /sys ${CHROOT_PATH}/sys
+mount -t devpts pts ${CHROOT_PATH}/dev/pts
+#mount -o bind /dev/shm ${CHROOT_PATH}/dev/shm
+mount -t proc none ${CHROOT_PATH}/proc
+mount -t sysfs none ${CHROOT_PATH}/sys
 mount -o bind /tmp ${CHROOT_PATH}/tmp
 
 cp -pf /etc/resolv.conf ${CHROOT_PATH}/etc
