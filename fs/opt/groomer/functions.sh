@@ -13,8 +13,8 @@ ARCHIVE_BOMB=0
 copy(){
     src_file=${1}
     dst_file=${2}
-    mkdir -p `dirname ${dst_file}`
-    cp ${src_file} ${dst_file}
+    mkdir -p `dirname "${dst_file}"`
+    cp "${src_file}" "${dst_file}"
 }
 
 # Plain text
@@ -47,14 +47,14 @@ archive(){
     echo Archive file ${1}
     if [ ${ARCHIVE_BOMB} -eq 0 ]; then
         temp_extract_dir=${2}_temp
-        mkdir -p ${temp_extract_dir}
-        ${UNPACKER} x ${1} -o${temp_extract_dir} -bd
+        mkdir -p "${temp_extract_dir}"
+        ${UNPACKER} x "${1}" -o"${temp_extract_dir}" -bd
         main ${2} ${RECURSIVE_ARCHIVE_CURRENT} ${temp_extract_dir} || true
-        rm -rf ${temp_extract_dir}
+        rm -rf "${temp_extract_dir}"
     fi
     if [ ${ARCHIVE_BOMB} -eq 1 ]; then
-        rm -rf ${2}
-        rm -rf ${2}_temp
+        rm -rf "${2}"
+        rm -rf "${2}_temp"
     fi
     CURRENT_SRC=${SRC}
 }
@@ -68,17 +68,17 @@ application(){
     case ${mime_details} in
         pdf)
             echo "Got a pdf"
-            ${PDF} --dest-dir ${2} ${src_file}
+            ${PDF} --dest-dir "${2}" "${src_file}"
             ;;
         msword|vnd.openxmlformats-officedocument.*|vnd.ms-*|vnd.oasis.opendocument*)
             # https://blogs.msdn.com/b/vsofficedeveloper/archive/2008/05/08/office-2007-open-xml-mime-types.aspx
             # http://plan-b-for-openoffice.org/glossary/term/mime-type
             echo "MS Office or ODF document"
             temp=${2}/temp
-            mkdir ${temp}
-            ${LO} --headless --convert-to pdf --outdir ${temp} ${src_file}
-            ${PDF} --dest-dir ${2} ${temp}/*.pdf
-            rm -rf ${temp}
+            mkdir "${temp}"
+            ${LO} --headless --convert-to pdf --outdir "${temp}" "${src_file}"
+            ${PDF} --dest-dir "${2}" ${temp}/*.pdf
+            rm -rf "${temp}"
             ;;
         *xml*)
             echo "Got an XML"
@@ -156,7 +156,7 @@ main(){
         # first param is the destination dir
         dest=${1}
 
-        mime=`file -b --mime-type ${file}`
+        mime=`file -b --mime-type "${file}"`
         echo ${mime}
         main_mime=`echo ${mime} | cut -f1 -d/`
         details=`echo ${mime} | cut -f2 -d/`
