@@ -14,8 +14,10 @@ set -e
 set -x
 
 # If you use a partition...
-PARTITION_ROOTFS='/dev/mmcblk0p2'
-PARTITION_BOOT='/dev/mmcblk0p1'
+#PARTITION_ROOTFS='/dev/mmcblk0p2'
+#PARTITION_BOOT='/dev/mmcblk0p1'
+PARTITION_ROOTFS='/dev/sdd2'
+PARTITION_BOOT='/dev/sdd1'
 # If you use the img
 ##### Debian
 IMAGE='2013-02-09-wheezy-raspbian.img'
@@ -54,7 +56,7 @@ export QEMU_CPU=arm1176
 
 mkdir -p ${CHROOT_PATH}
 
-if [ -a ${IMAGE} ]; then
+if [ ! -z ${IMAGE} ]; then
     mount -o loop,offset=${OFFSET_ROOTFS} ${IMAGE} ${CHROOT_PATH}
     mount -o loop,offset=${OFFSET_BOOT} ${IMAGE} ${CHROOT_PATH}/boot
 elif [ -a ${PARTITION_ROOTFS} ]; then
