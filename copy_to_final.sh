@@ -18,4 +18,5 @@ tar -xzf backup.tar.gz -C ${CHROOT_PATH}/
 
 # /!\ always try to mount the root partition on the SD, it is usually broken.
 # if it is, use fdisk to remove the second partition and recreate it (you will
-# not lose the data)
+# not lose the data).
+# See resize_img.md

@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Notes:
+# - To chroot in an existing SD card, unset IMAGE. Change the paths to the partitions if needed.
+# - The offsets are thoses of 2013-02-09-wheezy-raspbian.img. It will change on an other image.
+#   To get the offsets, use the "file" command.
+
 if [ "$(id -u)" != "0" ]; then
    echo "This script must be run as root" 1>&2
    exit 1
@@ -14,13 +19,14 @@ set -e
 set -x
 
 # If you use a partition...
-#PARTITION_ROOTFS='/dev/mmcblk0p2'
-#PARTITION_BOOT='/dev/mmcblk0p1'
-PARTITION_ROOTFS='/dev/sdd2'
-PARTITION_BOOT='/dev/sdd1'
+PARTITION_ROOTFS='/dev/mmcblk0p2'
+PARTITION_BOOT='/dev/mmcblk0p1'
+#PARTITION_ROOTFS='/dev/sdd2'
+#PARTITION_BOOT='/dev/sdd1'
+
 # If you use the img
 ##### Debian
-IMAGE='2013-02-09-wheezy-raspbian.img'
+#IMAGE='2013-02-09-wheezy-raspbian.img'
 OFFSET_ROOTFS=$((122880 * 512))
 OFFSET_BOOT=$((8192 * 512))
 ##### Arch
@@ -51,6 +57,7 @@ clean(){
 
 trap clean EXIT TERM INT
 
+# enforce the CPU in order to have the armv6 instructions set (and compile working packages...)
 export QEMU_CPU=arm1176
 #export QEMU_STRACE=1
 

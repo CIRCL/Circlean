@@ -1,17 +1,12 @@
 #!/bin/bash
 
-# get sources of latest libpoppler from experimental in the debian packages
-# Unpack the sources
-# unpack the the debian patches in the dir of the sources
-# let the dsc file outside of this directory
-# Build package
-# Take a nap
+apt-get -b source -t experimental poppler
 
-cd /root/pdf2htmlEX
+# Note: libpoppler-private-dev is not listed in the dependencies of pdf2htmlEX
+# but still needed because of poppler-config.h
+dpkg -i libpoppler-dev* libpoppler28* libpoppler-private-dev*
+
+cd pdf2htmlEX/
 git pull
-dpkg-buildpackage -rfakeroot -uc -b
-ls ../*deb
-ls /var/cache/apt/archives/libpoppler*
 
-# Copy libpoppler and pdf2htmlex deb out of the chroot.
-
+dpkg-buildpackage -uc -b
