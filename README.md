@@ -24,7 +24,7 @@ following theses rules (based on the mime type):
   - x-gzip|x-tar|x-7z-compressed => compressed file
   - octet-stream => direct copy
 
-Compressed files (x-gzip|x-tar|x-7z-compressed):
+Compressed files (zip|x-rar|x-bzip2|x-lzip|x-lzma|x-lzop|x-xz|x-compress|x-gzip|x-tar|*compressed):
 - Unpacking of archives
 - Recursively run the rules on the unpacked files
 
