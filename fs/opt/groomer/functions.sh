@@ -86,7 +86,7 @@ application(){
             ;;
         x-dosexec)
             echo "Win executable"
-            copy ${src_file} DANGEROUS_${dst_file}_DANGEROUS
+            copy ${src_file} ${2}/DANGEROUS_${1##$CURRENT_SRC/}_DANGEROUS
             ;;
         x-gzip|x-tar|x-7z-compressed)
             echo "Compressed file"
