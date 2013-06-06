@@ -107,19 +107,6 @@ do
 
         main ${target_dir}
 
-        #if [ $COPYDIRTYPDF -eq 1 ]; then
-        #    pdfCopyDirty ${SRC} $targetDir
-        #else
-        #    pdfCopyClean ${SRC} $targetDir
-        #fi
-
-        # copy stuff
-        #copySafeFiles ${SRC} $targetDir
-        #convertCopyFiles ${SRC} $targetDir $TEMP
-        #rm -rf ${TEMP}/*
-
-        # unpack and process archives
-        #unpackZip ${SRC} $targetDir $TEMP
         ls -lR "${target_dir}"
     fi
     let PARTCOUNT=`expr $PARTCOUNT + 1`
