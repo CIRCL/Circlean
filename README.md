@@ -34,10 +34,15 @@ Usage
 0. Power off the device
 1. Plug the untrusted key in the top usb slot of the Raspberry Pi
 2. Plug your own key in the bottom usb slot
-   Note: This key should be bigger than the original one because the archives
-   will be copyed
+    
+    *Note*: This key should be bigger than the original one because the archives
+          will be copyed
+
 3. Optional: connect the HDMI cable to a screen to see what happen
 4. Connect the power to the micro USB
+
+    *Note*: 5V, 700mA regulated power supply
+
 5. Wait until you do not see any blinking green light on the board, or if you
    connected the HDMI cable, check the screen
    it's slow and can take 30-60 minutes depending on how many document
