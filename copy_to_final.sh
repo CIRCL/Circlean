@@ -13,6 +13,7 @@ fi
 # prepare fs archive
 tar -cvpzf backup.tar.gz -C fs/ .
 tar -xzf backup.tar.gz -C ${CHROOT_PATH}/
+cp deb/led ${CHROOT_PATH}/usr/sbin/led
 
 #sudo dd bs=4M if=NEW_FINAL_2013-02-09-wheezy-raspbian.img of=/dev/sdd
 
