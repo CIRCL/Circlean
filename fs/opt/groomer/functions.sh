@@ -9,6 +9,18 @@ source ./constraint_conv.sh
 RECURSIVE_ARCHIVE_MAX=3
 RECURSIVE_ARCHIVE_CURRENT=0
 ARCHIVE_BOMB=0
+LOGFILE="${LOGS}/processing"
+
+# Something went wrong.
+error_handler(){
+    echo "FAILED." >> ${LOGFILE}
+    echo "Something went wrong during the duplication." >> ${LOGFILE}
+    echo "Please open a bug on https://www.github.com/Rafiot/KittenGroomer" >> ${LOGFILE}
+
+    exit
+}
+
+trap error_handler INT
 
 copy(){
     src_file=${1}
@@ -143,6 +155,9 @@ main(){
         if [ ${RECURSIVE_ARCHIVE_CURRENT} -gt ${RECURSIVE_ARCHIVE_MAX} ]; then
             echo Archive bomb.
             ARCHIVE_BOMB=1
+            echo "ARCHIVE BOMB." >> ${LOGFILE}
+            echo "The content of the archive contains recursively other archives." >> ${LOGFILE}
+            echo "This is a bad sign so the archive is not extracted to the destination key." >> ${LOGFILE}
             return
         else
             RECURSIVE_ARCHIVE_CURRENT=`expr ${RECURSIVE_ARCHIVE_CURRENT} + 1`
@@ -160,6 +175,7 @@ main(){
         echo ${mime}
         main_mime=`echo ${mime} | cut -f1 -d/`
         details=`echo ${mime} | cut -f2 -d/`
+        echo -n "Processing ${file} (${mime})... " >> ${LOGFILE}
         case "${main_mime}" in
             "text")
                 text ${file} ${dest}
@@ -193,6 +209,7 @@ main(){
                 echo $mime $main_mime $details
                 ;;
         esac
+        echo "done." >> ${LOGFILE}
     done
     IFS=$SAVEIFS
 }
