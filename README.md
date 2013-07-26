@@ -1,3 +1,8 @@
+CIRCLean
+========
+
+![Cleaner in action](http://circl.lu/files/circlean_step5.jpg)
+
 Why/What
 ========
 
