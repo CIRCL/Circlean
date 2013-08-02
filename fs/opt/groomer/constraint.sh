@@ -4,10 +4,12 @@ DEV_DST='/dev/sdb1'
 USERNAME='kitten'
 HOME="/home/${USERNAME}"
 
-# Paths used in multiple scripts
-SRC="${HOME}/src"
+TMP="/tmp/"
 
-DST="${HOME}/dst"
+# Paths used in multiple scripts
+SRC="${TMP}/src"
+
+DST="${TMP}/dst"
 TEMP="${DST}/temp"
 ZIPTEMP="${DST}/ziptemp"
 LOGS="${DST}/logs"
