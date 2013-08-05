@@ -9,7 +9,7 @@ source ./constraint_conv.sh
 RECURSIVE_ARCHIVE_MAX=3
 RECURSIVE_ARCHIVE_CURRENT=0
 ARCHIVE_BOMB=0
-LOGFILE="${LOGS}/processing"
+LOGFILE="${LOGS}/processing.txt"
 
 # Something went wrong.
 error_handler(){

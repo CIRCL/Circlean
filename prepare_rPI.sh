@@ -10,3 +10,4 @@ apt-get autoremove
 apt-get install libreoffice p7zip-full libfontforge1
 dpkg -i libpoppler28*.deb pdf2htmlex*.deb
 
+chown -R kitten:kitten /home/kitten

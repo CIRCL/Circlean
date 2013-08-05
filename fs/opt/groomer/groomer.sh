@@ -97,13 +97,13 @@ do
         echo "${partition} mounted at ${SRC}"
 
         # Print the filenames on the current partition in a logfile
-        find "${SRC}" -fls "${LOGS}/Content_partition_${PARTCOUNT}"
+        find "${SRC}" -fls "${LOGS}/Content_partition_${PARTCOUNT}.txt"
 
         # create a directory on ${DST} named PARTION_$PARTCOUNT
         target_dir="${DST}/FROM_PARTITION_${PARTCOUNT}"
         echo "copying to: ${target_dir}"
         mkdir -p "${target_dir}"
-        LOGFILE="${LOGS}/processing"
+        LOGFILE="${LOGS}/processing.txt"
 
         echo "==== Starting processing of ${SRC} to ${target_dir}. ====" >> ${LOGFILE}
         main ${target_dir}
