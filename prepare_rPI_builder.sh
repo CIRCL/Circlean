@@ -3,12 +3,16 @@
 # change locales to en_US.UTF-8
 dpkg-reconfigure locales
 
+# Increase size of image. See resize_img.md
+
 apt-get update
 apt-get dist-upgrade
 apt-get autoremove
 
 echo "deb http://ftp.de.debian.org/debian experimental main" >> /etc/apt/sources.list
 echo "deb-src http://ftp.de.debian.org/debian experimental main" >> /etc/apt/sources.list
+# Force User
+su root
 gpg --keyserver pgpkeys.mit.edu --recv-key 8B48AD6246925553
 gpg -a --export 8B48AD6246925553 | apt-key add -
 gpg --keyserver pgpkeys.mit.edu --recv-key AED4B06F473041FA

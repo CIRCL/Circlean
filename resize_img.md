@@ -3,12 +3,12 @@ Add empty space to the image
 
 Add 2Gb
 
-> dd if=/dev/zero bs=1024k count=2048 >> 2013-02-09-wheezy-raspbian.img
+> dd if=/dev/zero bs=1024k count=2048 >> 2013-09-10-wheezy-raspbian.img
 
 Expend partition size
 =====================
 
-> fdisk 2013-02-09-wheezy-raspbian.img
+> fdisk 2013-09-10-wheezy-raspbian.img
 
 Command (m for help): *p*
 
@@ -46,8 +46,8 @@ Resize partition
 
 > df | grep /mnt/arm
 
-/dev/loop2                3927752   1955672   1794172  53% /mnt/arm_rPi
-/dev/loop3                  57288     18960     38328  34% /mnt/arm_rPi/boot
+/dev/loop0                3927752   1955672   1794172  53% /mnt/arm_rPi
+/dev/loop1                  57288     18960     38328  34% /mnt/arm_rPi/boot
 
-sudo resize2fs /dev/loop2
+sudo resize2fs /dev/loop0
 
