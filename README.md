@@ -3,6 +3,11 @@ CIRCLean
 
 ![Cleaner in action](http://circl.lu/files/circlean_step5.jpg)
 
+How To
+======
+
+[Graphical how-to and pre-build image](http://circl.lu/projects/CIRCLean/).
+
 Why/What
 ========
 
