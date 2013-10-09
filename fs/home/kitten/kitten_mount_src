@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -e
-set -x
+#set -x
 
 if [ $# -eq 2 ]; then
     mount -o noexec,nosuid,nodev "${1}" "${2}"

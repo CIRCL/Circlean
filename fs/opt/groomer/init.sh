@@ -17,6 +17,8 @@ clean(){
 
 trap clean EXIT TERM INT
 
+./music.sh &
+
 su ${USERNAME} -c ./groomer.sh
 
 

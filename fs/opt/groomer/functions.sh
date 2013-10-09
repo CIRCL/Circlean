@@ -1,7 +1,7 @@
 #!/bin/bash
 
-#set -e
-set -x
+set -e
+#set -x
 
 source ./constraint.sh
 source ./constraint_conv.sh
