@@ -56,12 +56,12 @@ int main(int argc, char* argv[])
 
     //Turn on led
     while (1) {
-        printf("Enable LED\n");
+        //printf("Enable LED\n");
         GPIO_SET(GPIO_4);
         usleep(1000000);
-        printf("Disable GPIO\n"); // Does not seem to work?
-        GPIO_CLR(GPIO_4);
-        usleep(1000000);
+        //printf("Disable GPIO\n"); // Does not seem to work?
+        //GPIO_CLR(GPIO_4);
+        //usleep(1000000);
     }
     /* Free up ressources */
         /* munmap GPIO */
