@@ -24,6 +24,8 @@ if [ -e /dev/sda ]; then
     # avoid possibe misuse
     /sbin/ifconfig eth0 down
     ./init.sh
+    umount -r /dev/sda
+    umount -r /dev/sdb
     /sbin/shutdown -h now
   fi
 fi
