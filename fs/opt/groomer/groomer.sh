@@ -16,13 +16,13 @@ clean(){
     ${SYNC}
 
     # Cleanup source
-    ${SUDO} ${UMOUNT} ${SRC} || true
+    ${SUDO} ${UMOUNT} ${SRC}
     rm -rf ${SRC}
 
     # Cleanup destination
     rm -rf ${TEMP}
     rm -rf ${ZIPTEMP}
-    ${SUDO} ${UMOUNT} ${DST} || true
+    ${SUDO} ${UMOUNT} ${DST}
     rm -rf ${DST}
 
     exit

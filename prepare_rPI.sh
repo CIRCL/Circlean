@@ -11,3 +11,6 @@ apt-get install libreoffice p7zip-full libfontforge1 timidity
 dpkg -i libpoppler37*.deb pdf2htmlex*.deb
 
 chown -R kitten:kitten /home/kitten
+
+rm /etc/mtab
+ln -s /proc/mounts /etc/mtab
