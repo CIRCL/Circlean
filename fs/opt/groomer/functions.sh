@@ -14,13 +14,12 @@ LOGFILE="${LOGS}/processing.txt"
 # Something went wrong.
 error_handler(){
     echo "FAILED." >> ${LOGFILE}
-    echo "Something went wrong during the duplication." >> ${LOGFILE}
+    echo "Something went wrong during the duplication of the last file." >> ${LOGFILE}
     echo "Please open a bug on https://www.github.com/Rafiot/KittenGroomer" >> ${LOGFILE}
 
-    exit
 }
 
-trap error_handler INT
+trap error_handler ERR TERM INT
 
 copy(){
     src_file=${1}
@@ -213,4 +212,6 @@ main(){
     done
     IFS=$SAVEIFS
 }
+
+echo "Copy finished successfully." >> ${LOGFILE}
 
