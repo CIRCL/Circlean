@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-#set -x
 
 source ./constraint.sh
 source ./constraint_conv.sh
@@ -14,9 +12,9 @@ LOGFILE="${LOGS}/processing.txt"
 # Something went wrong.
 error_handler(){
     echo "FAILED." >> ${LOGFILE}
-    echo "Something went wrong during the duplication of the last file." >> ${LOGFILE}
-    echo "Please open a bug on https://www.github.com/Rafiot/KittenGroomer" >> ${LOGFILE}
-
+    echo -e "\tSomething went wrong during the duplication of the last file." >> ${LOGFILE}
+    echo -e "\tPlease open a bug on https://www.github.com/Rafiot/KittenGroomer" >> ${LOGFILE}
+    continue
 }
 
 trap error_handler ERR TERM INT
@@ -143,6 +141,8 @@ main(){
         echo "Please specify the destination directory."
         exit
     fi
+    set -e
+    set -x
 
     if [ -z ${2} ]; then
         CURRENT_SRC=${SRC}
@@ -177,31 +177,32 @@ main(){
         echo -n "Processing ${file} (${mime})... " >> ${LOGFILE}
         case "${main_mime}" in
             "text")
-                text ${file} ${dest}
+
+                text ${file} ${dest} || error_handler
                 ;;
             "audio")
-                audio ${file} ${dest}
+                audio ${file} ${dest} || error_handler
                 ;;
             "image")
-                image ${file} ${dest}
+                image ${file} ${dest} || error_handler
                 ;;
             "video")
-                video ${file} ${dest}
+                video ${file} ${dest} || error_handler
                 ;;
             "application")
-                application ${file} ${dest} ${details}
+                application ${file} ${dest} ${details} || error_handler
                 ;;
             "example")
-                example ${file} ${dest}
+                example ${file} ${dest} || error_handler
                 ;;
             "message")
-                message ${file} ${dest}
+                message ${file} ${dest} || error_handler
                 ;;
             "model")
-                model ${file} ${dest}
+                model ${file} ${dest} || error_handler
                 ;;
             "multipart")
-                multipart ${file} ${dest}
+                multipart ${file} ${dest} || error_handler
                 ;;
             *)
                 echo "This should never happen... :]"
@@ -211,7 +212,7 @@ main(){
         echo "done." >> ${LOGFILE}
     done
     IFS=$SAVEIFS
+    return 0
 }
 
-echo "Copy finished successfully." >> ${LOGFILE}
 

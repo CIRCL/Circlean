@@ -12,7 +12,7 @@ if [ $# -eq 3 ]; then
     # uid= only works on a vfat FS. What should we do if we get an ext* FS ?
     # the main problem is that we need the rw rights on the dest key.
     # It is not possible to ensure it on a non-vfat USB key.
-    mount -t vfat -o user,noexec,nosuid,nodev,rw,uid="${1}" "${2}" "${3}"
+    mount -t vfat -o user,noexec,nosuid,nodev,rw,uid="${1}",utf8=1 "${2}" "${3}"
     exit 0
 else
     echo 'Invalid number of arguments.'

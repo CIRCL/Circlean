@@ -106,7 +106,7 @@ do
         LOGFILE="${LOGS}/processing.txt"
 
         echo "==== Starting processing of ${SRC} to ${target_dir}. ====" >> ${LOGFILE}
-        main ${target_dir}
+        main ${target_dir} || true
         echo "==== Done with ${SRC} to ${target_dir}. ====" >> ${LOGFILE}
 
         ls -lR "${target_dir}"

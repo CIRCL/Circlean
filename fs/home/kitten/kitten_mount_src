@@ -4,7 +4,7 @@ set -e
 #set -x
 
 if [ $# -eq 2 ]; then
-    mount -o noexec,nosuid,nodev "${1}" "${2}"
+    mount -o noexec,nosuid,nodev,utf8=1 "${1}" "${2}"
     # renaming autorun.inf on the source key. As it it case insensitive, we have to do the following...
     ls "${2}" | grep -i autorun.inf | xargs -I {} mv "${2}"/{} "${2}"/DANGEROUS_{}_DANGEROUS || true
     mount -o remount,ro "${1}" "${2}"
