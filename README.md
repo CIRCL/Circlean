@@ -8,6 +8,10 @@ How To
 
 [Graphical how-to and pre-build image](http://circl.lu/projects/CIRCLean/).
 
+To prepare the SD card on Windows, you can use [Win32DiskImager] (http://sourceforge.net/projects/win32diskimager/).
+
+And the linux way is in the command line, via dd (see in copy_to_final.sh)
+
 Why/What
 ========
 
@@ -44,7 +48,7 @@ Usage
 0. Power off the device
 1. Plug the untrusted key in the top usb slot of the Raspberry Pi
 2. Plug your own key in the bottom usb slot
-    
+
     *Note*: This key should be bigger than the original one because the archives
           will be copyed
 
