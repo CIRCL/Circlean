@@ -18,7 +18,7 @@ LOGS="${DST}/logs"
 
 # commands
 SUDO='/usr/bin/sudo'
-ID=`/usr/bin/id -u`
+ID=`/usr/bin/id -u ${USERNAME}`
 SYNC='/bin/sync'
 TIMIDITY='/usr/bin/timidity'
 

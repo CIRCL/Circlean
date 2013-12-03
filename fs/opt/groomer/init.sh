@@ -19,6 +19,11 @@ trap clean EXIT TERM INT
 
 ./music.sh &
 
+# Dumb libreoffice wants to write into ~/libreoffice or crash with
+# com::sun::star::uno::RuntimeException
+mkdir /tmp/libreoffice
+chown -R kitten:kitten /tmp/libreoffice
+
 su ${USERNAME} -c ./groomer.sh
 
 

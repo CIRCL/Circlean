@@ -10,6 +10,10 @@ apt-get autoremove
 apt-get install libreoffice p7zip-full libfontforge1 timidity
 dpkg -i libpoppler37*.deb pdf2htmlex*.deb
 
+pushd /home/kitten
+ln -s /tmp/libreoffice
+popd
+
 chown -R kitten:kitten /home/kitten
 
 rm /etc/mtab
