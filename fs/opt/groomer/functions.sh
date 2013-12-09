@@ -19,6 +19,15 @@ error_handler(){
 
 trap error_handler ERR TERM INT
 
+office_n_txt(){
+    src_file=${1}
+    dst_file=${2}${1##$CURRENT_SRC}.html
+    temp=${2}/temp
+    ${LO} --headless --convert-to pdf --outdir "${temp}" "${src_file}"
+    ${PDF} --dest-dir=/ ${temp}/*.pdf ${dst_file}
+    rm -rf "${temp}"
+}
+
 copy(){
     src_file=${1}
     dst_file=${2}
@@ -29,8 +38,7 @@ copy(){
 # Plain text
 text(){
     echo Text file ${1}
-    # XXX: append .txt ?
-    copy ${1} ${2}${1##$CURRENT_SRC}
+    office_n_txt ${1} ${2}
 }
 
 # Multimedia
@@ -83,15 +91,11 @@ application(){
             # https://blogs.msdn.com/b/vsofficedeveloper/archive/2008/05/08/office-2007-open-xml-mime-types.aspx
             # http://plan-b-for-openoffice.org/glossary/term/mime-type
             echo "MS Office or ODF document"
-            temp=${2}/temp
-            mkdir "${temp}"
-            ${LO} --headless --convert-to pdf --outdir "${temp}" "${src_file}"
-            ${PDF} --dest-dir "${2}" ${temp}/*.pdf
-            rm -rf "${temp}"
+            office_n_txt ${src_file} ${2}
             ;;
         *xml*)
             echo "Got an XML"
-            text ${src_file} ${2}
+            office_n_txt ${src_file} ${2}
             ;;
         x-dosexec)
             echo "Win executable"
@@ -177,7 +181,6 @@ main(){
         echo -n "Processing ${file} (${mime})... " >> ${LOGFILE}
         case "${main_mime}" in
             "text")
-
                 text ${file} ${dest} || error_handler
                 ;;
             "audio")

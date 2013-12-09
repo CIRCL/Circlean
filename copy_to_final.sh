@@ -16,6 +16,7 @@ fi
 # prepare fs archive
 tar -cvpzf backup.tar.gz -C fs/ .
 tar -xzf backup.tar.gz -C ${CHROOT_PATH}/
+chown root:root ${CHROOT_PATH}/etc/sudoers
 cp deb/led ${CHROOT_PATH}/usr/sbin/led
 cp -rf midi ${CHROOT_PATH}/opt/
 
