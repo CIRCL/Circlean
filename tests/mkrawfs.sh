@@ -27,15 +27,16 @@ for f in $FS; do
         parted -s ${OUT_NAME_PART} mkpart primary 8192s 122879s
         parted -s ${OUT_NAME_PART} mkpart primary 122880s 201599s
         parted -s ${OUT_NAME_NORM} mkpart primary 8192s 201599s
-        losetup -o$((8192 * 512)) /dev/loop0 ${OUT_NAME_PART}
-        losetup -o$((122880 * 512)) /dev/loop1 ${OUT_NAME_PART}
-        losetup -o$((8192 * 512)) /dev/loop2 ${OUT_NAME_NORM}
-        mkfs.${f} /dev/loop0 57344
-        mkfs.${f} /dev/loop1 39360
-        mkfs.${f} /dev/loop2
-        losetup -d /dev/loop0
-        losetup -d /dev/loop1
-        losetup -d /dev/loop2
+        lo=`losetup -f`
+        losetup -o$((8192 * 512)) ${lo} ${OUT_NAME_PART}
+        mkfs.${f} ${lo} 57344
+        losetup -d ${lo}
+        losetup -o$((122880 * 512)) ${lo} ${OUT_NAME_PART}
+        mkfs.${f} ${lo} 39360
+        losetup -d ${lo}
+        losetup -o$((8192 * 512)) ${lo} ${OUT_NAME_NORM}
+        mkfs.${f} ${lo}
+        losetup -d ${lo}
     elif [ $f = ${FS_NTFS} ]; then
         mk${f} -f -F ${OUT_NAME}
     else
