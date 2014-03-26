@@ -2,7 +2,7 @@
 
 # http://xecdesign.com/qemu-emulating-raspberry-pi-the-easy-way/
 
-IMAGE='../old/2013-12-09_CIRCLean.img'
+IMAGE='../2014-01-07-wheezy-raspbian.img'
 OFFSET_ROOTFS=$((122880 * 512))
 
 IMAGE_VFAT_NORM="testcase.vfat"
@@ -52,13 +52,6 @@ mount -o loop,offset=${OFFSET_VFAT_PART2} ${IMAGE_VFAT_PART} ${SETUP_DIR}
 cp content_img_vfat_part2/* ${SETUP_DIR}
 umount ${SETUP_DIR}
 
-
-qemu-system-arm -kernel kernel-qemu -cpu arm1176 -m 256 -M versatilepb \
-    -watchdog i6300esb -watchdog-action poweroff \
-    -serial stdio -append "root=/dev/sdc2 panic=1 rootfstype=ext4 rw" \
-    -drive file=${IMAGE_VFAT_NORM},index=0,media=disk \
-    -drive file=${IMAGE_DEST},index=1,media=disk \
-    -vnc 0.0.0.0:1 -drive file=${IMAGE},index=2,media=disk
-
-
+./run.exp ${IMAGE} ${IMAGE_VFAT_NORM} ${IMAGE_DEST}
+#./run.exp ${IMAGE} ${IMAGE_VFAT_PART} ${IMAGE_DEST}
 
