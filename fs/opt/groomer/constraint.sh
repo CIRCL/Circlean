@@ -6,7 +6,7 @@ USERNAME='kitten'
 HOME="/home/${USERNAME}"
 MUSIC="/opt/midi/"
 
-TMP="/tmp/"
+TMP="/tmp"
 
 # Paths used in multiple scripts
 SRC="${TMP}/src"
@@ -21,6 +21,7 @@ SUDO='/usr/bin/sudo'
 ID=`/usr/bin/id -u`
 SYNC='/bin/sync'
 TIMIDITY='/usr/bin/timidity'
+MOUNT='/bin/mount'
 
 # root commands.
 # To avoid the risk that an attacker use -o remount on mount and other nasty

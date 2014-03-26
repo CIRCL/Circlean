@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -e
-#set -x
+set -x
 
 source ./constraint.sh
 if ! [ "${ID}" -ge "1000" ]; then
@@ -37,7 +37,7 @@ if [ ! -b ${DEV_SRC} ]; then
 fi
 # Find the partition names on the source device
 DEV_PARTITIONS=`ls "${DEV_SRC}"* | grep "${DEV_SRC}[1-9][0-6]*" || true`
-if [ -z ${DEV_PARTITIONS} ]; then
+if [ -z "${DEV_PARTITIONS}" ]; then
     echo "${DEV_SRC} does not have any partitions."
     exit
 fi
@@ -86,7 +86,7 @@ for partition in ${DEV_PARTITIONS}
 do
     # Processing a partition
     echo "Processing partition: ${partition}"
-    if ${MOUNT}|grep ${SRC}; then
+    if [ `${MOUNT} | grep -c ${SRC}` -ne 0 ]; then
         ${SUDO} ${UMOUNT} ${SRC}
     fi
 
