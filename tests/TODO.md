@@ -16,7 +16,7 @@ Ideas
 =====
 
 Source keys:
-- Working documents, one / multiple partitions
+[DONE] Working documents, one / multiple partitions
 - Non working documents: one / multiple partitions
 - different FS on different partitions
 - Non working FS
@@ -29,11 +29,8 @@ Destinations keys
 - not empty
 - unmountable (wrong/broken fs)
 
-
-
 Things to try out
 =================
 
-
-Run the image in qemu, process USB keys from there
+[DONE] Run the image in qemu, process USB keys from there
 
