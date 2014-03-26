@@ -3,12 +3,12 @@ Add empty space to the image
 
 Add 2Gb
 
-> dd if=/dev/zero bs=1024k count=2048 >> 2013-09-10-wheezy-raspbian.img
+> dd if=/dev/zero bs=1024k count=2048 >> 2014-01-07-wheezy-raspbian.img
 
-Expend partition size
+Expand partition size
 =====================
 
-> fdisk 2013-09-10-wheezy-raspbian.img
+> fdisk 2014-01-07-wheezy-raspbian.img
 
 Command (m for help): *p*
 

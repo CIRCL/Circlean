@@ -26,7 +26,7 @@ PARTITION_BOOT='/dev/sdd1'
 
 # If you use the img
 ##### Debian
-IMAGE='2013-09-10-wheezy-raspbian.img'
+IMAGE='2014-01-07-wheezy-raspbian.img'
 OFFSET_ROOTFS=$((122880 * 512))
 OFFSET_BOOT=$((8192 * 512))
 ##### Arch

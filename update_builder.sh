@@ -3,13 +3,9 @@
 # Force the User
 su root
 
-apt-get -b source -t experimental poppler
+wget https://github.com/coolwanglu/pdf2htmlEX/archive/v0.11.zip
+unzip v0.11.zip
 
-# Note: libpoppler-private-dev is not listed in the dependencies of pdf2htmlEX
-# but still needed because of poppler-config.h
-dpkg -i libpoppler-dev* libpoppler37* libpoppler-private-dev*
-
-cd pdf2htmlEX/
-git pull
+cd pdf2htmlEX-0.11/
 
 dpkg-buildpackage -uc -b
