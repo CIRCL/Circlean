@@ -3,14 +3,11 @@
 set timeout -1
 
 spawn qemu-system-arm -kernel kernel-qemu -cpu arm1176 -m 256 -M versatilepb \
-    -watchdog i6300esb -watchdog-action poweroff \
-    -serial stdio -append "root=/dev/sdc2 panic=1 rootfstype=ext4 ro console=ttyAMA0 console=ttyS0" \
+    -append "root=/dev/sdc2 panic=1 rootfstype=ext4 ro console=ttyAMA0 console=ttyS0" \
     -drive file=[lindex $argv 1],index=0,media=disk \
     -drive file=[lindex $argv 2],index=1,media=disk \
     -drive file=[lindex $argv 0],index=2,media=disk \
-    -vnc 0.0.0.0:1 \
-    -serial stdio \
-    -soundhw all \
+    -serial stdio -soundhw all -nographic \
     -chardev stdio,id=mon0 -mon chardev=mon0,mode=readline \
     -chardev socket,id=mon1,host=localhost,port=4444,server,nowait \
     -mon chardev=mon1,mode=control,pretty=on
