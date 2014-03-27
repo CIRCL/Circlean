@@ -7,7 +7,7 @@ dpkg-reconfigure locales
 apt-get update
 apt-get dist-upgrade
 apt-get autoremove
-apt-get install libreoffice p7zip-full libfontforge1 timidity
+apt-get install libreoffice p7zip-full libfontforge1 timidity freepats
 dpkg -i --ignore-depends=libpoppler27 pdf2htmlex*.deb
 
 # Make Libreoffice usable on a RO filesystem
