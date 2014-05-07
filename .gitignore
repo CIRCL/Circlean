@@ -1,2 +1,8 @@
 filesystem/opt/groomer/pdfbox-app-*.jar
 filesystem/etc
+tests/content*
+tests/*vfat
+deb/
+
+*img
+

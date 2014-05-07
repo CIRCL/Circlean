@@ -1,0 +1,23 @@
+#!/bin/bash
+
+set -e
+
+cleanup(){
+    apt-get autoremove -y
+    apt-get autoclean -y
+    apt-get clean -y
+
+    /sbin/shutdown -h now
+}
+
+
+trap TERM EXIT
+
+apt-get update -y
+apt-get dist-upgrade
+
+
+/bin/bash
+
+
+
