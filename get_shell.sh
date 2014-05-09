@@ -11,7 +11,6 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 set -e
-set -x
 
 ./mount_image.sh ./copy_force_shell.sh
 
@@ -34,9 +33,6 @@ mount -o loop,offset=${OFFSET_ROOTFS} ${IMAGE} ${SETUP_DIR}
 mv ${SETUP_DIR}/etc/ld.so.preload ${SETUP_DIR}/etc/ld.so.preload_bkp
 umount ${SETUP_DIR}
 
-qemu-system-arm -kernel tests/kernel-qemu -cpu arm1176 -m 256 -M versatilepb \
-    -append "root=/dev/sda2 panic=1 rootfstype=ext4 rw console=ttyAMA0 console=ttyS0" \
-    -drive file=${IMAGE},index=0,media=disk \
-    -nographic
+./get_shell.exp ${IMAGE}
 
 
