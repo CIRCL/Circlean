@@ -1,0 +1,10 @@
+Version 1.0 - 2014-05-20
+
+- Based on Raspbian Jessie
+- Fully automated tests with Qemu
+- Mimetype: support of PDF, Office documents, archives, windows executables
+- Filesystem: USB keys have to be formated in vfat
+- Support of multiple partitions
+- Renaming of autorun.inf on the source key
+- Operating system is read only
+- Use pdf2htmlEX v0.11
