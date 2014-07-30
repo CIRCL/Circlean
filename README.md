@@ -1,7 +1,7 @@
 CIRCLean
 ========
 
-![Cleaner in action](http://circl.lu/files/circlean_step5.jpg)
+![Cleaner in action](http://www.circl.lu/assets/images/CIRCLean/CIRCLean.png)
 
 How To
 ======
