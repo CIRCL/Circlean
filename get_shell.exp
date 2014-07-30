@@ -2,7 +2,7 @@
 
 set timeout -1
 
-spawn qemu-system-arm -kernel tests/140509-kernel -cpu arm1176 -m 256 -M versatilepb \
+spawn qemu-system-arm -kernel tests/140730-kernel -cpu arm1176 -m 256 -M versatilepb \
     -append "root=/dev/sda2 panic=1 rootfstype=ext4 rw console=ttyAMA0 console=ttyS0" \
     -drive file=[lindex $argv 0],index=0,media=disk \
     -monitor telnet:localhost:4444,server,nowait \

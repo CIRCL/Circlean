@@ -2,7 +2,7 @@
 
 # http://xecdesign.com/qemu-emulating-raspberry-pi-the-easy-way/
 
-IMAGE='../2014-01-07-wheezy-raspbian.img'
+IMAGE='../2014-06-20-wheezy-raspbian.img'
 OFFSET_ROOTFS=$((122880 * 512))
 
 IMAGE_VFAT_NORM="testcase.vfat"

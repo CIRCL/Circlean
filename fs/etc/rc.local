@@ -11,6 +11,10 @@
 #
 # By default this script does nothing.
 
+clean(){
+    systemctl poweroff
+}
+
 # Print the IP address
 _IP=$(hostname -I) || true
 if [ "$_IP" ]; then
@@ -19,12 +23,13 @@ fi
 
 if [ -e /dev/sda ]; then
   if [ -e /dev/sdb ]; then
+    trap clean EXIT TERM INT
     cd /opt/groomer
     /usr/sbin/led &
-    # avoid possibe misuse
+    # avoid possible misuse
     /sbin/ifconfig eth0 down
     ./init.sh
-    /sbin/shutdown -P -h now
+    systemctl poweroff
   fi
 fi
 
