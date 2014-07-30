@@ -16,14 +16,12 @@ clean(){
     ${SYNC}
 
     # Cleanup source
-    ${SUDO} ${UMOUNT} ${SRC}
-    rm -rf ${SRC}
+    pumount ${SRC}
 
     # Cleanup destination
     rm -rf ${TEMP}
     rm -rf ${ZIPTEMP}
-    ${SUDO} ${UMOUNT} ${DST}
-    rm -rf ${DST}
+    pumount ${DST}
 
     exit
 }
@@ -43,31 +41,23 @@ if [ -z "${DEV_PARTITIONS}" ]; then
 fi
 
 # Do we have a destination device
-if [ ! -b ${DEV_DST} ]; then
-    echo "Destination device (${DEV_DST}) does not exists."
+if [ ! -b "/dev/${DEV_DST}" ]; then
+    echo "Destination device (/dev/${DEV_DST}) does not exists."
     exit
-fi
-
-# Prepare mount points
-if [ ! -d ${SRC} ]; then
-    mkdir ${SRC}
-fi
-if [ ! -d ${DST} ]; then
-    mkdir ${DST}
 fi
 
 # mount and prepare destination device
 if ${MOUNT}|grep ${DST}; then
-    ${SUDO} ${UMOUNT} ${DST} || true
+    ${PUMOUNT} ${DST} || true
 fi
 # uid= only works on a vfat FS. What should wedo if we get an ext* FS ?
-${SUDO} ${MOUNT_DST} ${ID} ${DEV_DST} ${DST}
+${PMOUNT} -w ${DEV_DST} ${DST}
 if [ ${?} -ne 0 ]; then
-    echo "Unable to mount ${DEV_DST} on ${DST}"
+    echo "Unable to mount /dev/${DEV_DST} on /media/${DST}"
     exit
 else
-    echo "Target USB device (${DEV_DST}) mounted at ${DST}"
-    rm -rf "${DST}/FROM_PARTITION_"*
+    echo "Target USB device (/dev/${DEV_DST}) mounted at /media/${DST}"
+    rm -rf "/media/${DST}/FROM_PARTITION_"*
 
     # prepare temp dirs and make sure it's empty
     mkdir -p "${TEMP}"
@@ -87,27 +77,30 @@ do
     # Processing a partition
     echo "Processing partition: ${partition}"
     if [ `${MOUNT} | grep -c ${SRC}` -ne 0 ]; then
-        ${SUDO} ${UMOUNT} ${SRC}
+        ${PUMOUNT} ${SRC}
     fi
 
-    ${SUDO} ${MOUNT_SRC} ${partition} ${SRC}
+    ${PMOUNT} -w ${partition} ${SRC}
+    ls "/media/${SRC}" | grep -i autorun.inf | xargs -I {} mv "/media/${SRC}"/{} "/media/${SRC}"/DANGEROUS_{}_DANGEROUS || true
+    ${PUMOUNT} ${SRC}
+    ${PMOUNT} -r ${partition} ${SRC}
     if [ ${?} -ne 0 ]; then
-        echo "Unable to mount ${partition} on ${SRC}"
+        echo "Unable to mount ${partition} on /media/${SRC}"
     else
-        echo "${partition} mounted at ${SRC}"
+        echo "${partition} mounted at /media/${SRC}"
 
         # Print the filenames on the current partition in a logfile
-        find "${SRC}" -fls "${LOGS}/Content_partition_${PARTCOUNT}.txt"
+        find "/media/${SRC}" -fls "${LOGS}/Content_partition_${PARTCOUNT}.txt"
 
         # create a directory on ${DST} named PARTION_$PARTCOUNT
-        target_dir="${DST}/FROM_PARTITION_${PARTCOUNT}"
+        target_dir="/media/${DST}/FROM_PARTITION_${PARTCOUNT}"
         echo "copying to: ${target_dir}"
         mkdir -p "${target_dir}"
         LOGFILE="${LOGS}/processing.txt"
 
-        echo "==== Starting processing of ${SRC} to ${target_dir}. ====" >> ${LOGFILE}
+        echo "==== Starting processing of /media/${SRC} to ${target_dir}. ====" >> ${LOGFILE}
         main ${target_dir} || true
-        echo "==== Done with ${SRC} to ${target_dir}. ====" >> ${LOGFILE}
+        echo "==== Done with /media/${SRC} to ${target_dir}. ====" >> ${LOGFILE}
 
         ls -lR "${target_dir}"
     fi

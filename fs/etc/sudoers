@@ -26,5 +26,3 @@ Defaults	secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/b
 
 #includedir /etc/sudoers.d
 #pi ALL=(ALL) NOPASSWD: ALL
-Cmnd_Alias GROOMER_CMDS = /home/kitten/kitten_mount_src,     /home/kitten/kitten_mount_dst, /home/kitten/kitten_umount
-kitten  ALL = NOPASSWD: GROOMER_CMDS

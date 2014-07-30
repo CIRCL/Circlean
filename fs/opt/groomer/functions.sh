@@ -73,7 +73,7 @@ archive(){
         rm -rf "${2}"
         rm -rf "${2}_temp"
     fi
-    CURRENT_SRC=${SRC}
+    CURRENT_SRC="/media/${SRC}"
 }
 
 
@@ -149,7 +149,7 @@ main(){
     set -x
 
     if [ -z ${2} ]; then
-        CURRENT_SRC=${SRC}
+        CURRENT_SRC="/media/${SRC}"
         RECURSIVE_ARCHIVE_CURRENT=0
         ARCHIVE_BOMB=0
     else
