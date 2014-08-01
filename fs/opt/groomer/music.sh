@@ -5,6 +5,12 @@ set -e
 
 source ./constraint.sh
 
+killed(){
+    echo 'Music stopped.'
+}
+
+trap killed EXIT TERM INT
+
 # Force output on analog
 amixer cset numid=3 1
 

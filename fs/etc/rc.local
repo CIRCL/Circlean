@@ -12,6 +12,7 @@
 # By default this script does nothing.
 
 clean(){
+    echo 'Rc Local done, quit.'
     systemctl poweroff
 }
 
@@ -27,7 +28,9 @@ if [ -e /dev/sda ]; then
     cd /opt/groomer
     /usr/sbin/led &
     # avoid possible misuse
-    /sbin/ifconfig eth0 down
+    systemctl stop display-manager
+    systemctl stop sshd
+    systemctl stop dbus-org.freedesktop.ModemManager1
     ./init.sh
     systemctl poweroff
   fi

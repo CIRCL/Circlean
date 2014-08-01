@@ -2,7 +2,7 @@
 
 set timeout -1
 
-spawn qemu-system-arm -kernel 140730-kernel -cpu arm1176 -m 200 -M versatilepb \
+spawn qemu-system-arm -kernel 140801-kernel -cpu arm1176 -m 256 -M versatilepb \
     -append "root=/dev/sdc2 panic=1 rootfstype=ext4 ro console=ttyAMA0 console=ttyS0" \
     -drive file=[lindex $argv 1],index=0,media=disk \
     -drive file=[lindex $argv 2],index=1,media=disk \
