@@ -30,9 +30,14 @@ if [ -e /dev/sda ]; then
     # avoid possible misuse
     systemctl stop display-manager
     systemctl stop sshd
+    systemctl stop ssh
     systemctl stop dbus-org.freedesktop.ModemManager1
+    systemctl stop cron
+    systemctl stop ModemManager
+    #systemctl stop rsyslog
+    #systemctl stop syslog
+    #systemctl stop remote-fs
     ./init.sh
-    systemctl poweroff
   fi
 fi
 
