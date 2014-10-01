@@ -19,5 +19,5 @@ LOGS="/media/${DST}/logs"
 SYNC='/bin/sync'
 TIMIDITY='/usr/bin/timidity'
 MOUNT='/bin/mount'
-PMOUNT='/usr/bin/pmount'
+PMOUNT='/usr/bin/pmount -A -s'
 PUMOUNT='/usr/bin/pumount'
