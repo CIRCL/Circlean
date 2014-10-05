@@ -23,6 +23,8 @@ losetup -o$((8192 * 512)) ${lo} ${IMAGE_DEST}
 mkfs.vfat ${lo}
 losetup -d ${lo}
 
+sleep 5
+
 for f in $FS; do
     # Create files of 128Mb
     OUT_NAME_NORM="testcase."${f}
@@ -42,23 +44,27 @@ for f in $FS; do
         losetup -o$((122880 * 512)) ${lo} ${OUT_NAME_PART}
         mkfs.${f} ${lo} 39360
         losetup -d ${lo}
+        sleep 5
 
         parted -s ${OUT_NAME_NORM} mkpart primary 8192s 201599s
         losetup -o$((8192 * 512)) ${lo} ${OUT_NAME_NORM}
         mkfs.${f} ${lo}
         losetup -d ${lo}
+        sleep 5
     elif [ $f = ${FS_NTFS} ]; then
         parted -s ${OUT_NAME_NORM} mkpart primary 8192s 201599s
         lo=`losetup -f`
         losetup -o$((8192 * 512)) ${lo} ${OUT_NAME_NORM}
         mk${f} -f -I ${lo}
         losetup -d ${lo}
+        sleep 5
     else
         parted -s ${OUT_NAME_NORM} mkpart primary 8192s 201599s
         lo=`losetup -f`
         losetup -o$((8192 * 512)) ${lo} ${OUT_NAME_NORM}
         mkfs.${f} ${lo}
         losetup -d ${lo}
+        sleep 5
     fi
 done
 
