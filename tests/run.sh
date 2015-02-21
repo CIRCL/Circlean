@@ -72,6 +72,7 @@ mount -o loop,offset=${OFFSET_VFAT_NORM} ${IMAGE_EXT4} ${SETUP_DIR}
 cp -rf content_img_vfat_norm/* ${SETUP_DIR}
 umount ${SETUP_DIR}
 
+chmod -w ${IMAGE}
 ./run.exp ${IMAGE} ${IMAGE_VFAT_NORM} ${IMAGE_DEST}
 sleep 10
 ./run.exp ${IMAGE} ${IMAGE_VFAT_PART} ${IMAGE_DEST}
@@ -87,4 +88,6 @@ sleep 10
 #./run.exp ${IMAGE} ${IMAGE_EXT4} ${IMAGE_DEST}
 
 
+#./run.exp ${IMAGE} ${IMAGE_VFAT_PART} ${IMAGE_DEST}
+chmod +w ${IMAGE}
 

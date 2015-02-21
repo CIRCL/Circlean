@@ -23,7 +23,7 @@ Source keys:
 - Malicious documents (very slow, might break the conversions)
 
 Destinations keys
-- empty, big enough
+[DONE] empty, big enough
 - empty, too small
 - broken
 - not empty
