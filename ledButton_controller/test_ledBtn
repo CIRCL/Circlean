@@ -1,0 +1,27 @@
+#!/bin/sh
+FIFO="/tmp/ledBtnFIFO"
+#mkfifo $FIFO
+
+#sudo ./ledBtn $FIFO
+
+# send command "READY"
+echo "r" > $FIFO
+#sleep 1 
+# send command "PROCESSING"
+echo "p" > $FIFO
+sleep 1
+# send command "FILE processed"
+echo "f" > $FIFO
+sleep 3
+# send command "FILE processed"
+echo "f" > $FIFO
+sleep 3
+# send command "processing successfully COMPLETED"
+echo "c" > $FIFO
+sleep 2
+# send command "ZERO (clear display and return state to 0)"
+echo "z" > $FIFO
+sleep 2
+# send command "ERROR"
+echo "e" > $FIFO
+
