@@ -13,7 +13,7 @@
 
 clean(){
     echo 'Rc Local done, quit.'
-    systemctl poweroff
+    /sbin/shutdown -P -h now
 }
 
 # Print the IP address
@@ -24,19 +24,11 @@ fi
 
 if [ -e /dev/sda ]; then
   if [ -e /dev/sdb ]; then
+    # avoid possible misuse
+    /sbin/ifconfig eth0 down
     trap clean EXIT TERM INT
     cd /opt/groomer
-    /usr/sbin/led &
-    # avoid possible misuse
-    systemctl stop display-manager
-    systemctl stop sshd
-    systemctl stop ssh
-    systemctl stop dbus-org.freedesktop.ModemManager1
-    systemctl stop cron
-    systemctl stop ModemManager
-    #systemctl stop rsyslog
-    #systemctl stop syslog
-    #systemctl stop remote-fs
+    #/usr/sbin/led &
     ./init.sh
   fi
 fi

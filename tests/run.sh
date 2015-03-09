@@ -2,7 +2,7 @@
 
 # http://xecdesign.com/qemu-emulating-raspberry-pi-the-easy-way/
 
-IMAGE='../2014-09-09-wheezy-raspbian.img'
+IMAGE='../2015-02-16-raspbian-wheezy.img'
 OFFSET_ROOTFS=$((122880 * 512))
 
 IMAGE_VFAT_NORM="testcase.vfat"
@@ -74,10 +74,10 @@ umount ${SETUP_DIR}
 
 chmod -w ${IMAGE}
 ./run.exp ${IMAGE} ${IMAGE_VFAT_NORM} ${IMAGE_DEST}
-sleep 10
-./run.exp ${IMAGE} ${IMAGE_VFAT_PART} ${IMAGE_DEST}
-sleep 10
-./run.exp ${IMAGE} ${IMAGE_NTFS_NORM} ${IMAGE_DEST}
+#sleep 10
+#./run.exp ${IMAGE} ${IMAGE_VFAT_PART} ${IMAGE_DEST}
+#sleep 10
+#./run.exp ${IMAGE} ${IMAGE_NTFS_NORM} ${IMAGE_DEST}
 
 # EXT* not supported due to permission issues
 #sleep 10

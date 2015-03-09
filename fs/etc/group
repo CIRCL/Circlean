@@ -51,6 +51,4 @@ lightdm:x:109:
 indiecity:x:1001:root
 spi:x:1002:pi
 gpio:x:1003:pi
-weston-launch:x:110:
 kitten:x:1004:
-systemd-journal:x:111:
