@@ -65,7 +65,7 @@ archive(){
     if [ ${ARCHIVE_BOMB} -eq 0 ]; then
         temp_extract_dir=${2}_temp
         mkdir -p "${temp_extract_dir}"
-        ${UNPACKER} x "${1}" -o"${temp_extract_dir}" -bd
+        ${UNPACKER} -p1 x "${1}" -o"${temp_extract_dir}" -bd
         main ${2} ${RECURSIVE_ARCHIVE_CURRENT} ${temp_extract_dir} || true
         rm -rf "${temp_extract_dir}"
     fi
