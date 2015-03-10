@@ -1,6 +1,6 @@
 CIRCLean
 ========
-
+![CIRCLean logo](https://www.circl.lu/assets/images/logos/circlean.png)
 ![Cleaner in action](http://www.circl.lu/assets/images/CIRCLean/CIRCLean.png)
 
 How To
