@@ -1,3 +1,19 @@
+Version 1.2 - 2015-03-10
+
+- Rollback the migration to Jessie and use Wheezy again: the only importantant depencendy from Jessie was poppler, which is available in the backports
+- Use the most recent security patches
+- Do not wait for user input in case of password protected archive
+
+Version 1.1.1 - 2014-10-26
+
+- General upgrade of Debian to avoid the system to fail in case there is no HDMI cable connected.
+
+Version 1.1 - 2014-10-01
+
+- NTFS support added for USB key
+- Updated to Debian Jessie including patches for [bash vulnerabilities CVE-2014-6271 - CVE-2014-7169](/pub/tr-27/)
+- CIRCLean user are now removed from the sudoer
+
 Version 1.0 - 2014-05-20
 
 - Based on Raspbian Jessie
