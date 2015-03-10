@@ -162,7 +162,7 @@ Final image specifics
 * Install repencencies required by the project
 
 ```
-    apt-get install libreoffice p7zip-full libfontforge1 timidity freepats pmount
+    apt-get install libreoffice p7zip-full libfontforge1 timidity freepats pmount ntfs-3g
     dpkg -i *.deb
 ```
 
