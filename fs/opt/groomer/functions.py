@@ -10,6 +10,7 @@ import subprocess
 import time
 
 
+
 LIBREOFFICE = '/usr/bin/unoconv'
 PDF2HTMLEX = '/usr/bin/pdf2htmlEX'
 SEVENZ = '/usr/bin/7z'
@@ -240,23 +241,27 @@ class KittenGroomer(object):
 
     def _office_related(self):
         self.cur_file.add_log_details('processing_type', 'office')
-        dst_path, filename = os.path.split(self.cur_file.dst_path)
+        dst_dir, filename = os.path.split(self.cur_file.dst_path)
         name, ext = os.path.splitext(filename)
-        tmpdir = os.path.join(dst_path, 'temp')
-        tmppath = os.path.join(tmpdir, name, '.pdf')
+        tmpdir = os.path.join(dst_dir, 'temp')
+        tmppath = os.path.join(tmpdir, name + '.pdf')
         self._safe_mkdir(tmpdir)
         lo_command = '{} --format pdf -eSelectPdfVersion=1 --output {} {}'.format(
             LIBREOFFICE, tmppath, self.cur_file.src_path)
         self._run_process(lo_command)
-        pdf_command = '{} --dest-dir=/ {} {}'.format(PDF2HTMLEX, tmppath, self.cur_file.dst_path)
-        self._run_process(pdf_command)
+        self.__pdf(tmppath)
         self._safe_rmtree(tmpdir)
+
+    def __pdf(self, tmpsrcpath):
+        pdf_command = '{} --dest-dir / {} {}'.format(PDF2HTMLEX, tmpsrcpath,
+                                                     self.cur_file.dst_path + '.html')
+        self._run_process(pdf_command)
 
     def _pdf(self):
         self.cur_file.add_log_details('processing_type', 'pdf')
+        # FIXME: convert pdf to pdf/a if needed prior to converting to html
         # TODO: Convert to pdf/A
-        pdf_command = '{} --dest-dir {} {}'.format(PDF2HTMLEX, self.cur_file.dst_path, self.cur_file.src_path)
-        self._run_process(pdf_command)
+        self.__pdf(self.cur_file.src_path)
 
     def _archive(self):
         self.cur_file.add_log_details('processing_type', 'archive')

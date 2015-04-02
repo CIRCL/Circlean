@@ -71,6 +71,9 @@ fi
 
 # Groom da kitteh!
 
+# Find the FS types
+# lsblk -n -o name,fstype,mountpoint,label,uuid -r
+
 PARTCOUNT=1
 for partition in ${DEV_PARTITIONS}
 do
