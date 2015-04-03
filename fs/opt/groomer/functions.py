@@ -10,8 +10,8 @@ import subprocess
 import time
 
 
-
 LIBREOFFICE = '/usr/bin/unoconv'
+GS = '/usr/bin/gs'
 PDF2HTMLEX = '/usr/bin/pdf2htmlEX'
 SEVENZ = '/usr/bin/7z'
 
@@ -242,39 +242,45 @@ class KittenGroomer(object):
     def _office_related(self):
         self.cur_file.add_log_details('processing_type', 'office')
         dst_dir, filename = os.path.split(self.cur_file.dst_path)
-        name, ext = os.path.splitext(filename)
         tmpdir = os.path.join(dst_dir, 'temp')
+        name, ext = os.path.splitext(filename)
         tmppath = os.path.join(tmpdir, name + '.pdf')
         self._safe_mkdir(tmpdir)
         lo_command = '{} --format pdf -eSelectPdfVersion=1 --output {} {}'.format(
             LIBREOFFICE, tmppath, self.cur_file.src_path)
         self._run_process(lo_command)
-        self.__pdf(tmppath)
+        self._pdfa(tmppath)
         self._safe_rmtree(tmpdir)
 
-    def __pdf(self, tmpsrcpath):
+    def _pdfa(self, tmpsrcpath):
         pdf_command = '{} --dest-dir / {} {}'.format(PDF2HTMLEX, tmpsrcpath,
                                                      self.cur_file.dst_path + '.html')
         self._run_process(pdf_command)
 
     def _pdf(self):
         self.cur_file.add_log_details('processing_type', 'pdf')
-        # FIXME: convert pdf to pdf/a if needed prior to converting to html
-        # TODO: Convert to pdf/A
-        self.__pdf(self.cur_file.src_path)
+        dst_dir, filename = os.path.split(self.cur_file.dst_path)
+        tmpdir = os.path.join(dst_dir, 'temp')
+        tmppath = os.path.join(tmpdir, filename)
+        self._safe_mkdir(tmpdir)
+        gs_command = '{} -dPDFA -dBATCH -dNOPAUSE -sDEVICE=pdfwrite -sOutputFile={} {}'.format(
+            GS, tmppath, self.cur_file.src_path)
+        self._run_process(gs_command)
+        self._pdfa(tmppath)
+        self._safe_rmtree(tmpdir)
 
     def _archive(self):
         self.cur_file.add_log_details('processing_type', 'archive')
         self.cur_file.is_recursive = True
         self.cur_file.log_string += 'Archive extracted, processing content.'
-        self.recursive += 1
         tmpdir = self.cur_file.dst_path + '_temp'
         self._safe_mkdir(tmpdir)
         extract_command = '{} -p1 x {} -o{} -bd'.format(SEVENZ, self.cur_file.src_path, tmpdir)
         self._run_process(extract_command)
+        self.recursive += 1
         self.processdir(self.cur_file.dst_path, tmpdir)
-        self._safe_rmtree(tmpdir)
         self.recursive -= 1
+        self._safe_rmtree(tmpdir)
 
     def _unknown_app(self):
         self.cur_file.make_unknown()
@@ -302,7 +308,7 @@ class KittenGroomer(object):
     def _media_processing(self):
         self.cur_log.fields(processing_type='media')
         if not self.cur_file.verify_mime() or not self.cur_file.verify_extension():
-            # The extension is unknown or doesn't match the mime type, suspicious
+            # The extension is unknown or doesn't match the mime type => suspicious
             # TODO: write details in the logfile
             self.cur_file.make_dangerous()
         self._safe_copy()
