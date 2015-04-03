@@ -2,13 +2,9 @@
 # -*- coding: utf-8 -*-
 import magic
 import os
-import shutil
 import mimetypes
-from twiggy import quickSetup, log
-import shlex
-import subprocess
-import time
 
+from helpers import FileBase, KittenGroomerBase
 
 LIBREOFFICE = '/usr/bin/unoconv'
 GS = '/usr/bin/gs'
@@ -27,21 +23,15 @@ mimes_compressed = ['zip', 'x-rar', 'x-bzip2', 'x-lzip', 'x-lzma', 'x-lzop',
 mimes_data = ['octet-stream']
 
 
-class File(object):
+class File(FileBase):
 
     def __init__(self, src_path, dst_path, main_type, sub_type):
-        self.src_path = src_path
-        self.dst_path = dst_path
+        super(File, self).__init__(src_path, dst_path)
         self.main_type = main_type
         self.sub_type = sub_type
-        self.log_details = {'filepath': self.src_path, 'maintype': self.main_type,
-                            'subtype': self.sub_type}
+        self.log_details.update({'maintype': self.main_type, 'subtype': self.sub_type})
         self.expected_mimetype, self.expected_extensions = self.crosscheck_mime()
         self.is_recursive = False
-        self.log_string = ''
-
-    def add_log_details(self, key, value):
-        self.log_details[key] = value
 
     def crosscheck_mime(self):
         # /usr/share/mime has interesting stuff
@@ -69,38 +59,18 @@ class File(object):
         actual_mimetype = '{}/{}'.format(self.main_type, self.sub_type)
         return actual_mimetype == self.expected_mimetype
 
-    def make_dangerous(self):
-        self.log_details['dangerous'] = True
-        path, filename = os.path.split(self.dst_path)
-        self.dst_path = os.path.join(path, 'DANGEROUS_{}_DANGEROUS'.format(filename))
 
-    def make_unknown(self):
-        self.log_details['unknown'] = True
-        path, filename = os.path.split(self.dst_path)
-        self.dst_path = os.path.join(path, 'UNKNOWN_{}'.format(filename))
+class KittenGroomer(KittenGroomerBase):
 
-    def make_binary(self):
-        self.log_details['binary'] = True
-        path, filename = os.path.split(self.dst_path)
-        self.dst_path = os.path.join(path, '{}.bin'.format(filename))
-
-
-class KittenGroomer(object):
-
-    def __init__(self, max_recursive=5):
-        self.src_root_dir = os.path.join(os.sep, 'media', 'src')
-        self.dst_root_dir = os.path.join(os.sep, 'media', 'dst')
-        self.log_root_dir = os.path.join(self.dst_root_dir, 'logs')
-        self.log_processing = os.path.join(self.log_root_dir, 'processing.log')
+    def __init__(self, root_src=None, root_dst=None, max_recursive=5):
+        if root_src is None:
+            root_src = os.path.join(os.sep, 'media', 'src')
+        if root_dst is None:
+            root_dst = os.path.join(os.sep, 'media', 'dst')
+        super(KittenGroomer, self).__init__(root_src, root_dst)
 
         self.recursive = 0
         self.max_recursive = max_recursive
-
-        # quickSetup(file=self.log_processing)
-        quickSetup()
-        self.log_name = log.name('files')
-
-        self.cur_file = None
 
         subtypes_apps = [
             (mimes_office, self._office_related),
@@ -133,30 +103,6 @@ class KittenGroomer(object):
                 to_return[st] = fct
         return to_return
 
-    def _safe_rmtree(self, directory):
-        if os.path.exists(directory):
-            shutil.rmtree(directory)
-
-    def _safe_remove(self, filepath):
-        if os.path.exists(filepath):
-            os.remove(filepath)
-
-    def _safe_mkdir(self, directory):
-        if not os.path.exists(directory):
-            os.makedirs(directory)
-
-    def _safe_copy(self):
-        ''' Create dir if needed '''
-        try:
-            dst_path, filename = os.path.split(self.cur_file.dst_path)
-            self._safe_mkdir(dst_path)
-            shutil.copy(self.cur_file.src_path, self.cur_file.dst_path)
-            return True
-        except Exception as e:
-            # TODO: Logfile
-            print(e)
-            return False
-
     def _list_all_files(self, directory):
         for root, dirs, files in os.walk(directory):
             for filename in files:
@@ -164,16 +110,6 @@ class KittenGroomer(object):
                 mimetype = magic.from_file(filepath, mime=True)
                 maintype, subtype = mimetype.split('/')
                 yield filepath, maintype, subtype
-
-    def _run_process(self, command_line):
-        args = shlex.split(command_line)
-        p = subprocess.Popen(args)
-        while True:
-            code = p.poll()
-            if code is not None:
-                break
-            time.sleep(1)
-        return True
 
     def _print_log(self):
         tmp_log = self.log_name.fields(**self.cur_file.log_details)
@@ -278,7 +214,7 @@ class KittenGroomer(object):
         extract_command = '{} -p1 x {} -o{} -bd'.format(SEVENZ, self.cur_file.src_path, tmpdir)
         self._run_process(extract_command)
         self.recursive += 1
-        self.processdir(self.cur_file.dst_path, tmpdir)
+        self.processdir(tmpdir, self.cur_file.dst_path)
         self.recursive -= 1
         self._safe_rmtree(tmpdir)
 
@@ -315,11 +251,11 @@ class KittenGroomer(object):
 
     #######################
 
-    def processdir(self, dst_dir=None, src_dir=None):
-        if dst_dir is None:
-            dst_dir = self.dst_root_dir
+    def processdir(self, src_dir=None, dst_dir=None):
         if src_dir is None:
             src_dir = self.src_root_dir
+        if dst_dir is None:
+            dst_dir = self.dst_root_dir
 
         if self.recursive > 0:
             self._print_log()
@@ -344,6 +280,6 @@ class KittenGroomer(object):
                 self._print_log()
 
 if __name__ == '__main__':
-    kg = KittenGroomer()
-    kg.processdir('/home/raphael/gits/KittenGroomer/tests/content_img_vfat_norm_out',
-                  '/home/raphael/gits/KittenGroomer/tests/content_img_vfat_norm')
+    kg = KittenGroomer('/home/raphael/gits/KittenGroomer/tests/content_img_vfat_norm',
+                       '/home/raphael/gits/KittenGroomer/tests/content_img_vfat_norm_out')
+    kg.processdir()
