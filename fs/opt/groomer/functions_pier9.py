@@ -43,7 +43,6 @@ class KittenGroomerPier9(KittenGroomerBase):
             tmp_log.debug(self.cur_file.log_string)
 
     def processdir(self):
-
         for srcpath in self._list_all_files(self.src_root_dir):
             self.log_name.info('Processing {}', srcpath.replace(self.src_root_dir + '/', ''))
             self.cur_file = FilePier9(srcpath, srcpath.replace(self.src_root_dir, self.dst_root_dir))

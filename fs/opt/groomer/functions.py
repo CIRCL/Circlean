@@ -3,6 +3,9 @@
 import magic
 import os
 import mimetypes
+import shlex
+import subprocess
+import time
 
 from helpers import FileBase, KittenGroomerBase
 
@@ -25,10 +28,10 @@ mimes_data = ['octet-stream']
 
 class File(FileBase):
 
-    def __init__(self, src_path, dst_path, main_type, sub_type):
+    def __init__(self, src_path, dst_path):
         super(File, self).__init__(src_path, dst_path)
-        self.main_type = main_type
-        self.sub_type = sub_type
+        mimetype = magic.from_file(src_path, mime=True)
+        self.main_type, self.sub_type = mimetype.split('/')
         self.log_details.update({'maintype': self.main_type, 'subtype': self.sub_type})
         self.expected_mimetype, self.expected_extensions = self.crosscheck_mime()
         self.is_recursive = False
@@ -103,14 +106,6 @@ class KittenGroomer(KittenGroomerBase):
                 to_return[st] = fct
         return to_return
 
-    def _list_all_files(self, directory):
-        for root, dirs, files in os.walk(directory):
-            for filename in files:
-                filepath = os.path.join(root, filename)
-                mimetype = magic.from_file(filepath, mime=True)
-                maintype, subtype = mimetype.split('/')
-                yield filepath, maintype, subtype
-
     def _print_log(self):
         tmp_log = self.log_name.fields(**self.cur_file.log_details)
         if self.cur_file.log_details.get('dangerous'):
@@ -119,6 +114,16 @@ class KittenGroomer(KittenGroomerBase):
             tmp_log.info(self.cur_file.log_string)
         else:
             tmp_log.debug(self.cur_file.log_string)
+
+    def _run_process(self, command_line):
+        args = shlex.split(command_line)
+        p = subprocess.Popen(args)
+        while True:
+            code = p.poll()
+            if code is not None:
+                break
+            time.sleep(1)
+        return True
 
     #######################
 
@@ -269,13 +274,12 @@ class KittenGroomer(KittenGroomerBase):
                 archbomb_path = src_dir[:-len('_temp')]
                 self._safe_remove(archbomb_path)
 
-        for srcpath, maintype, subtype in self._list_all_files(src_dir):
-            self.log_name.info('Processing {} ({}/{})', srcpath.replace(src_dir + '/', ''),
-                               maintype, subtype)
-            self.cur_file = File(srcpath, srcpath.replace(src_dir, dst_dir),
-                                 maintype, subtype)
+        for srcpath in self._list_all_files(src_dir):
+            self.cur_file = File(srcpath, srcpath.replace(src_dir, dst_dir))
 
-            self.mime_processing_options.get(maintype, self.unknown)()
+            self.log_name.info('Processing {} ({}/{})', srcpath.replace(src_dir + '/', ''),
+                               self.cur_file.main_type, self.cur_file.sub_type)
+            self.mime_processing_options.get(self.cur_file.main_type, self.unknown)()
             if not self.cur_file.is_recursive:
                 self._print_log()
 

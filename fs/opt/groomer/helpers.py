@@ -3,9 +3,6 @@
 import os
 import shutil
 from twiggy import quickSetup, log
-import shlex
-import subprocess
-import time
 
 
 class KittenGroomerError(Exception):
@@ -90,19 +87,12 @@ class KittenGroomerBase(object):
                 filepath = os.path.join(root, filename)
                 yield filepath
 
-    def _run_process(self, command_line):
-        args = shlex.split(command_line)
-        p = subprocess.Popen(args)
-        while True:
-            code = p.poll()
-            if code is not None:
-                break
-            time.sleep(1)
-        return True
-
     def _print_log(self):
-        # Not implemented
-        pass
+        '''
+            You probably want to reimplement it in the subclass
+        '''
+        tmp_log = self.log_name.fields(**self.cur_file.log_details)
+        tmp_log.info('It did a thing.')
 
     #######################
 
