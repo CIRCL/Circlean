@@ -29,6 +29,7 @@ mimes_data = ['octet-stream']
 class File(FileBase):
 
     def __init__(self, src_path, dst_path):
+        ''' Init file object, set the mimetype '''
         super(File, self).__init__(src_path, dst_path)
         mimetype = magic.from_file(src_path, mime=True)
         self.main_type, self.sub_type = mimetype.split('/')
@@ -37,6 +38,9 @@ class File(FileBase):
         self.is_recursive = False
 
     def crosscheck_mime(self):
+        '''
+            Set the expected mime and extension variables based on mime type.
+        '''
         # /usr/share/mime has interesting stuff
 
         # guess_type uses the extension to get a mime type
@@ -51,12 +55,14 @@ class File(FileBase):
         return expected_mimetype, expected_extensions
 
     def verify_extension(self):
+        '''Check if the extension is the one we expect'''
         if self.expected_extensions is None:
             return None
         path, actual_extension = os.path.splitext(self.src_path)
         return actual_extension in self.expected_extensions
 
     def verify_mime(self):
+        '''Check if the mime is the one we expect'''
         if self.expected_mimetype is None:
             return None
         actual_mimetype = '{}/{}'.format(self.main_type, self.sub_type)
@@ -66,6 +72,9 @@ class File(FileBase):
 class KittenGroomer(KittenGroomerBase):
 
     def __init__(self, root_src=None, root_dst=None, max_recursive=5):
+        '''
+            Initialize the basics of the conversion process
+        '''
         if root_src is None:
             root_src = os.path.join(os.sep, 'media', 'src')
         if root_dst is None:
@@ -100,6 +109,9 @@ class KittenGroomer(KittenGroomerBase):
 
     # ##### Helpers #####
     def _init_subtypes_application(self, subtypes_application):
+        '''
+            Create the Dict to pick the right function based on the sub mime type
+        '''
         to_return = {}
         for list_subtypes, fct in subtypes_application:
             for st in list_subtypes:
@@ -107,6 +119,9 @@ class KittenGroomer(KittenGroomerBase):
         return to_return
 
     def _print_log(self):
+        '''
+            Print the logs related to the current file being processed
+        '''
         tmp_log = self.log_name.fields(**self.cur_file.log_details)
         if self.cur_file.log_details.get('dangerous'):
             tmp_log.warning(self.cur_file.log_string)
@@ -116,6 +131,7 @@ class KittenGroomer(KittenGroomerBase):
             tmp_log.debug(self.cur_file.log_string)
 
     def _run_process(self, command_line):
+        '''Run subprocess, wait until it finishes'''
         args = shlex.split(command_line)
         p = subprocess.Popen(args)
         while True:
@@ -138,21 +154,25 @@ class KittenGroomer(KittenGroomerBase):
 
     # ##### Threated as malicious, no reason to have it on a USB key ######
     def example(self):
+        '''Way to process example file'''
         self.cur_file.log_string += 'Example file'
         self.cur_file.make_dangerous()
         self._safe_copy()
 
     def message(self):
+        '''Way to process message file'''
         self.cur_file.log_string += 'Message file'
         self.cur_file.make_dangerous()
         self._safe_copy()
 
     def model(self):
+        '''Way to process model file'''
         self.cur_file.log_string += 'Model file'
         self.cur_file.make_dangerous()
         self._safe_copy()
 
     def multipart(self):
+        '''Way to process multipart file'''
         self.cur_file.log_string += 'Multipart file'
         self.cur_file.make_dangerous()
         self._safe_copy()
@@ -176,11 +196,13 @@ class KittenGroomer(KittenGroomerBase):
         self._unknown_app()
 
     def _executables(self):
+        '''Way to process executable file'''
         self.cur_file.add_log_details('processing_type', 'executable')
         self.cur_file.make_dangerous()
         self._safe_copy()
 
     def _office_related(self):
+        '''Way to process all the files LibreOffice can handle'''
         self.cur_file.add_log_details('processing_type', 'office')
         dst_dir, filename = os.path.split(self.cur_file.dst_path)
         tmpdir = os.path.join(dst_dir, 'temp')
@@ -194,11 +216,13 @@ class KittenGroomer(KittenGroomerBase):
         self._safe_rmtree(tmpdir)
 
     def _pdfa(self, tmpsrcpath):
+        '''Way to process PDF/A file'''
         pdf_command = '{} --dest-dir / {} {}'.format(PDF2HTMLEX, tmpsrcpath,
                                                      self.cur_file.dst_path + '.html')
         self._run_process(pdf_command)
 
     def _pdf(self):
+        '''Way to process PDF file'''
         self.cur_file.add_log_details('processing_type', 'pdf')
         dst_dir, filename = os.path.split(self.cur_file.dst_path)
         tmpdir = os.path.join(dst_dir, 'temp')
@@ -211,6 +235,7 @@ class KittenGroomer(KittenGroomerBase):
         self._safe_rmtree(tmpdir)
 
     def _archive(self):
+        '''Way to process Archive'''
         self.cur_file.add_log_details('processing_type', 'archive')
         self.cur_file.is_recursive = True
         self.cur_file.log_string += 'Archive extracted, processing content.'
@@ -224,10 +249,12 @@ class KittenGroomer(KittenGroomerBase):
         self._safe_rmtree(tmpdir)
 
     def _unknown_app(self):
+        '''Way to process an unknown file'''
         self.cur_file.make_unknown()
         self._safe_copy()
 
     def _binary_app(self):
+        '''Way to process an unknown binary file'''
         self.cur_file.make_binary()
         self._safe_copy()
 
@@ -235,18 +262,22 @@ class KittenGroomer(KittenGroomerBase):
 
     # ##### Not converted, checking the mime type ######
     def audio(self):
+        '''Way to process an audio file'''
         self.cur_file.log_string += 'Audio file'
         self._media_processing()
 
     def image(self):
+        '''Way to process an image'''
         self.cur_file.log_string += 'Image file'
         self._media_processing()
 
     def video(self):
+        '''Way to process a video'''
         self.cur_file.log_string += 'Video file'
         self._media_processing()
 
     def _media_processing(self):
+        '''Generic way to process all the media files'''
         self.cur_log.fields(processing_type='media')
         if not self.cur_file.verify_mime() or not self.cur_file.verify_extension():
             # The extension is unknown or doesn't match the mime type => suspicious
@@ -257,6 +288,9 @@ class KittenGroomer(KittenGroomerBase):
     #######################
 
     def processdir(self, src_dir=None, dst_dir=None):
+        '''
+            Main function doing the processing
+        '''
         if src_dir is None:
             src_dir = self.src_root_dir
         if dst_dir is None:

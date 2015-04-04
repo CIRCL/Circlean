@@ -18,6 +18,7 @@ up = ['.upp', '.up3', '.stl', '.obj']
 class FilePier9(FileBase):
 
     def __init__(self, src_path, dst_path):
+        ''' Init file object, set the extension '''
         super(FilePier9, self).__init__(src_path, dst_path)
         a, self.extension = os.path.splitext(self.src_path)
 
@@ -25,7 +26,9 @@ class FilePier9(FileBase):
 class KittenGroomerPier9(KittenGroomerBase):
 
     def __init__(self, root_src=None, root_dst=None):
-
+        '''
+            Initialize the basics of the copy
+        '''
         if root_src is None:
             root_src = os.path.join(os.sep, 'media', 'src')
         if root_dst is None:
@@ -36,6 +39,9 @@ class KittenGroomerPier9(KittenGroomerBase):
         self.authorized_extensions = printers + cnc + shopbot + omax + epilog_laser + metabeam + up
 
     def _print_log(self):
+        '''
+            Print the logs related to the current file being processed
+        '''
         tmp_log = self.log_name.fields(**self.cur_file.log_details)
         if not self.cur_file.log_details.get('valid'):
             tmp_log.warning(self.cur_file.log_string)
@@ -43,6 +49,9 @@ class KittenGroomerPier9(KittenGroomerBase):
             tmp_log.debug(self.cur_file.log_string)
 
     def processdir(self):
+        '''
+            Main function doing the processing
+        '''
         for srcpath in self._list_all_files(self.src_root_dir):
             self.log_name.info('Processing {}', srcpath.replace(self.src_root_dir + '/', ''))
             self.cur_file = FilePier9(srcpath, srcpath.replace(self.src_root_dir, self.dst_root_dir))
