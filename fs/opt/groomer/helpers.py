@@ -3,7 +3,7 @@
 import os
 import shutil
 from twiggy import quickSetup, log
-
+import argparse
 
 class KittenGroomerError(Exception):
     def __init__(self, message):
@@ -138,3 +138,12 @@ class KittenGroomerBase(object):
             Main function doing the work, you have to implement it yourself.
         '''
         raise ImplementationRequired('You have to implement the result processdir.')
+
+
+def main(kg_implementation):
+    parser = argparse.ArgumentParser(prog='KittenGroomer', description='Call the KittenGroomer implementation to do things on files present in the source directory to the destination directory')
+    parser.add_argument('-s', '--source', type=str, help='Source directory')
+    parser.add_argument('-d', '--destination', type=str, help='Destination directory')
+    args = parser.parse_args()
+    kg = kg_implementation(args.source, args.destination)
+    kg.processdir()

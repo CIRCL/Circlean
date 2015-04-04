@@ -7,7 +7,7 @@ import shlex
 import subprocess
 import time
 
-from helpers import FileBase, KittenGroomerBase
+from helpers import FileBase, KittenGroomerBase, main
 
 LIBREOFFICE = '/usr/bin/unoconv'
 GS = '/usr/bin/gs'
@@ -318,6 +318,4 @@ class KittenGroomer(KittenGroomerBase):
                 self._print_log()
 
 if __name__ == '__main__':
-    kg = KittenGroomer('/home/raphael/gits/KittenGroomer/tests/content_img_vfat_norm',
-                       '/home/raphael/gits/KittenGroomer/tests/content_img_vfat_norm_out')
-    kg.processdir()
+    main(KittenGroomer)

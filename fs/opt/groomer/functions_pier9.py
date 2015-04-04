@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 
-from helpers import FileBase, KittenGroomerBase
+from helpers import FileBase, KittenGroomerBase, main
 
 
 printers = ['.STL', '.obj']
@@ -65,6 +65,4 @@ class KittenGroomerPier9(KittenGroomerBase):
 
 
 if __name__ == '__main__':
-    kg = KittenGroomerPier9('/home/raphael/gits/KittenGroomer/tests/content_img_vfat_norm',
-                            '/home/raphael/gits/KittenGroomer/tests/content_img_vfat_norm_out')
-    kg.processdir()
+    main(KittenGroomerPier9)
