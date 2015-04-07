@@ -26,6 +26,12 @@ echo $! > /tmp/music.pid
 # com::sun::star::uno::RuntimeException
 mkdir /tmp/libreoffice
 chown -R kitten:kitten /tmp/libreoffice
+# Avoid:
+# Failed to connect to /usr/lib/libreoffice/program/soffice.bin (pid=2455) in 6 seconds.
+# Connector : couldn't connect to socket (Success)
+# Error: Unable to connect or start own listener. Aborting.
+mkdir /tmp/libreoffice_config
+chown -R kitten:kitten /tmp/libreoffice_config
 
 su ${USERNAME} -c ./groomer.sh
 

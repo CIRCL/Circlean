@@ -162,8 +162,9 @@ Final image specifics
 * Install repencencies required by the project
 
 ```
-    apt-get install libreoffice p7zip-full libfontforge1 timidity freepats pmount ntfs-3g
+    apt-get install libreoffice p7zip-full libfontforge1 timidity freepats pmount ntfs-3g unoconv python-pip
     dpkg -i *.deb
+    pip install twiggy python-magic
 ```
 
 * Create the user, make Libreoffice and mtab working on a RO filesystem
@@ -172,6 +173,8 @@ Final image specifics
     useradd -m kitten
     pushd /home/kitten
     ln -s /tmp/libreoffice
+    mkdir .config/
+    ln -s /tmp/libreoffice_config .config/libreoffice
     popd
     chown -R kitten:kitten /home/kitten
     ln -s /proc/mounts /etc/mtab
