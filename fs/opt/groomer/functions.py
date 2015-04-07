@@ -9,7 +9,8 @@ import time
 
 from helpers import FileBase, KittenGroomerBase, main
 
-LIBREOFFICE = '/usr/bin/unoconv'
+UNOCONV = '/usr/bin/unoconv'
+LIBREOFFICE = '/usr/bin/libreoffice'
 GS = '/usr/bin/gs'
 PDF2HTMLEX = '/usr/bin/pdf2htmlEX'
 SEVENZ = '/usr/bin/7z'
@@ -107,6 +108,9 @@ class KittenGroomer(KittenGroomerBase):
             'inode': self.inode,
         }
 
+        # Dirty trick to run libreoffice at least once and avoid unoconv to crash...
+        self._run_process(LIBREOFFICE, 5)
+
     # ##### Helpers #####
     def _init_subtypes_application(self, subtypes_application):
         '''
@@ -130,13 +134,20 @@ class KittenGroomer(KittenGroomerBase):
         else:
             tmp_log.debug(self.cur_file.log_string)
 
-    def _run_process(self, command_line):
+    def _run_process(self, command_line, timeout=0):
         '''Run subprocess, wait until it finishes'''
+        if timeout != 0:
+            deadline = time.time() + timeout
+        else:
+            deadline = None
         args = shlex.split(command_line)
         p = subprocess.Popen(args)
         while True:
             code = p.poll()
             if code is not None:
+                break
+            if deadline is not None and time.time() > deadline:
+                p.kill()
                 break
             time.sleep(1)
         return True
@@ -210,7 +221,7 @@ class KittenGroomer(KittenGroomerBase):
         tmppath = os.path.join(tmpdir, name + '.pdf')
         self._safe_mkdir(tmpdir)
         lo_command = '{} --format pdf -eSelectPdfVersion=1 --output {} {}'.format(
-            LIBREOFFICE, tmppath, self.cur_file.src_path)
+            UNOCONV, tmppath, self.cur_file.src_path)
         self._run_process(lo_command)
         self._pdfa(tmppath)
         self._safe_rmtree(tmpdir)
