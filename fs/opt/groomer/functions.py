@@ -198,7 +198,7 @@ class KittenGroomer(KittenGroomerBase):
 
     def application(self):
         ''' Everything can be there, using the subtype to decide '''
-        for subtype, fct in self.subtypes_application.iteritems():
+        for subtype, fct in list(self.subtypes_application.items()):
             if subtype in self.cur_file.sub_type:
                 fct()
                 self.cur_file.log_string += 'Application file'
