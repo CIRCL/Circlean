@@ -7,3 +7,7 @@ deb/
 *img
 
 ledBtn
+
+python/build/*
+pyton/dist/*
+python/kittengroomer.egg-info/*
