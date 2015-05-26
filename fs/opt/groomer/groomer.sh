@@ -102,7 +102,7 @@ do
         LOGFILE="${LOGS}/processing.txt"
 
         echo "==== Starting processing of /media/${SRC} to ${target_dir}. ====" >> ${LOGFILE}
-        python ./functions.py --source /media/${SRC} --destination ${target_dir} || true
+        generic.py --source /media/${SRC} --destination ${target_dir} || true
         echo "==== Done with /media/${SRC} to ${target_dir}. ====" >> ${LOGFILE}
 
         ls -lR "${target_dir}"
