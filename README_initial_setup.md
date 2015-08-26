@@ -1,3 +1,12 @@
+Install Qemu
+============
+
+Install the necessary packages:
+
+```
+    sudo apt-get qemu qemu-user-static
+```
+
 Create a new image from scratch
 ===============================
 
@@ -84,8 +93,7 @@ Build environment specifics
 
 ```
     echo 'deb-src http://ftp.debian.org/debian/ wheezy-backports main' >> /etc/apt/sources.list
-    gpg --keyserver pgpkeys.mit.edu --recv-key  8B48AD6246925553
-    gpg -a --export 8B48AD6246925553 | sudo apt-key add -
+    apt-get instal debian-keyring debian-archive-keyring
     apt-get update
 ```
 
@@ -102,6 +110,8 @@ Build environment specifics
     cd poppler-<VERSION>/
     dpkg-buildpackage
 ```
+At least on Debian 8, you may receive an error about libpoppler-glib-dev missing the gir1.2-poppler requirement; you can ignore it.
+
 
 * Install the packages required by pdf2htmlEX
 
@@ -185,6 +195,8 @@ Final image specifics
 ```
     sudo ./copy_to_final.sh
 ```
+
+* Exit the chroot
 
 Write the image on a SD card
 ============================
