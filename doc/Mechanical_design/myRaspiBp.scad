@@ -5,11 +5,12 @@
 //						added spacers on cover (MD)
 //	v 1.5 - 08/02/2015 - fine tuning of connector hole Z position
 //	v 1.7 - 10/02/2015 - fine tuning of holes, cutouts, spacers
+//  v 1.8 - 21/07/2015 - bug correction : inverted riser parameters
 //
 
 // design control
 test_fit = 0 ;		// set to one for test fit
-top_bottom = 1 ;		// 0 = bottom only, 1 = top only, 2 = top & bottom
+top_bottom = 0 ;		// 0 = bottom only, 1 = top only, 2 = top & bottom
 print = 1 ;			// set to one for printing configuration 
 
 // parameters
@@ -179,7 +180,7 @@ module box_bottom() {
 				translate([uSD_x, 0, 0])
 					spacers(hole_x1 + tolerance, hole_x2 + tolerance, 
 							hole_y + tolerance, device_y - hole_y + tolerance, 
-							riser_r, riser_z) ;
+							riser_z, riser_r) ;
 			}
 		}
 	
