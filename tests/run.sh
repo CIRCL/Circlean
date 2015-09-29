@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# http://xecdesign.com/qemu-emulating-raspberry-pi-the-easy-way/
+# http://pub.phyks.me/respawn/mypersonaldata/public/2014-05-20-11-08-01/
 
 IMAGE='../2015-02-16-raspbian-wheezy.img'
 OFFSET_ROOTFS=$((122880 * 512))
