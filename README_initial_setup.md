@@ -1,10 +1,10 @@
-Install Qemu
+Install Qemu and Expect
 ============
 
 Install the necessary packages:
 
 ```
-    sudo apt-get qemu qemu-user-static
+    sudo apt-get install qemu qemu-user-static expect
 ```
 
 Create a new image from scratch
@@ -196,6 +196,12 @@ Final image specifics
     sudo ./copy_to_final.sh
 ```
 
+* Get the PyCIRCLean modules
+```
+    pip install git+https://github.com/CIRCL/PyCIRCLean
+```
+
+
 * Exit the chroot
 
 Write the image on a SD card
@@ -210,9 +216,23 @@ Write the image on a SD card
 Run the tests
 =============
 
-Make sure to set the filename of the image in `tests/run.sh`
+* Get the qemu kernel:
+```
+   pushd tests; wget https://github.com/dhruvvyas90/qemu-rpi-kernel/raw/master/kernel-qemu; popd
+```
 
+* Put some test data from tests/testFiles into tests/content_img_vfat_norm
+
+* Comment out the other tests in tests/run.sh or populate those directories as
+  well
+
+* Make sure to set the filename of the image and the kernel in `tests/run.sh`
+
+* Run the tests:
 ```
     sudo ./run_tests.sh
 ```
 
+* If the image run processed images correctly but doesn't exit and unmount the
+  images cleanly, look at tests/run.exp and make sure it's waiting for the
+  string your qemu and kernel actually produce.
