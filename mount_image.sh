@@ -22,6 +22,7 @@ if [ -z "$1" ]; then
     exit
 fi
 COMMAND=${1}
+COMMAND_OPT=${2}
 
 set -e
 set -x
@@ -99,5 +100,4 @@ mv ${CHROOT_PATH}/etc/ld.so.preload ${CHROOT_PATH}/etc/ld.so.preload_bkp
 # To make debugging easier
 echo "KittenGroomer: Image mounted, executing command from mount_image.sh" 1>&2
 
-
-${COMMAND} ${CHROOT_PATH}
+${COMMAND} ${CHROOT_PATH} ${COMMAND_OPT}
