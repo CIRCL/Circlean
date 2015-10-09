@@ -5,6 +5,18 @@
 # To make debugging easier
 echo "KittenGroomer: in tests/run.sh" 1>&2
 
+if [ -z "$1" ]; then
+    echo "Please tell me which partition type to test."
+    echo "VFAT_NORM VFAT_PART NTPS_NORM EXT2 EXT3 EXT4"
+    exit
+fi
+if [ -z "$2" ]; then
+    echo "Please tell me which file type to test."
+    echo "t_images1"
+    exit
+fi
+TEST_PART_TYPE=${1}
+TEST_SOURCE_TYPE=${2}
 
 IMAGE='../raspbian-wheezy.img'
 OFFSET_ROOTFS=$((122880 * 512))
@@ -48,54 +60,88 @@ mount -o loop,offset=${OFFSET_ROOTFS} ${IMAGE} ${SETUP_DIR}
 mv ${SETUP_DIR}/etc/ld.so.preload ${SETUP_DIR}/etc/ld.so.preload_bkp
 umount ${SETUP_DIR}
 
+
+
 # Prepare the test source key
-mount -o loop,offset=${OFFSET_VFAT_NORM} ${IMAGE_VFAT_NORM} ${SETUP_DIR}
-cp -rf content_img_vfat_norm/* ${SETUP_DIR}
-umount ${SETUP_DIR}
+if [ ${TEST_PART_TYPE} = "VFAT_NORM" ]; then
+    mount -o loop,offset=${OFFSET_VFAT_NORM} ${IMAGE_VFAT_NORM} ${SETUP_DIR}
+    cp -rf testFiles/${TEST_SOURCE_TYPE}/* ${SETUP_DIR}
+    umount ${SETUP_DIR}
+fi
+
 # Prepare the test source key (with partitions)
-#mount -o loop,offset=${OFFSET_VFAT_PART1} ${IMAGE_VFAT_PART} ${SETUP_DIR}
-#cp -rf content_img_vfat_part1/* ${SETUP_DIR}
-#umount ${SETUP_DIR}
-#mount -o loop,offset=${OFFSET_VFAT_PART2} ${IMAGE_VFAT_PART} ${SETUP_DIR}
-#cp -rf content_img_vfat_part2/* ${SETUP_DIR}
-#umount ${SETUP_DIR}
+if [ ${TEST_PART_TYPE} = "VFAT_PART" ]; then
+    mount -o loop,offset=${OFFSET_VFAT_PART1} ${IMAGE_VFAT_PART} ${SETUP_DIR}
+    cp -rf testFiles/${TEST_SOURCE_TYPE}/* ${SETUP_DIR}
+    umount ${SETUP_DIR}
+    mount -o loop,offset=${OFFSET_VFAT_PART2} ${IMAGE_VFAT_PART} ${SETUP_DIR}
+    cp -rf testFiles/${TEST_SOURCE_TYPE}/* ${SETUP_DIR}
+    umount ${SETUP_DIR}
+fi
+
 # Prepare the test source key (NTFS)
-#mount -o loop,offset=${OFFSET_VFAT_NORM} ${IMAGE_NTFS_NORM} ${SETUP_DIR}
-#cp -rf content_img_vfat_norm/* ${SETUP_DIR}
-#umount ${SETUP_DIR}
+if [ ${TEST_PART_TYPE} = "NTFS_NORM" ]; then
+    mount -o loop,offset=${OFFSET_VFAT_NORM} ${IMAGE_NTFS_NORM} ${SETUP_DIR}
+    cp -rf testFiles/${TEST_SOURCE_TYPE}/* ${SETUP_DIR}
+    umount ${SETUP_DIR}
+fi
+
 # Prepare the test source key (EXT2)
-#mount -o loop,offset=${OFFSET_VFAT_NORM} ${IMAGE_EXT2} ${SETUP_DIR}
-#cp -rf content_img_vfat_norm/* ${SETUP_DIR}
-#umount ${SETUP_DIR}
+if [ ${TEST_PART_TYPE} = "EXT2" ]; then
+    mount -o loop,offset=${OFFSET_VFAT_NORM} ${IMAGE_EXT2} ${SETUP_DIR}
+    cp -rf testFiles/${TEST_SOURCE_TYPE}/* ${SETUP_DIR}
+    umount ${SETUP_DIR}
+fi
+
 # Prepare the test source key (EXT3)
-#mount -o loop,offset=${OFFSET_VFAT_NORM} ${IMAGE_EXT3} ${SETUP_DIR}
-#cp -rf content_img_vfat_norm/* ${SETUP_DIR}
-#umount ${SETUP_DIR}
+if [ ${TEST_PART_TYPE} = "EXT4" ]; then
+    mount -o loop,offset=${OFFSET_VFAT_NORM} ${IMAGE_EXT3} ${SETUP_DIR}
+    cp -rf testFiles/${TEST_SOURCE_TYPE}/* ${SETUP_DIR}
+    umount ${SETUP_DIR}
+fi
+
 # Prepare the test source key (EXT4)
-#mount -o loop,offset=${OFFSET_VFAT_NORM} ${IMAGE_EXT4} ${SETUP_DIR}
-#cp -rf content_img_vfat_norm/* ${SETUP_DIR}
-#umount ${SETUP_DIR}
+if [ ${TEST_PART_TYPE} = "EXT4" ]; then
+    mount -o loop,offset=${OFFSET_VFAT_NORM} ${IMAGE_EXT4} ${SETUP_DIR}
+    cp -rf testFiles/${TEST_SOURCE_TYPE}/* ${SETUP_DIR}
+    umount ${SETUP_DIR}
+fi
 
 # To make debugging easier
 echo "KittenGroomer: about to enter tests/run.exp" 1>&2
 
 chmod a-w ${IMAGE}
-./run.exp ${IMAGE} ${IMAGE_VFAT_NORM} ${IMAGE_DEST}
-#sleep 10
-#./run.exp ${IMAGE} ${IMAGE_VFAT_PART} ${IMAGE_DEST}
-#sleep 10
-#./run.exp ${IMAGE} ${IMAGE_NTFS_NORM} ${IMAGE_DEST}
+
+
+if [ ${TEST_PART_TYPE} = "VFAT_NORM" ]; then
+    ./run.exp ${IMAGE} ${IMAGE_VFAT_NORM} ${IMAGE_DEST}
+    sleep 10
+fi
+
+if [ ${TEST_PART_TYPE} = "VFAT_PART" ]; then
+    ./run.exp ${IMAGE} ${IMAGE_VFAT_PART} ${IMAGE_DEST}
+    sleep 10
+fi
+
+if [ ${TEST_PART_TYPE} = "NTFS_NORM" ]; then
+    ./run.exp ${IMAGE} ${IMAGE_NTFS_NORM} ${IMAGE_DEST}
+    sleep 10
+fi
 
 # EXT* not supported due to permission issues
-#sleep 10
-#./run.exp ${IMAGE} ${IMAGE_EXT2} ${IMAGE_DEST}
-#sleep 10
-#./run.exp ${IMAGE} ${IMAGE_EXT3} ${IMAGE_DEST}
-#sleep 10
-#./run.exp ${IMAGE} ${IMAGE_EXT4} ${IMAGE_DEST}
+if [ ${TEST_PART_TYPE} = "EXT2" ]; then
+    ./run.exp ${IMAGE} ${IMAGE_EXT2} ${IMAGE_DEST}
+    sleep 10
+fi
+if [ ${TEST_PART_TYPE} = "EXT3" ]; then
+    ./run.exp ${IMAGE} ${IMAGE_EXT3} ${IMAGE_DEST}
+    sleep 10
+fi
+if [ ${TEST_PART_TYPE} = "NTFS_EXT4" ]; then
+    ./run.exp ${IMAGE} ${IMAGE_EXT4} ${IMAGE_DEST}
+    sleep 10
+fi
 
-
-#./run.exp ${IMAGE} ${IMAGE_VFAT_PART} ${IMAGE_DEST}
 chmod +w ${IMAGE}
 
 # To make debugging easier
