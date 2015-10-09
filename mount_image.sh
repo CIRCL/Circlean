@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# To make debugging easier
+echo "KittenGroomer: in mount_image.sh" 1>&2
+
 # Notes:
 # - To chroot in an existing SD card, unset IMAGE. Change the paths to the partitions if needed.
 # - The offsets are thoses of 2013-02-09-wheezy-raspbian.img. It will change on an other image.
@@ -92,5 +95,9 @@ mount -o bind /tmp ${CHROOT_PATH}/tmp
 cp -pf /etc/resolv.conf ${CHROOT_PATH}/etc
 
 mv ${CHROOT_PATH}/etc/ld.so.preload ${CHROOT_PATH}/etc/ld.so.preload_bkp
+
+# To make debugging easier
+echo "KittenGroomer: Image mounted, executing command from mount_image.sh" 1>&2
+
 
 ${COMMAND} ${CHROOT_PATH}

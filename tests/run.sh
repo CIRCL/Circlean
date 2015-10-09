@@ -2,6 +2,10 @@
 
 # http://pub.phyks.me/respawn/mypersonaldata/public/2014-05-20-11-08-01/
 
+# To make debugging easier
+echo "KittenGroomer: in tests/run.sh" 1>&2
+
+
 IMAGE='../raspbian-wheezy.img'
 OFFSET_ROOTFS=$((122880 * 512))
 
@@ -49,28 +53,31 @@ mount -o loop,offset=${OFFSET_VFAT_NORM} ${IMAGE_VFAT_NORM} ${SETUP_DIR}
 cp -rf content_img_vfat_norm/* ${SETUP_DIR}
 umount ${SETUP_DIR}
 # Prepare the test source key (with partitions)
-mount -o loop,offset=${OFFSET_VFAT_PART1} ${IMAGE_VFAT_PART} ${SETUP_DIR}
-cp -rf content_img_vfat_part1/* ${SETUP_DIR}
-umount ${SETUP_DIR}
-mount -o loop,offset=${OFFSET_VFAT_PART2} ${IMAGE_VFAT_PART} ${SETUP_DIR}
-cp -rf content_img_vfat_part2/* ${SETUP_DIR}
-umount ${SETUP_DIR}
+#mount -o loop,offset=${OFFSET_VFAT_PART1} ${IMAGE_VFAT_PART} ${SETUP_DIR}
+#cp -rf content_img_vfat_part1/* ${SETUP_DIR}
+#umount ${SETUP_DIR}
+#mount -o loop,offset=${OFFSET_VFAT_PART2} ${IMAGE_VFAT_PART} ${SETUP_DIR}
+#cp -rf content_img_vfat_part2/* ${SETUP_DIR}
+#umount ${SETUP_DIR}
 # Prepare the test source key (NTFS)
-mount -o loop,offset=${OFFSET_VFAT_NORM} ${IMAGE_NTFS_NORM} ${SETUP_DIR}
-cp -rf content_img_vfat_norm/* ${SETUP_DIR}
-umount ${SETUP_DIR}
+#mount -o loop,offset=${OFFSET_VFAT_NORM} ${IMAGE_NTFS_NORM} ${SETUP_DIR}
+#cp -rf content_img_vfat_norm/* ${SETUP_DIR}
+#umount ${SETUP_DIR}
 # Prepare the test source key (EXT2)
-mount -o loop,offset=${OFFSET_VFAT_NORM} ${IMAGE_EXT2} ${SETUP_DIR}
-cp -rf content_img_vfat_norm/* ${SETUP_DIR}
-umount ${SETUP_DIR}
+#mount -o loop,offset=${OFFSET_VFAT_NORM} ${IMAGE_EXT2} ${SETUP_DIR}
+#cp -rf content_img_vfat_norm/* ${SETUP_DIR}
+#umount ${SETUP_DIR}
 # Prepare the test source key (EXT3)
-mount -o loop,offset=${OFFSET_VFAT_NORM} ${IMAGE_EXT3} ${SETUP_DIR}
-cp -rf content_img_vfat_norm/* ${SETUP_DIR}
-umount ${SETUP_DIR}
+#mount -o loop,offset=${OFFSET_VFAT_NORM} ${IMAGE_EXT3} ${SETUP_DIR}
+#cp -rf content_img_vfat_norm/* ${SETUP_DIR}
+#umount ${SETUP_DIR}
 # Prepare the test source key (EXT4)
-mount -o loop,offset=${OFFSET_VFAT_NORM} ${IMAGE_EXT4} ${SETUP_DIR}
-cp -rf content_img_vfat_norm/* ${SETUP_DIR}
-umount ${SETUP_DIR}
+#mount -o loop,offset=${OFFSET_VFAT_NORM} ${IMAGE_EXT4} ${SETUP_DIR}
+#cp -rf content_img_vfat_norm/* ${SETUP_DIR}
+#umount ${SETUP_DIR}
+
+# To make debugging easier
+echo "KittenGroomer: about to enter tests/run.exp" 1>&2
 
 chmod a-w ${IMAGE}
 ./run.exp ${IMAGE} ${IMAGE_VFAT_NORM} ${IMAGE_DEST}
@@ -91,3 +98,5 @@ chmod a-w ${IMAGE}
 #./run.exp ${IMAGE} ${IMAGE_VFAT_PART} ${IMAGE_DEST}
 chmod +w ${IMAGE}
 
+# To make debugging easier
+echo "KittenGroomer: done with tests/run.sh" 1>&2

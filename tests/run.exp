@@ -13,6 +13,6 @@ spawn qemu-system-arm -kernel kernel-qemu -cpu arm1176 -m 256 -M versatilepb \
     -mon chardev=mon1,mode=control,pretty=on \
     -vnc 0.0.0.0:1
 
-expect "reboot: System halted"
+expect "System halted."
 
 send "quit\n"
