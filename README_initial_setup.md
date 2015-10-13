@@ -1,10 +1,10 @@
-Install Qemu
+Install Qemu and Expect
 ============
 
 Install the necessary packages:
 
 ```
-    sudo apt-get qemu qemu-user-static
+    sudo apt-get install qemu qemu-user-static expect
 ```
 
 Create a new image from scratch
@@ -16,7 +16,8 @@ Create a new image from scratch
 * Unpack it:
 
 ```
-    unzip 2015-02-16-raspbian-wheezy.zip
+    unzip 2015-05-05-raspbian-wheezy.zip
+    mv 2015-05-05-raspbian-wheezy.zip raspbian-wheezy.zip
 ```
 
 Prepare the base image
@@ -25,12 +26,6 @@ Prepare the base image
 It will be used for the build environment and the final image.
 
 * [Add empty space to the image](resize_img.md)
-
-* Edit `mount_image.sh` and change the `IMAGE` variable accordingly
-
-```
-    IMAGE='2015-02-16-raspbian-wheezy.img'
-```
 
 * Chroot in the image
 
@@ -64,8 +59,8 @@ Setup two images
 * Create two separate images: one will be used to build the deb packages that are not available in wheezy
 
 ```
-    mv 2015-02-16-raspbian-wheezy.img BUILDENV_2015-02-16-raspbian-wheezy.img
-    cp BUILDENV_2015-02-16-raspbian-wheezy.img FINAL_2015-02-16-raspbian-wheezy.img
+    mv raspbian-wheezy.img BUILDENV-raspbian-wheezy.img
+    cp BUILDENV-raspbian-wheezy.img FINAL-raspbian-wheezy.img
 ```
 
 Build environment specifics
@@ -74,7 +69,7 @@ Build environment specifics
 * Create a symlink to the build image
 
 ```
-    ln -s  BUILDENV_2015-02-16-raspbian-wheezy.img 2015-02-16-raspbian-wheezy.img
+    ln -s  BUILDENV-raspbian-wheezy.img raspbian-wheezy.img
 ```
 
 * Chroot in the image
@@ -147,8 +142,8 @@ Final image specifics
 * Change the link to the image
 
 ```
-   rm 2015-02-16-raspbian-wheezy.img
-   ln -s FINAL_2015-02-16-raspbian-wheezy.img 2015-02-16-raspbian-wheezy.img
+   rm raspbian-wheezy.img
+   ln -s FINAL-raspbian-wheezy.img -raspbian-wheezy.img
 ```
 
 * Chroot in the image
@@ -196,6 +191,12 @@ Final image specifics
     sudo ./copy_to_final.sh
 ```
 
+* Get the PyCIRCLean modules
+```
+    pip install git+https://github.com/CIRCL/PyCIRCLean
+```
+
+
 * Exit the chroot
 
 Write the image on a SD card
@@ -204,15 +205,29 @@ Write the image on a SD card
 *WARNING*: Make sure you write on the right filesystem
 
 ```
-    sudo dd bs=4M if=FINAL_2015-02-16-raspbian-wheezy.img of=/dev/<FILESYSTEM>
+    sudo dd bs=4M if=FINAL-raspbian-wheezy.img of=/dev/<FILESYSTEM>
 ```
 
 Run the tests
 =============
 
-Make sure to set the filename of the image in `tests/run.sh`
+* Get the qemu kernel:
+```
+   pushd tests; wget https://github.com/dhruvvyas90/qemu-rpi-kernel/raw/master/kernel-qemu; popd
+```
 
+* Put some test data from tests/testFiles into tests/content_img_vfat_norm
+
+* Comment out the other tests in tests/run.sh or populate those directories as
+  well
+
+* Make sure to set the filename of the image and the kernel in `tests/run.sh`
+
+* Run the tests:
 ```
     sudo ./run_tests.sh
 ```
 
+* If the image run processed images correctly but doesn't exit and unmount the
+  images cleanly, look at tests/run.exp and make sure it's waiting for the
+  string your qemu and kernel actually produce.
