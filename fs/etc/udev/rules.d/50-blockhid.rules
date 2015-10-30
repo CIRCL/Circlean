@@ -1,0 +1,1 @@
+SUBSYSTEM=="hidraw", DRIVERS=="usbhid", RUN+="/bin/bash -c 'cd /sys/devices/platform/bcm2708_usb/usb1/1-1 ; for d in $(ls -d 1-1.[2-5]); do if [ $(ls -lR $d | grep -c usbhid) -gt 0 ] ; then echo 0 > $d/authorized ; fi ; done'"
