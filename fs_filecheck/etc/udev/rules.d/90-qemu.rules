@@ -1,0 +1,2 @@
+KERNEL=="sdc", SYMLINK+="mmcblk0"
+KERNEL=="sdc?", SYMLINK+="mmcblk0p%n",
