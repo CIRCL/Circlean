@@ -35,7 +35,7 @@ PARTITION_BOOT='/dev/mmcblk0p1'
 
 # If you use the img
 ##### Debian
-IMAGE='2015-11-06-CIRCLean.img'
+IMAGE='raspbian-wheezy.img'
 OFFSET_ROOTFS=$((122880 * 512))
 OFFSET_BOOT=$((8192 * 512))
 ##### Arch
