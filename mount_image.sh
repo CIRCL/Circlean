@@ -28,14 +28,14 @@ set -e
 set -x
 
 # If you use a partition...
-#PARTITION_ROOTFS='/dev/mmcblk0p2'
-#PARTITION_BOOT='/dev/mmcblk0p1'
-PARTITION_ROOTFS='/dev/sdd2'
-PARTITION_BOOT='/dev/sdd1'
+PARTITION_ROOTFS='/dev/mmcblk0p2'
+PARTITION_BOOT='/dev/mmcblk0p1'
+#PARTITION_ROOTFS='/dev/sdd2'
+#PARTITION_BOOT='/dev/sdd1'
 
 # If you use the img
 ##### Debian
-IMAGE='raspbian-wheezy.img'
+IMAGE='2015-11-06-CIRCLean.img'
 OFFSET_ROOTFS=$((122880 * 512))
 OFFSET_BOOT=$((8192 * 512))
 ##### Arch

@@ -2,22 +2,6 @@
 
 # http://pub.phyks.me/respawn/mypersonaldata/public/2014-05-20-11-08-01/
 
-# To make debugging easier
-echo "KittenGroomer: in tests/run.sh" 1>&2
-
-if [ -z "$1" ]; then
-    echo "Please tell me which partition type to test."
-    echo "VFAT_NORM VFAT_PART NTPS_NORM EXT2 EXT3 EXT4"
-    exit
-fi
-if [ -z "$2" ]; then
-    echo "Please tell me which file type to test."
-    echo "t_images1"
-    exit
-fi
-TEST_PART_TYPE=${1}
-TEST_SOURCE_TYPE=${2}
-
 IMAGE='../raspbian-wheezy.img'
 OFFSET_ROOTFS=$((122880 * 512))
 

@@ -23,7 +23,7 @@ fi
 #cp deb/*.deb ${CHROOT_PATH}/
 
 # prepare fs archive
-tar -cvpzf backup.tar.gz -C fs/ .
+tar -cvpzf backup.tar.gz -C fs_filecheck/ .
 tar -xzf backup.tar.gz -C ${CHROOT_PATH}/
 chown root:root ${CHROOT_PATH}/etc/sudoers
 if [ -f deb/led ]; then
