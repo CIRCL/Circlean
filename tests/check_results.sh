@@ -16,7 +16,7 @@ if [ -z "$1" ]; then
     echo "t_images1"
     exit
 fi
-TEST_SOURCE_TYPE=${2}
+TEST_SOURCE_TYPE=${1}
 
 set -e
 set -x

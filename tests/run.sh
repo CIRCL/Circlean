@@ -65,6 +65,7 @@ umount ${SETUP_DIR}
 # Prepare the test source key
 if [ ${TEST_PART_TYPE} = "VFAT_NORM" ]; then
     mount -o loop,offset=${OFFSET_VFAT_NORM} ${IMAGE_VFAT_NORM} ${SETUP_DIR}
+    rm -rf ${SETUP_DIR}/*
     cp -rf testFiles/${TEST_SOURCE_TYPE}/* ${SETUP_DIR}
     umount ${SETUP_DIR}
 fi
@@ -72,9 +73,11 @@ fi
 # Prepare the test source key (with partitions)
 if [ ${TEST_PART_TYPE} = "VFAT_PART" ]; then
     mount -o loop,offset=${OFFSET_VFAT_PART1} ${IMAGE_VFAT_PART} ${SETUP_DIR}
+    rm -rf ${SETUP_DIR}/*
     cp -rf testFiles/${TEST_SOURCE_TYPE}/* ${SETUP_DIR}
     umount ${SETUP_DIR}
     mount -o loop,offset=${OFFSET_VFAT_PART2} ${IMAGE_VFAT_PART} ${SETUP_DIR}
+    rm -rf ${SETUP_DIR}/*
     cp -rf testFiles/${TEST_SOURCE_TYPE}/* ${SETUP_DIR}
     umount ${SETUP_DIR}
 fi
@@ -82,6 +85,7 @@ fi
 # Prepare the test source key (NTFS)
 if [ ${TEST_PART_TYPE} = "NTFS_NORM" ]; then
     mount -o loop,offset=${OFFSET_VFAT_NORM} ${IMAGE_NTFS_NORM} ${SETUP_DIR}
+    rm -rf ${SETUP_DIR}/*
     cp -rf testFiles/${TEST_SOURCE_TYPE}/* ${SETUP_DIR}
     umount ${SETUP_DIR}
 fi
@@ -89,6 +93,7 @@ fi
 # Prepare the test source key (EXT2)
 if [ ${TEST_PART_TYPE} = "EXT2" ]; then
     mount -o loop,offset=${OFFSET_VFAT_NORM} ${IMAGE_EXT2} ${SETUP_DIR}
+    rm -rf ${SETUP_DIR}/*
     cp -rf testFiles/${TEST_SOURCE_TYPE}/* ${SETUP_DIR}
     umount ${SETUP_DIR}
 fi
@@ -96,6 +101,7 @@ fi
 # Prepare the test source key (EXT3)
 if [ ${TEST_PART_TYPE} = "EXT4" ]; then
     mount -o loop,offset=${OFFSET_VFAT_NORM} ${IMAGE_EXT3} ${SETUP_DIR}
+    rm -rf ${SETUP_DIR}/*
     cp -rf testFiles/${TEST_SOURCE_TYPE}/* ${SETUP_DIR}
     umount ${SETUP_DIR}
 fi
@@ -103,9 +109,16 @@ fi
 # Prepare the test source key (EXT4)
 if [ ${TEST_PART_TYPE} = "EXT4" ]; then
     mount -o loop,offset=${OFFSET_VFAT_NORM} ${IMAGE_EXT4} ${SETUP_DIR}
+    rm -rf ${SETUP_DIR}/*
     cp -rf testFiles/${TEST_SOURCE_TYPE}/* ${SETUP_DIR}
     umount ${SETUP_DIR}
 fi
+
+# Prepare the test destination key
+mount -o loop,offset=${OFFSET_VFAT_NORM} ${IMAGE_DEST} ${SETUP_DIR}
+rm -rf ${SETUP_DIR}/*
+umount ${SETUP_DIR}
+
 
 # To make debugging easier
 echo "KittenGroomer: about to enter tests/run.exp" 1>&2
