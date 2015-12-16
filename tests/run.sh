@@ -2,7 +2,6 @@
 
 # http://pub.phyks.me/respawn/mypersonaldata/public/2014-05-20-11-08-01/
 
-<<<<<<< HEAD
 # To make debugging easier
 echo "KittenGroomer: in tests/run.sh" 1>&2
 
@@ -19,8 +18,6 @@ fi
 TEST_PART_TYPE=${1}
 TEST_SOURCE_TYPE=${2}
 
-=======
->>>>>>> master
 IMAGE='../raspbian-wheezy.img'
 OFFSET_ROOTFS=$((122880 * 512))
 

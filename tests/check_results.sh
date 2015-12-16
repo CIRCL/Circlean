@@ -41,7 +41,7 @@ mount -o loop,offset=${OFFSET_VFAT_NORM} ${IMAGE_DEST} ${RESULTS_DIR}
 cp -rf ${RESULTS_DIR}/* actualResults
 umount ${RESULTS_DIR}
 
-
+#TODO: Check if the results were what we expected.
 
 # To make debugging easier
 echo "KittenGroomer: done with tests/check_results.sh" 1>&2
