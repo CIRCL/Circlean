@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# To make debugging easier
+echo "KittenGroomer: in copy_to_final.sh" 1>&2
+
+
 set -e
 set -x
 
@@ -42,3 +46,7 @@ cp -rf midi ${CHROOT_PATH}/opt/
 
 
 # It is also a good idea to run raspi-config once and enable the console login (allow debugging)
+
+# To make debugging easier
+echo "KittenGroomer: done with copy_to_final.sh" 1>&2
+

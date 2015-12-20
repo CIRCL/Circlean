@@ -3,6 +3,9 @@
 set -e
 set -x
 
+# To make debugging easier
+echo "KittenGroomer: in groomer.sh" 1>&2
+
 source ./constraint.sh
 if ! [ "${ID}" -ge "1000" ]; then
     echo "This script cannot run as root."
@@ -101,14 +104,19 @@ do
         mkdir -p "${target_dir}"
         LOGFILE="${LOGS}/processing.txt"
 
+        echo "==== Starting processing of /media/${SRC} to ${target_dir}. ====" 1>&2
         echo "==== Starting processing of /media/${SRC} to ${target_dir}. ====" >> ${LOGFILE}
         generic.py --source /media/${SRC} --destination ${target_dir} || true
+        echo "==== Done with /media/${SRC} to ${target_dir}. ====" 1>&2
         echo "==== Done with /media/${SRC} to ${target_dir}. ====" >> ${LOGFILE}
 
         ls -lR "${target_dir}"
     fi
     let PARTCOUNT=`expr $PARTCOUNT + 1`
 done
+
+# To make debugging easier
+echo "KittenGroomer: done with groomer.sh" 1>&2
 
 # The cleanup is automatically done in the function clean called when
 # the program quits
