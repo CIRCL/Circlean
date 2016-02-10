@@ -8,5 +8,5 @@ Second: Top right
 Third: Bottom left
 Forth: Bottom right
 
-tl;rd: as long as the source key (sda) is connected to the top left port, the destination (sdb) can be connected on any other port.
+tl;dr: as long as the source key (sda) is connected to the top left port, the destination (sdb) can be connected on any other port.
 

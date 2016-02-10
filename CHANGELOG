@@ -1,6 +1,6 @@
 Version 1.2 - 2015-03-10
 
-- Rollback the migration to Jessie and use Wheezy again: the only importantant depencendy from Jessie was poppler, which is available in the backports
+- Rollback the migration to Jessie and use Wheezy again: the only important dependency from Jessie was poppler, which is available in the backports
 - Use the most recent security patches
 - Do not wait for user input in case of password protected archive
 
