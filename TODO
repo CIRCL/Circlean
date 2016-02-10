@@ -2,7 +2,7 @@ TODO
 ====
 
 * the script locations should be changed in the next version so they don't sit
-   next to teh rPi's example development code that ships with teh stock rPi
+   next to the rPi's example development code that ships with the stock rPi
 * the system isn't optimised and should be : cleanup and making it as close to
   stock as possible
 [Npot sure] Starting process should be more obfuscated
@@ -15,9 +15,9 @@ TODO
 [done in HTML] convert documents (pdfs/*office/...) in images ?
 [Not Needed] Have a look at Ghostscript to work on PDFs (.pdf -> .eps -> .png?)
 [do everything as user] do not run the conversions as root -> run in chroot
-* take eth0 down in /etc/netowrk/interfaces or in the groomer script disable the
+* take eth0 down in /etc/network/interfaces or in the groomer script disable the
   interface before anything happens
-* hdmi should stay up: solveable by poking the power management timer
+* hdmi should stay up: solvable by poking the power management timer
   (better not to disable the PM completely)
 [Done] get rid of pdfbox. remove need for java
 [WIP] scripts to generate a SD card automatically (win/mac/linux)
