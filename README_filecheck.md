@@ -51,7 +51,7 @@ It will be used for the build environment and the final image.
     apt-get update
     apt-get dist-upgrade
     apt-get autoremove
-    apt-get install git p7zip-full python-dev python-pip python-lxml pmount libjpeg-dev libtiff-dev libwebp-dev liblcms2-dev tcl-dev tk-dev python-tk
+    apt-get install timidity git p7zip-full python-dev python-pip python-lxml pmount libjpeg-dev libtiff-dev libwebp-dev liblcms2-dev tcl-dev tk-dev python-tk
 ```
 
 * Install python requirements
