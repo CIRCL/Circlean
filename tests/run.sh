@@ -47,6 +47,7 @@ SETUP_DIR="setup"
 clean(){
     mount -o loop,offset=${OFFSET_ROOTFS} ${IMAGE} ${SETUP_DIR}
     mv ${SETUP_DIR}/etc/ld.so.preload_bkp ${SETUP_DIR}/etc/ld.so.preload
+    sleep 5
     umount ${SETUP_DIR}
     rm -rf ${SETUP_DIR}
 }
@@ -118,7 +119,6 @@ fi
 mount -o loop,offset=${OFFSET_VFAT_NORM} ${IMAGE_DEST} ${SETUP_DIR}
 rm -rf ${SETUP_DIR}/*
 umount ${SETUP_DIR}
-
 
 # To make debugging easier
 echo "KittenGroomer: about to enter tests/run.exp" 1>&2

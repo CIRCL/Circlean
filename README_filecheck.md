@@ -51,18 +51,13 @@ It will be used for the build environment and the final image.
     apt-get update
     apt-get dist-upgrade
     apt-get autoremove
-    apt-get install p7zip-full python-dev libxml2-dev libxslt1-dev pmount python-setuptools libtiff4-dev libjpeg8-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.5-dev tk8.5-dev python-tk
+    apt-get install git p7zip-full python-dev python-pip python-lxml pmount libjpeg-dev libtiff-dev libwebp-dev liblcms2-dev tcl-dev tk-dev python-tk
 ```
 
 * Install python requirements
 
 ```
-    pip install lxml
-    pip install oletools olefile
-    pip install officedissector
-    pip install exifread
-    pip install Pillow
-    pip install git+https://github.com/Rafiot/python-magic.git@travis
+    pip install oletools olefile officedissector exifread Pillow
     pip install git+https://github.com/CIRCL/PyCIRCLean.git
 ```
 
