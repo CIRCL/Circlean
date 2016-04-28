@@ -7,18 +7,19 @@ Install the necessary packages:
     sudo apt-get install qemu qemu-user-static expect
 ```
 
+
 Create a new image from scratch
 ===============================
 
-* Download the most recent Raspbian version:
-    http://downloads.raspberrypi.org/raspbian_latest
+* Download the most recent version of Raspbian Jessie lite:
+    https://downloads.raspberrypi.org/raspbian_lite_latest
 
 * Unpack it:
 
 ```
-    unzip 2015-05-05-raspbian-wheezy.zip
-    mv 2015-05-05-raspbian-wheezy.zip raspbian-wheezy.zip
+    unzip 2016-03-18-raspbian-jessie-lite.zip
 ```
+
 
 Prepare the image
 =================
