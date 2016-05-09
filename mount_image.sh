@@ -35,7 +35,7 @@ PARTITION_BOOT='/dev/mmcblk0p1'
 
 # If you use the img
 ##### Debian
-IMAGE='2016-04-26_CIRCLean.img'
+IMAGE='2016-05-09_CIRCLean.img'
 OFFSET_ROOTFS=$((131072 * 512))
 OFFSET_BOOT=$((8192 * 512))
 ##### Arch
