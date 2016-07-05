@@ -33,5 +33,11 @@ chown -R kitten:kitten /tmp/libreoffice
 mkdir /tmp/libreoffice_config
 chown -R kitten:kitten /tmp/libreoffice_config
 
+# Reject all network connexions.
+iptables -F
+iptables -A INPUT -j REJECT
+iptables -A OUTPUT -j REJECT
+iptables -A FORWARD -j REJECT
+
 su ${USERNAME} -c ./groomer.sh
 
