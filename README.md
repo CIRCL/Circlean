@@ -6,9 +6,9 @@ CIRCLean
 How To
 ======
 
-[Graphical how-to and pre-build image](http://circl.lu/projects/CIRCLean/).
+[Graphical how-to and pre-built image](http://circl.lu/projects/CIRCLean/).
 
-To prepare the SD card on Windows, you can use [Win32DiskImager] (http://sourceforge.net/projects/win32diskimager/).
+To prepare the SD card on Windows, you can use [Win32DiskImager](http://sourceforge.net/projects/win32diskimager/).
 
 And the linux way is in the command line, via dd (see in copy_to_final.sh)
 
