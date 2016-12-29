@@ -10,6 +10,9 @@
 # bits.
 #
 # By default this script does nothing.
+#
+# The above are the default comments for rc.local. For Circlean, rc.local has
+# been modified to start the grooming process on boot.
 
 clean(){
     echo 'Rc Local done, quit.'

@@ -3,16 +3,16 @@ Building the image from scratch
 
 There is always a prebuilt image available for download and installation as
 described in the [README](README.md). If you'd like to build the project yourself,
-there are several steps:
+there are several steps involved:
 
-* Downloading a generic Raspbian Lite image.
-* Adding space to the downloaded image.
-* Downloading and building the dependencies.
-* Copying the project filesystem into the image.
+* Downloading a generic Raspbian Lite image
+* Adding space to the image
+* Downloading and building the dependencies
+* Copying the project filesystem into the image
 
-This procedure will not work unless you are running Ubuntu or Debian linux. If you
-only have access to MacOS or Windows, the best option is to install linux in a
-VM, using something like VirtualBox.
+This procedure will only work on Ubuntu or Debian Linux. If you use MacOS or
+Windows, the best option is to install Linux in a virtual machine using
+something like VirtualBox.
 
 Downloading the Raspbian image
 ==============================
@@ -87,17 +87,17 @@ larger than it was before (6852607 vs. 2658303 in the example).
     Syncing disks.
 ```
 
-* Mount the image in loop mode. Edit /mount_image.sh to contain the proper values
+* Mount the image in loop mode: first, edit /mount_image.sh to use the proper values
 for $OFFSET_BOOT and $OFFSET_ROOTFS, which you can obtain using fdisk and "p" as
-shown above. You must also change $IMAGE to the correct string. Then run:
+shown above. You must also change $IMAGE to the correct path. Then run:
 
 ```
     sudo ./proper_chroot.sh
 ```
 
 * After mounting the image, the above script will chroot into the mounted image.
-While in a chroot, the / directory is treated like it is the / directory (thus
-the name, change root). To exit the chroot, run "exit" in the root directory.
+While in a chroot, the / directory of the image appears as the system / directory
+(thus the name, change root). To exit the chroot, run "exit" in the root directory.
 Then, verify the path to the mounted partitions, and resize the filesystem
 to fill the new larger partition using resize2fs:
 
@@ -183,7 +183,7 @@ Write the image on a SD card
 ```
 
 * If it has been automatically mounted, unmount the SD card (use the path you
-found in the previous step:
+found in the previous step):
 
 ```
     umount $PATH_TO_YOUR_SD
