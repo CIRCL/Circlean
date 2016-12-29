@@ -1,12 +1,12 @@
 #!/bin/bash
 
+# This script will mount a given image or sd card in loop mode.
+# Make sure to change the path and offsets for the image you use. You can get
+# the correct offsets using `file $PATH_TO_IMAGE` or fdisk.
+# If you want to mount an SD card, unset $IMAGE.
+
 # To make debugging easier
 echo "KittenGroomer: in mount_image.sh" 1>&2
-
-# Notes:
-# - To chroot in an existing SD card, unset IMAGE. Change the paths to the partitions if needed.
-# - The offsets are thoses of 2013-02-09-wheezy-raspbian.img. It will change on an other image.
-#   To get the offsets, use the "file" command.
 
 if [ "$(id -u)" != "0" ]; then
    echo "This script must be run as root" 1>&2
@@ -33,21 +33,17 @@ PARTITION_BOOT='/dev/mmcblk0p1'
 #PARTITION_ROOTFS='/dev/sdd2'
 #PARTITION_BOOT='/dev/sdd1'
 
-# If you use the img
+# If you use the img...
+# Double check the path and offsets as noted above!
 ##### Debian
 IMAGE='2016-05-09_CIRCLean.img'
-OFFSET_ROOTFS=$((131072 * 512))
 OFFSET_BOOT=$((8192 * 512))
-##### Arch
-#IMAGE='archlinux-hf-2013-02-11.img'
-#OFFSET_ROOTFS=$((186368 * 512))
-#OFFSET_BOOT=$((2048 * 512))
-############
+OFFSET_ROOTFS=$((131072 * 512))
 
 CHROOT_PATH='/mnt/arm_rPi'
 
 clean(){
-    mv ${CHROOT_PATH}/etc/ld.so.preload_bkp ${CHROOT_PATH}/etc/ld.so.preload
+    mv ${CHROOT_PATH}/etc/ld.so.preload_backup ${CHROOT_PATH}/etc/ld.so.preload
     rm ${CHROOT_PATH}/etc/resolv.conf
     rm ${CHROOT_PATH}/usr/bin/qemu*arm*
 
@@ -79,7 +75,7 @@ elif [ -a ${PARTITION_ROOTFS} ]; then
     mount ${PARTITION_ROOTFS} ${CHROOT_PATH}
     mount ${PARTITION_BOOT} ${CHROOT_PATH}/boot
 else
-    print 'You need a SD card or an image'
+    echo 'You need a SD card or an image'
     exit
 fi
 
@@ -95,7 +91,7 @@ mount -o bind /tmp ${CHROOT_PATH}/tmp
 
 cp -pf /etc/resolv.conf ${CHROOT_PATH}/etc
 
-mv ${CHROOT_PATH}/etc/ld.so.preload ${CHROOT_PATH}/etc/ld.so.preload_bkp
+mv ${CHROOT_PATH}/etc/ld.so.preload ${CHROOT_PATH}/etc/ld.so.preload_backup
 
 # To make debugging easier
 echo "KittenGroomer: Image mounted, executing command from mount_image.sh" 1>&2
