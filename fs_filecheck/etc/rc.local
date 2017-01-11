@@ -15,9 +15,11 @@
 # been modified to start the grooming process on boot.
 
 clean(){
-    echo 'Rc Local done, quit.'
+    echo "GROOMER: rc.local done, shutting down."
     /sbin/shutdown -P -h now
 }
+
+echo "GROOMER: end of boot, running rc.local."
 
 # Print the IP address
 _IP=$(hostname -I) || true
@@ -35,5 +37,7 @@ if [ -e /dev/sda ]; then
     ./init.sh
   fi
 fi
+
+sleep 60
 
 exit 0

@@ -13,7 +13,7 @@ DST="dst"
 TEMP="/media/${DST}/temp"
 ZIPTEMP="/media/${DST}/ziptemp"
 LOGS="/media/${DST}/logs"
-
+GROOM_LOG="/var/tmp/groomer_log.txt"
 
 # commands
 SYNC='/bin/sync'
