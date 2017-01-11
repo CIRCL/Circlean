@@ -19,25 +19,19 @@ clean(){
     /sbin/shutdown -P -h now
 }
 
+trap clean EXIT TERM INT
+
 echo "GROOMER: end of boot, running rc.local."
 
-# Print the IP address
-_IP=$(hostname -I) || true
-if [ "$_IP" ]; then
-  printf "My IP address is %s\n" "$_IP"
-fi
-
-if [ -e /dev/sda ]; then
-  if [ -e /dev/sdb ]; then
+# if [ -e /dev/sda ]; then
+# if [ -e /dev/sdb ]; then
     # avoid possible misuse
-    /sbin/ifconfig eth0 down
-    trap clean EXIT TERM INT
-    cd /opt/groomer
-    /usr/sbin/led &
-    ./init.sh
-  fi
-fi
+#fdisk -l
+echo "Testing, did anything happen." >> /var/tmp/thing.txt
 
-sleep 60
+cd /opt/groomer
+./init.sh | tee "/var/tmp/groomer_log.txt"
+
+sleep 20
 
 exit 0
