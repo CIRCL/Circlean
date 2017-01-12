@@ -16,6 +16,7 @@
 
 clean(){
     echo "GROOMER: rc.local done, shutting down."
+    sleep 60
     /sbin/shutdown -P -h now
 }
 
@@ -25,13 +26,8 @@ echo "GROOMER: end of boot, running rc.local."
 
 # if [ -e /dev/sda ]; then
 # if [ -e /dev/sdb ]; then
-    # avoid possible misuse
-#fdisk -l
-echo "Testing, did anything happen." >> /var/tmp/thing.txt
 
 cd /opt/groomer
-./init.sh | tee "/var/tmp/groomer_log.txt"
-
-sleep 20
+./init.sh
 
 exit 0

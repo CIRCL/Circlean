@@ -11,16 +11,16 @@ fi
 
 clean(){
     echo "GROOMER: Cleaning up after groomer.sh."
+
+    cp ${GROOM_LOG} "${DST_MNT}/groomer_log.txt"
+
+    # Write anything in memory to disk
     ${SYNC}
 
-    cp "${GROOM_LOG} ${SRC}/groomer_log.txt"
-    cp "${GROOM_LOG} ${DST}/groomer_log.txt"
-
-    # Cleanup source
+    # Unmount source
     pumount ${SRC}
 
-    # Cleanup destination
-
+    # Clean up and unmount destination
     rm -rf ${TEMP}
     rm -rf ${ZIPTEMP}
     pumount ${DST}
@@ -53,10 +53,10 @@ fi
 # uid= only works on a vfat FS. What should wedo if we get an ext* FS ?
 ${PMOUNT} -w ${DEV_DST} ${DST}
 if [ ${?} -ne 0 ]; then
-    echo "GROOMER: Unable to mount /dev/${DEV_DST} on ${DST}"
+    echo "GROOMER: Unable to mount ${DEV_DST} on ${DST_MNT}"
     exit
 else
-    echo "GROOMER: Target USB device (/dev/${DEV_DST}) mounted at ${DST}"
+    echo "GROOMER: Target USB device (${DEV_DST}) mounted at ${DST_MNT}"
     
     # rm -rf "/media/${DST}/FROM_PARTITION_"*
 
@@ -69,9 +69,8 @@ else
     # rm -rf "${ZIPTEMP}/"*
     # rm -rf "${LOGS}/"*
 fi
-${PMOUNT} -w ${DEV_SRCONE} ${SRC}
 
-sleep 30
+${PMOUNT} -w ${DEV_SRCONE} ${SRC}
 
 # Groom da kitteh!
 

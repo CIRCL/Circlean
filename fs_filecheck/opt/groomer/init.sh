@@ -17,4 +17,6 @@ clean(){
 
 trap clean EXIT TERM INT
 
-su ${USERNAME} -c ./groomer.sh
+fdisk -l |& tee ${GROOM_LOG}
+
+su ${USERNAME} -c ./groomer.sh |& tee ${GROOM_LOG}
