@@ -15,9 +15,16 @@ fi
 clean(){
     echo "GROOMER: cleaning up after init.sh."
     ${SYNC}
+    # Stop the music from playing
+    kill -9 $(cat /tmp/music.pid)
+    rm -f /tmp/music.pid
 }
 
 trap clean EXIT TERM INT
+
+# Start music
+./music.sh &
+echo $! > /tmp/music.pid
 
 # List block storage devices (for debugging)
 lsblk |& tee ${GROOM_LOG}

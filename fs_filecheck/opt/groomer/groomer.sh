@@ -47,7 +47,7 @@ do
     ${PUMOUNT} ${SRC}
     ${PMOUNT} -r ${partition} ${SRC}
     if [ ${?} -ne 0 ]; then
-        # Previous command (mounting this partition) failed
+        # Previous command (mounting current partition) failed
         echo "GROOMER: Unable to mount ${partition} on /media/${SRC}"
     else
         echo "GROOMER: ${partition} mounted at /media/${SRC}"
@@ -61,9 +61,9 @@ do
         LOGFILE="${LOGS}/processing.txt"
 
         # Run the current partition through filecheck.py
-        echo "GROOMER: ==== Starting processing of /media/${SRC} to ${target_dir}. ====" >> ${LOGFILE}
+        echo "==== Starting processing of /media/${SRC} to ${target_dir}. ====" >> ${LOGFILE}
         filecheck.py --source /media/${SRC} --destination ${target_dir} || true
-        echo "GROOMER: ==== Done with /media/${SRC} to ${target_dir}. ====" >> ${LOGFILE}
+        echo "==== Done with /media/${SRC} to ${target_dir}. ====" >> ${LOGFILE}
 
         # List destination files (recursively) for debugging
         ls -lR "${target_dir}"
