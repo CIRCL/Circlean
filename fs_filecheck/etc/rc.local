@@ -16,7 +16,6 @@
 
 clean(){
     echo "GROOMER: rc.local done, shutting down."
-    sleep 30
     /sbin/shutdown -P -h now
 }
 

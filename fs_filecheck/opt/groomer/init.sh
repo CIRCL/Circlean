@@ -4,6 +4,7 @@
 set -e
 set -x
 
+# Import constants from config file
 source ./config.sh
 
 if [ ${ID} -ne 0 ]; then
@@ -18,8 +19,7 @@ clean(){
 
 trap clean EXIT TERM INT
 
-lsblk -n -o name,fstype,mountpoint,label,uuid -r |& tee ${GROOM_LOG}
+# List block storage devices (for debugging)
+lsblk |& tee ${GROOM_LOG}
 
-sleep 30
-
-su ${USERNAME} -c ./groomer.sh |& tee -a ${GROOM_LOG}
+su ${USERNAME} -c ./mount_dest.sh |& tee -a ${GROOM_LOG}
