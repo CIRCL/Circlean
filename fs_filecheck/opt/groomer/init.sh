@@ -26,7 +26,8 @@ trap clean EXIT TERM INT
 ./music.sh &
 echo $! > /tmp/music.pid
 
-# List block storage devices (for debugging)
-lsblk |& tee ${GROOM_LOG}
+# List block storage devices for debugging
+# Make sure to set tee in append (-a) mode below if you uncomment
+# lsblk |& tee ${GROOM_LOG}
 
-su ${USERNAME} -c ./mount_dest.sh |& tee -a ${GROOM_LOG}
+su ${USERNAME} -c ./mount_dest.sh |& tee ${GROOM_LOG}

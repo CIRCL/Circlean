@@ -54,12 +54,12 @@ fi
 
 # Mount the first partition of DST (/dev/sdb1)
 # pmount automatically mounts on /media/ (at /media/dst in this case).
-${PMOUNT} -w ${DEV_DST_ONE} ${DST}
+${PMOUNT} -w /dev/dest_key1 ${DST}
 if [ ${?} -ne 0 ]; then
-    echo "GROOMER: Unable to mount ${DEV_DST_ONE} on ${DST_MNT}"
+    echo "GROOMER: Unable to mount ${DEV_DST}1 on ${DST_MNT}"
     exit
 else
-    echo "GROOMER: Destination USB device (${DEV_DST_ONE}) mounted at ${DST_MNT}"
+    echo "GROOMER: Destination USB device (${DEV_DST}1) mounted at ${DST_MNT}"
 
     # Remove any existing "FROM_PARTITION_" directories
     rm -rf "/media/${DST}/FROM_PARTITION_"*

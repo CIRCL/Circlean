@@ -4,13 +4,11 @@ ID=`/usr/bin/id -u`
 
 # Paths used in multiple scripts
 SRC="src"
-DEV_SRC="/dev/sda"
-DEV_SRC_ONE="/dev/sda1"
+DEV_SRC="/dev/source_key"
 SRC_MNT="/media/src"
 
 DST="dst"
-DEV_DST="/dev/sdb"
-DEV_DST_ONE="/dev/sdb1"
+DEV_DST="/dev/dest_key"
 DST_MNT="/media/dst"
 
 TEMP="${DST_MNT}/temp"
