@@ -10,16 +10,6 @@ apt-get autoremove
 apt-get install libreoffice p7zip-full libfontforge1 timidity freepats pmount
 dpkg -i pdf2htmlex*.deb
 
-# Make Libreoffice usable on a RO filesystem
-useradd -m kitten
-pushd /home/kitten
-ln -s /tmp/libreoffice
-popd
-
-chown -R kitten:kitten /home/kitten
-
-ln -s /proc/mounts /etc/mtab
-
 # Disable swap
 dphys-swapfile uninstall
 
