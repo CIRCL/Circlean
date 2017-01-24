@@ -23,7 +23,7 @@ clean(){
 
 trap clean EXIT TERM INT
 
-# Find the partition names on the source device
+# Find the partition names on the device available at /dev/source_key
 DEV_PARTITIONS=`ls "${DEV_SRC}"* | grep "${DEV_SRC}[1-9][0-6]*" || true`
 if [ -z "${DEV_PARTITIONS}" ]; then
     echo "GROOMER: ${DEV_SRC} does not have any partitions."

@@ -17,7 +17,7 @@ clean(){
 
     # Copy the temporary logfile to the destination key
     cp ${GROOM_LOG} "${DST_MNT}/groomer_log_dst.txt"
- 
+
     # Write anything in memory to disk
     ${SYNC}
 
@@ -32,13 +32,13 @@ clean(){
 
 trap clean EXIT TERM INT
 
-# Check that a device is available on /dev/sda
+# Check that a device is available on /dev/source_key (symlinked to /dev/sda or sdb)
 if [ ! -b ${DEV_SRC} ]; then
     echo "GROOMER: Source device (${DEV_SRC}) does not exist."
     exit
 fi
 
-# Check that a device is available on /dev/sdb
+# Check that a device is available on /dev/dest_key (symlinked to /dev/sda or sdb)
 if [ ! -b ${DEV_DST} ]; then
     echo "GROOMER: Destination device (${DEV_DST}) does not exist."
     exit
@@ -52,9 +52,9 @@ fi
 # uid= only works on a vfat FS. What should wedo if we get an ext* FS ?
 # What does this ^ comment mean?
 
-# Mount the first partition of DST (/dev/sdb1)
+# Mount the first partition of DST (/dev/dest_key1)
 # pmount automatically mounts on /media/ (at /media/dst in this case).
-${PMOUNT} -w /dev/dest_key1 ${DST}
+${PMOUNT} -w "${DEV_DST}1" ${DST}
 if [ ${?} -ne 0 ]; then
     echo "GROOMER: Unable to mount ${DEV_DST}1 on ${DST_MNT}"
     exit

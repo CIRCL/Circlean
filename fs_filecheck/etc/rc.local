@@ -35,7 +35,6 @@ if [ -e /dev/sda ]; then
     setterm -powersave off -blank 0
     trap clean EXIT TERM INT
     cd /opt/groomer
-    /usr/sbin/led &
     ./init.sh
   fi
 fi

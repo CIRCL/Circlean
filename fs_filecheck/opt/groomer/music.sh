@@ -3,7 +3,7 @@
 set -e
 #set -x
 
-source ./constraint.sh
+source ./config.sh
 
 killed(){
     echo 'Music stopped.'

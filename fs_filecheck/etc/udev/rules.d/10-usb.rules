@@ -1,6 +1,3 @@
 # The purpose of this rules file is to ensure that the top left usb port and its partitions have a symlink to /dev/source_key[num], and the other ports to /dev/dest_key[num]
-KERNELS=="1-1.2", SUBSYSTEMS=="usb", SYMLINK+="source_key%n"
-KERNELS=="1-1.[3-5]*", SUBSYSTEMS=="usb", SYMLINK+="dest_key%n"
-
-# KERNELS=="1-1.2", SUBSYSTEMS=="usb", ENV{USB} SYMLINK+="source_key%n"
-# KERNELS=="1-1.[3-5]*", SUBSYSTEMS=="usb", SYMLINK+="dest_key%n"
+KERNEL=="sd*", KERNELS=="1-1.2", SUBSYSTEMS=="usb", SYMLINK+="source_key%n"
+KERNEL=="sd*", KERNELS=="1-1.[3-5]", SUBSYSTEMS=="usb", SYMLINK+="dest_key%n"
