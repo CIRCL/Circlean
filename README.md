@@ -14,18 +14,21 @@ And the linux way is in the command line, via dd (see in copy_to_final.sh)
 
 If you'd like to contribute to the project or build the image yourself, see
 [contributing](CONTRIBUTING.md) and the [setup readme](README_setup.md).
+This is a work in progress - contributions are welcome.
 
 Why/What
 ========
 
 This project aims to be useful when you get/find a USB key that you can't trust,
-and you want to have a look at its contents without taking the risk of plugging it into your
-main computer directly.
+and you want to look at its contents without taking the risk of plugging it into
+your computer directly.
 
-This is a work in progress - contributions are welcome:
+CIRCLean is currently tested to work with USB keys that have FAT32, NTFS, or
+ext2/3/4 filesystems. Currently, exFAT is not supported due to lack of support for
+this format in pmount. The vast majority of USB keys will be FAT32 or NTFS.
 
-The content of the first key will be copied or/and converted to the second key
-following these rules (based on the mime type, as determined by libmagic):
+The content of the untrusted key will be copied or/and converted to the second
+(blank) key following these rules (based on the mime type as determined bylibmagic):
 - Direct copy of:
   - Plain text files (mime type: text/*)
   - Audio files (mime type: audio/*)
