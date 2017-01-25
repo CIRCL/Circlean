@@ -31,8 +31,6 @@ if [ -e /dev/sda ]; then
   if [ -e /dev/sdb ]; then
     # Avoid possible misuse - turn off eth0 (ethernet port)
     /sbin/ifconfig eth0 down
-    # Stop hdmi display from sleeping after a period of time
-    setterm -powersave off -blank 0
     trap clean EXIT TERM INT
     cd /opt/groomer
     ./init.sh

@@ -22,6 +22,9 @@ clean(){
 
 trap clean EXIT TERM INT
 
+# Stop hdmi display from sleeping after a period of time
+setterm -powersave off -blank 0
+
 # Start music
 ./music.sh &
 echo $! > /tmp/music.pid
