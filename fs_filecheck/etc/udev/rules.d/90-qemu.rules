@@ -1,2 +1,5 @@
+# This udev rule is designed to make the hardware appear more like the actual raspi hardware when emulating in Qemu. You might have to change sdc to sda or sdb depending on where the filesystem you are emulating is available from in /dev/.
+# See http://pub.phyks.me/respawn/mypersonaldata/public/2014-05-20-11-08-01/ for more info.
 KERNEL=="sdc", SYMLINK+="mmcblk0"
 KERNEL=="sdc?", SYMLINK+="mmcblk0p%n",
+#KERNEL=="sdc2", SYMLINK+="root"

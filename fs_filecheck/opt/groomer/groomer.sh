@@ -1,112 +1,75 @@
 #!/bin/bash
 
+# set -e (exit when a line returns non-0 status) and -x (xtrace) flags
 set -e
 set -x
 
-source ./constraint.sh
+# Import constants from config file
+source ./config.sh
+
 if ! [ "${ID}" -ge "1000" ]; then
-    echo "This script cannot run as root."
+    echo "GROOMER: groomer.sh cannot run as root."
     exit
 fi
 
-clean(){
-    echo Cleaning.
+clean(){ 
+    # Write anything in memory to disk
     ${SYNC}
 
-    # Cleanup source
-    pumount ${SRC}
-
-    # Cleanup destination
+    # Remove temporary files from destination key
     rm -rf ${TEMP}
     rm -rf ${ZIPTEMP}
-    pumount ${DST}
-
-    exit
 }
 
 trap clean EXIT TERM INT
 
-# De we have a source device
-if [ ! -b ${DEV_SRC} ]; then
-    echo "Source device (${DEV_SRC}) does not exists."
-    exit
-fi
-# Find the partition names on the source device
+# Find the partition names on the device available at /dev/source_key
 DEV_PARTITIONS=`ls "${DEV_SRC}"* | grep "${DEV_SRC}[1-9][0-6]*" || true`
 if [ -z "${DEV_PARTITIONS}" ]; then
-    echo "${DEV_SRC} does not have any partitions."
+    echo "GROOMER: ${DEV_SRC} does not have any partitions."
     exit
 fi
-
-# Do we have a destination device
-if [ ! -b "/dev/${DEV_DST}" ]; then
-    echo "Destination device (/dev/${DEV_DST}) does not exists."
-    exit
-fi
-
-# mount and prepare destination device
-if ${MOUNT}|grep ${DST}; then
-    ${PUMOUNT} ${DST} || true
-fi
-# uid= only works on a vfat FS. What should wedo if we get an ext* FS ?
-${PMOUNT} -w ${DEV_DST} ${DST}
-if [ ${?} -ne 0 ]; then
-    echo "Unable to mount /dev/${DEV_DST} on /media/${DST}"
-    exit
-else
-    echo "Target USB device (/dev/${DEV_DST}) mounted at /media/${DST}"
-    rm -rf "/media/${DST}/FROM_PARTITION_"*
-
-    # prepare temp dirs and make sure it's empty
-    mkdir -p "${TEMP}"
-    mkdir -p "${ZIPTEMP}"
-    mkdir -p "${LOGS}"
-
-    rm -rf "${TEMP}/"*
-    rm -rf "${ZIPTEMP}/"*
-    rm -rf "${LOGS}/"*
-fi
-
-# Groom da kitteh!
-
-# Find the FS types
-# lsblk -n -o name,fstype,mountpoint,label,uuid -r
 
 PARTCOUNT=1
 for partition in ${DEV_PARTITIONS}
 do
-    # Processing a partition
-    echo "Processing partition: ${partition}"
+    echo "GROOMER: Processing partition ${partition}"
+    # Unmount anything that is mounted on /media/src
     if [ `${MOUNT} | grep -c ${SRC}` -ne 0 ]; then
         ${PUMOUNT} ${SRC}
     fi
 
+    # Mount the current partition in write mode
     ${PMOUNT} -w ${partition} ${SRC}
-    ls "/media/${SRC}" | grep -i autorun.inf | xargs -I {} mv "/media/${SRC}"/{} "/media/${SRC}"/DANGEROUS_{}_DANGEROUS || true
+    # Mark any autorun.inf files as dangerous on the source device
+    ls ${SRC_MNT} | grep -i autorun.inf | xargs -I {} mv "${SRC_MNT}"/{} "{SRC_MNT}"/DANGEROUS_{}_DANGEROUS || true
+    # Unmount and remount the current partition in read-only mode
     ${PUMOUNT} ${SRC}
     ${PMOUNT} -r ${partition} ${SRC}
     if [ ${?} -ne 0 ]; then
-        echo "Unable to mount ${partition} on /media/${SRC}"
+        # Previous command (mounting current partition) failed
+        echo "GROOMER: Unable to mount ${partition} on /media/${SRC}"
     else
-        echo "${partition} mounted at /media/${SRC}"
+        echo "GROOMER: ${partition} mounted at /media/${SRC}"
 
-        # Print the filenames on the current partition in a logfile
-        find "/media/${SRC}" -fls "${LOGS}/Content_partition_${PARTCOUNT}.txt"
+        # Put the filenames from the current partition in a logfile
+        find "/media/${SRC}" -fls "${LOGS}/contents_partition_${PARTCOUNT}.txt"
 
-        # create a directory on ${DST} named PARTION_$PARTCOUNT
+        # Create a directory on ${DST} named PARTION_$PARTCOUNT
         target_dir="/media/${DST}/FROM_PARTITION_${PARTCOUNT}"
-        echo "copying to: ${target_dir}"
         mkdir -p "${target_dir}"
         LOGFILE="${LOGS}/processing.txt"
 
+        # Run the current partition through filecheck.py
         echo "==== Starting processing of /media/${SRC} to ${target_dir}. ====" >> ${LOGFILE}
         filecheck.py --source /media/${SRC} --destination ${target_dir} || true
         echo "==== Done with /media/${SRC} to ${target_dir}. ====" >> ${LOGFILE}
 
+        # List destination files (recursively) for debugging
         ls -lR "${target_dir}"
     fi
     let PARTCOUNT=`expr $PARTCOUNT + 1`
 done
 
 # The cleanup is automatically done in the function clean called when
-# the program quits
+# the program exits
