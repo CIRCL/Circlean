@@ -53,16 +53,16 @@ larger than it was before (6852607 vs. 2658303 in the example).
     > fdisk XXXX-XX-XX-raspbian-jessie-lite.img
 
     Command (m for help): *p*
-    Disk XXXX-XX-XX-raspbian-jessie-lite.img: 3.3 GiB, 3508535296 bytes, 6852608 sectors
+    Disk XXXX-XX-XX-raspbian-jessie-lite.img: 3.3 GiB, 3537895424 bytes, 6909952 sectors
     Units: sectors of 1 * 512 = 512 bytes
     Sector size (logical/physical): 512 bytes / 512 bytes
     I/O size (minimum/optimal): 512 bytes / 512 bytes
     Disklabel type: dos
-    Disk identifier: 0x6f92008e
+    Disk identifier: 0x244b8248
 
     Device                               Boot  Start     End Sectors  Size Id Type
-    XXXX-XX-XX-raspbian-jessie-lite.img1        8192  131071  122880   60M  c W95 FAT32 (LBA)
-    XXXX-XX-XX-raspbian-jessie-lite.img2      131072 2658303 2527232  1.2G 83 Linux
+    XXXX-XX-XX-raspbian-jessie-lite.img1        8192  137215  129024   63M  c W95 FAT32 (LBA)
+    XXXX-XX-XX-raspbian-jessie-lite.img2      137216 2715647 2578432  1.2G 83 Linux
 
     Command (m for help): *d*
     Partition number (1,2, default 2): *2*
@@ -77,8 +77,8 @@ larger than it was before (6852607 vs. 2658303 in the example).
 
     Using default response p.
     Partition number (2-4, default 2):
-    First sector (2048-6852607, default 2048): *131072*
-    Last sector, +sectors or +size{K,M,G,T,P} (131072-6852607, default 6852607):
+    First sector (2048-6852607, default 2048): *137216*
+    Last sector, +sectors or +size{K,M,G,T,P} (131216-6909951, default 6909951):
 
     Created a new partition 2 of type 'Linux' and of size 3.2 GiB.
 
