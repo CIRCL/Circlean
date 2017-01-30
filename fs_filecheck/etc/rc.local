@@ -21,12 +21,6 @@ clean(){
 
 echo "GROOMER: end of boot, running rc.local."
 
-# Print the IP address (this doesn't work currently?)
-# _IP=$(hostname -I) || true
-# if [ "$_IP" ]; then
-#   printf "My IP address is %s\n" "$_IP"
-# fi
-
 if [ -e /dev/sda ]; then
   if [ -e /dev/sdb ]; then
     # Avoid possible misuse - turn off eth0 (ethernet port)
