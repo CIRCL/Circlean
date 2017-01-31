@@ -13,6 +13,9 @@ if [ ${ID} -ne 0 ]; then
 fi
 
 clean(){
+    if [ ${DEBUG} = true ]; then
+        sleep 20
+    fi
     echo "GROOMER: cleaning up after init.sh."
     ${SYNC}
     # Stop the music from playing
@@ -30,7 +33,8 @@ setterm -powersave off -blank 0
 echo $! > /tmp/music.pid
 
 # List block storage devices for debugging
-# Make sure to set tee in append (-a) mode below if you uncomment
-# lsblk |& tee ${GROOM_LOG}
+if [ ${DEBUG} = true ]; then
+    lsblk |& tee -a ${DEBUG_LOG}
+fi
 
-su ${USERNAME} -c ./mount_dest.sh |& tee ${GROOM_LOG}
+su ${USERNAME} -c ./mount_dest.sh |& tee -a ${DEBUG_LOG}

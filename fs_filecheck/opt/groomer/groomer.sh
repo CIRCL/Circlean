@@ -12,7 +12,11 @@ if ! [ "${ID}" -ge "1000" ]; then
     exit
 fi
 
-clean(){ 
+clean(){
+    if [ ${DEBUG} = true ]; then
+        sleep 20
+    fi
+
     # Write anything in memory to disk
     ${SYNC}
 
@@ -58,7 +62,7 @@ do
         # Create a directory on ${DST} named PARTION_$PARTCOUNT
         target_dir="/media/${DST}/FROM_PARTITION_${PARTCOUNT}"
         mkdir -p "${target_dir}"
-        LOGFILE="${LOGS}/processing.txt"
+        LOGFILE="${LOGS}/processing_log.txt"
 
         # Run the current partition through filecheck.py
         echo "==== Starting processing of /media/${SRC} to ${target_dir}. ====" >> ${LOGFILE}

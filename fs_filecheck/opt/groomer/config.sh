@@ -14,7 +14,7 @@ DST_MNT="/media/dst"
 TEMP="${DST_MNT}/temp"
 ZIPTEMP="${DST_MNT}/ziptemp"
 LOGS="${DST_MNT}/logs"
-GROOM_LOG="/tmp/groom_log.txt"
+DEBUG_LOG="/tmp/groomer_debug_log.txt"
 MUSIC="/opt/midi/"
 
 
@@ -24,3 +24,6 @@ TIMIDITY="/usr/bin/timidity"
 MOUNT="/bin/mount"
 PMOUNT="/usr/bin/pmount -A -s"
 PUMOUNT="/usr/bin/pumount"
+
+# Config flags
+DEBUG=true
