@@ -26,4 +26,4 @@ PMOUNT="/usr/bin/pmount -A -s"
 PUMOUNT="/usr/bin/pumount"
 
 # Config flags
-DEBUG=true
+DEBUG=false
