@@ -17,7 +17,7 @@ set -x
 
 # Double check the path and offsets as noted above!
 # Path to the image
-IMAGE='/media/sf_ubuntu-shared/2017-02-02_CIRCLean.img'
+IMAGE='2017-02-02_CIRCLean.img'
 # Start sector of boot (first) partition
 BOOT_START=8192
 # Start sector of root (second) partition
