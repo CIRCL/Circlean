@@ -1,6 +1,9 @@
 Version 2.1 - 2017-02-XX
 - Updated to the newest version of Raspbian Jessie lite (January 11th 2017 release)
-- NTFS files can be mounted
+- NTFS files can now be mounted as source or destination keys
+- Added udev rules that ensure the USB ports map deterministically to source and destination keys
+- New debug flag and debug logging functionality to make working on Circlean without a monitor easier
+- Turned off automatic display sleep
 
 Version 2.0.2 - 2016-05-12
 - Improve filename encoding
