@@ -1,4 +1,4 @@
-Version 2.1 - 2017-02-XX
+Version 2.1 - 2017-02-02
 - Updated to the newest version of Raspbian Jessie lite (January 11th 2017 release)
 - NTFS files can now be mounted as source or destination keys
 - Added udev rules that ensure the USB ports map deterministically to source and destination keys

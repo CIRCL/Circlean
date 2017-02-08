@@ -37,7 +37,7 @@ Traceback of the qemu failure on digitalocean
 
 pulseaudio: pa_context_connect() failed
 pulseaudio: Reason: Connection refused
-pulseaudio: Failed to initialize PA contextaudio: Could not init `pa' audio driver
+pulseaudio: Failed to initialize PA contextaudio: Could not init 'pa' audio driver
 ALSA lib confmisc.c:768:(parse_card) cannot find card '0'
 ALSA lib conf.c:4259:(_snd_config_evaluate) function snd_func_card_driver returned error: No such file or directory
 ALSA lib confmisc.c:392:(snd_func_concat) error evaluating strings
@@ -47,7 +47,7 @@ ALSA lib conf.c:4259:(_snd_config_evaluate) function snd_func_refer returned err
 ALSA lib conf.c:4738:(snd_config_expand) Evaluate error: No such file or directory
 ALSA lib pcm.c:2239:(snd_pcm_open_noupdate) Unknown PCM default
 alsa: Could not initialize DAC
-alsa: Failed to open `default':
+alsa: Failed to open 'default':
 alsa: Reason: No such file or directory
 ALSA lib confmisc.c:768:(parse_card) cannot find card '0'
 ALSA lib conf.c:4259:(_snd_config_evaluate) function snd_func_card_driver returned error: No such file or directory
@@ -58,9 +58,9 @@ ALSA lib conf.c:4259:(_snd_config_evaluate) function snd_func_refer returned err
 ALSA lib conf.c:4738:(snd_config_expand) Evaluate error: No such file or directory
 ALSA lib pcm.c:2239:(snd_pcm_open_noupdate) Unknown PCM default
 alsa: Could not initialize DAC
-alsa: Failed to open `default':
+alsa: Failed to open 'default':
 alsa: Reason: No such file or directory
-audio: Failed to create voice `lm4549.out'
+audio: Failed to create voice 'lm4549.out'
 Could not initialize SDL(No available video device) - exiting
 
 

@@ -2,7 +2,7 @@ Building the image from scratch
 ===============================
 
 There is always a prebuilt image available for download and installation as
-described in the [README](README.md). If you'd like to build the project yourself,
+described in the [README](../README.md). If you'd like to build the project yourself,
 there are several steps involved:
 
 * Downloading a generic Raspbian Lite image
@@ -146,7 +146,7 @@ raspbian-sys-mods related installs may fail - you can ignore them:
 ```
 * Install the linux dependencies (see CONTRIBUTING.md for more details):
 ```
-    apt-get install timidity git p7zip-full python3 python3-pip python3-lxml pmount ntfs-3g libjpeg-dev libtiff-dev libwebp-dev liblcms2-dev tcl-dev
+    apt-get install timidity git p7zip-full python3 python3-pip python3-lxml pmount ntfs-3g libjpeg-dev libtiff-dev libwebp-dev tk-dev python-tk liblcms2-dev tcl-dev
 ```
 * Compile p7zip-rar from source. First, uncomment out the second line in /etc/apt/sources.list. Then:
 ```
@@ -161,7 +161,7 @@ have to edit your PATH variable or use pip3 to get the correct pip. You also mig
 verify that these dependencies are current by checking in the PyCIRCLean git repo.
 ```
     pip install -U pip
-    pip install oletools exifread pillow
+    pip install oletools exifread Pillow
     pip install git+https://github.com/decalage2/oletools.git
     pip install git+https://github.com/Rafiot/officedissector.git
     pip install git+https://github.com/CIRCL/PyCIRCLean.git

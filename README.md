@@ -8,15 +8,14 @@ How To Install
 
 [Graphical how-to and pre-built image download](http://circl.lu/projects/CIRCLean/).
 
-To prepare the SD card on Windows, you can use [Win32DiskImager](http://sourceforge.net/
-projects/win32diskimager/). On linux/macOS, use dd (see the how-to link for
+To prepare the SD card on Windows, you can use [Win32DiskImager](http://sourceforge.net/projects/win32diskimager/). On linux/macOS, use dd (see the how-to link for
 instructions).
 
 The current prebuilt image is based on the 1-11-17 release of Raspbian Jessie Lite.
 The smallest SD card that Circlean can fit on is currently 4GB.
 
 If you'd like to contribute to the project or build the image yourself, see
-[contributing](CONTRIBUTING.md) and the [setup instructions](doc/setup_with_proot.md).
+[contributing.md](CONTRIBUTING.md) and the [setup instructions](doc/setup_with_proot.md).
 This is a work in progress - contributions are welcome.
 
 Why/What
@@ -26,7 +25,7 @@ This project aims to be useful when you get/find a USB key that you can't trust,
 and you want to look at its contents without taking the risk of plugging it into
 your computer directly. The official project page can be found at [https://www.circl.lu/projects/CIRCLean/]
 
-The Raspberry Pi Foundation blog has a [post](https://www.raspberrypi.org/blog/kittengroomercirclean-data-security-for-journalists-and-activists/) with more information
+The Raspberry Pi Foundation has a [blog post](https://www.raspberrypi.org/blog/kittengroomercirclean-data-security-for-journalists-and-activists/) with more information
 about an older version of the project and details of the inspiration behind it.
 
 CIRCLean is currently tested to work with USB keys that have FAT32, NTFS, or
@@ -35,14 +34,14 @@ keys). Currently, exFAT is not supported due to lack of support for this format 
 The vast majority of USB keys will be FAT32 or NTFS.
 
 The content of the untrusted key will be copied or/and converted to the second
-(blank) key following these rules (based on the mime type as determined bylibmagic):
+(blank) key following these rules (based on the mime type as determined by libmagic):
 - Direct copy of:
   - Plain text files (mime type: text/*)
   - Audio files (mime type: audio/*)
   - Video files (mime type: video/*)
   - Example files (mime type: example/*)
   - Multipart files (mime type: multipart/*)
-  - *xml* files, after being converted to text files
+  - xml files, after being converted to text files
   - Octet-stream files
 - Copied after verification:
   - Image files after verifying that they are not compression bombs (mime type: image/*)
@@ -62,7 +61,7 @@ Usage
 =====
 
 0. Power off the device and unplug all connections.
-1. Plug the untrusted key in the top USB slot of the Raspberry Pi.
+1. Plug the untrusted key in the top left USB slot of the Raspberry Pi.
 2. Plug your own key in the bottom USB slot (or use any of the other slots if
 there are more than 2).
 

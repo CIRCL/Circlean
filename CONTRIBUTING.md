@@ -4,8 +4,7 @@ Getting started
 If you'd like to work on the Python code that processes files for Circlean, you should
 take a look at [PyCIRCLean](https://github.com/CIRCL/PyCIRCLean), specifically the
 filecheck.py script. To get started contributing to Circlean, first, fork the project and
-`git clone` your fork. Then, follow the instructions in [setup_with_proot.md](doc/
-setup_with_proot.md) to build an image. To make things easier, you can also download a
+`git clone` your fork. Then, follow the instructions in [setup_with_proot.md](doc/setup_with_proot.md) to build an image. To make things easier, you can also download a
 prebuilt image as mentioned in the README, and then mount and make modifications to this
 image to test your changes.
 
@@ -25,8 +24,7 @@ Dependencies
 * Pmount and ntfs-3g for mounting usb key partitions
 * Python 3 and pip for installing and running Python dependencies
 * Python3-lxml for handling ooxml and other Office files in filecheck.py
-* libjpeg-dev libtiff-dev libwebp-dev liblcms2-dev tcl-dev for various image formats (
-dependencies for pillow)
+* libjpeg-dev, libtiff-dev, libwebp-dev, liblcms2-dev, tcl-dev, tk-dev, and python-tk for various image formats (dependencies for pillow)
 * Exifread for file metadata
 * Pillow for handling images
 * Olefile, oletools, and officedissector for handling various Office filetypes
