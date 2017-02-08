@@ -27,6 +27,7 @@ if [ -e /dev/sda ]; then
     /sbin/ifconfig eth0 down
     trap clean EXIT TERM INT
     cd /opt/groomer
+    /usr/sbin/led &
     ./init.sh
   fi
 fi
