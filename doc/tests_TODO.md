@@ -16,14 +16,14 @@ Ideas
 =====
 
 Source keys:
-[DONE] Working documents, one / multiple partitions
+- Working documents, one / multiple partitions
 - Non working documents: one / multiple partitions
 - different FS on different partitions
 - Non working FS
 - Malicious documents (very slow, might break the conversions)
 
 Destinations keys
-[DONE] empty, big enough
+- empty, big enough
 - empty, too small
 - broken
 - not empty

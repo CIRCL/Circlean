@@ -19,7 +19,7 @@ cdrom:x:24:pi
 floppy:x:25:
 tape:x:26:
 sudo:x:27:pi
-audio:x:29:pi
+audio:x:29:pi,timidity
 dip:x:30:
 www-data:x:33:
 backup:x:34:
@@ -52,3 +52,4 @@ indiecity:x:1001:root
 spi:x:1002:pi
 gpio:x:1003:pi
 kitten:x:1004:
+timidity:x:110:

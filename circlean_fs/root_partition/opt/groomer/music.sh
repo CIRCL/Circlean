@@ -17,5 +17,6 @@ amixer cset numid=3 1
 files=(${MUSIC}*)
 
 while true; do
-    $TIMIDITY ${files[RANDOM % ${#files[@]}]}
+    # -id flags set interface to "dumb" and -qq silences most/all terminal output
+    $TIMIDITY -idqq ${files[RANDOM % ${#files[@]}]}
 done

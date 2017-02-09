@@ -13,10 +13,13 @@ if ! [ "${ID}" -ge "1000" ]; then
 fi
 
 clean(){
-    echo "GROOMER: Cleaning up in mount_keys.sh."
+    if [ ${DEBUG} = true ]; then
+        sleep 20
+        # Copy the temporary logfile to the destination key
+        cp ${DEBUG_LOG} "${DST_MNT}/groomer_debug_log.txt"
+    fi
 
-    # Copy the temporary logfile to the destination key
-    cp ${GROOM_LOG} "${DST_MNT}/groomer_log_dst.txt"
+    echo "GROOMER: Cleaning up in mount_keys.sh."
 
     # Write anything in memory to disk
     ${SYNC}

@@ -21,18 +21,13 @@ clean(){
 
 echo "GROOMER: end of boot, running rc.local."
 
-# Print the IP address (this doesn't work currently?)
-# _IP=$(hostname -I) || true
-# if [ "$_IP" ]; then
-#   printf "My IP address is %s\n" "$_IP"
-# fi
-
 if [ -e /dev/sda ]; then
   if [ -e /dev/sdb ]; then
     # Avoid possible misuse - turn off eth0 (ethernet port)
     /sbin/ifconfig eth0 down
     trap clean EXIT TERM INT
     cd /opt/groomer
+    /usr/sbin/led &
     ./init.sh
   fi
 fi
