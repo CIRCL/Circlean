@@ -146,7 +146,7 @@ raspbian-sys-mods related installs may fail - you can ignore them:
 ```
 * Install the linux dependencies (see CONTRIBUTING.md for more details):
 ```
-    apt-get install timidity git p7zip-full python3 python3-pip python3-lxml pmount ntfs-3g libjpeg-dev libtiff-dev libwebp-dev tk-dev python-tk liblcms2-dev tcl-dev
+    apt-get install timidity git p7zip-full python3 python3-pip python3-lxml pmount ntfs-3g libjpeg-dev libtiff-dev libwebp-dev tk-dev python3-tk liblcms2-dev tcl-dev
 ```
 * Compile p7zip-rar from source. First, uncomment out the second line in /etc/apt/sources.list. Then:
 ```
