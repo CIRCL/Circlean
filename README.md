@@ -1,5 +1,8 @@
 CIRCLean
 ========
+
+[![Chatroom](https://badges.gitter.im/CIRCLean/Lobby.svg)](https://gitter.im/CIRCLean/Lobby)]
+
 ![CIRCLean logo](https://www.circl.lu/assets/images/logos/circlean.png)
 ![Cleaner in action](http://www.circl.lu/assets/images/CIRCLean/CIRCLean.png)
 
