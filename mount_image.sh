@@ -36,9 +36,9 @@ PARTITION_BOOT='/dev/mmcblk0p1'
 # If you use the img...
 # Double check the path and offsets as noted above!
 ##### Debian
-IMAGE='2016-05-09_CIRCLean.img'
+IMAGE='2017-02-02_CIRCLean.img'
 OFFSET_BOOT=$((8192 * 512))
-OFFSET_ROOTFS=$((131072 * 512))
+OFFSET_ROOTFS=$((137216 * 512))
 
 CHROOT_PATH='/mnt/arm_rPi'
 
