@@ -17,7 +17,6 @@ done
 main() {
     set -eu  # exit when a line returns non-0 status, treat unset variables as errors
     trap killed EXIT TERM INT  # run clean when the script ends or is interrupted
-    check_is_root
     source ./config.sh  # get config values
     run_timidity
 }

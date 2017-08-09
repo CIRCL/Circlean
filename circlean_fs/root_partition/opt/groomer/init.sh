@@ -12,7 +12,7 @@ clean(){
 }
 
 check_is_root() {
-    if [ "${ID}" -ne 0 ]; then
+    if [ "${ID}" -ne 0 ]; then  # -ne is an integer comparison instead of a string comparison
         echo "GROOMER: This script has to be run as root."
         exit
     fi
@@ -35,8 +35,8 @@ run_groomer() {
 main() {
     set -eu  # exit when a line returns non-0 status, treat unset variables as errors
     trap clean EXIT TERM INT  # run clean when the script ends or is interrupted
-    check_is_root
     source ./config.sh  # get config values
+    check_is_root
     if [ "${DEBUG}" = true ]; then
         set -x
     fi

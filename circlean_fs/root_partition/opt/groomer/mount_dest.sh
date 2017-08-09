@@ -1,78 +1,76 @@
 #!/bin/bash
 
-# set -e (exit when a line returns non-0 status) and -x (xtrace) flags
-set -e
-set -x
-
-# Import constants from config file
-source ./config.sh
-
-if ! [ "${ID}" -ge "1000" ]; then
-    echo "GROOMER: mount_keys.sh cannot run as root."
-    exit
-fi
-
 clean(){
-    if [ ${DEBUG} = true ]; then
-        sleep 20
-        # Copy the temporary logfile to the destination key
-        cp ${DEBUG_LOG} "${DST_MNT}/groomer_debug_log.txt"
+        if [ "${DEBUG}" = true ]; then
+            sleep 20
+            # Copy the temporary logfile to the destination key
+            cp "${DEBUG_LOG}" "${DST_MNT}/groomer_debug_log.txt"
+        fi
+        echo "GROOMER: Cleaning up in mount_keys.sh."
+        ${SYNC}  # Write anything in memory to disk
+        # Unmount source and destination
+        pumount "${SRC}"
+        pumount "${DST}"
+        exit
+    }
+
+check_not_root() {
+    if ! [ "${ID}" -ge "1000" ]; then
+        echo "GROOMER: mount_keys.sh cannot run as root."
+        exit
     fi
-
-    echo "GROOMER: Cleaning up in mount_keys.sh."
-
-    # Write anything in memory to disk
-    ${SYNC}
-
-    # Unmount source and destination
-    pumount ${SRC}
-
-    # Clean up and unmount destination
-    pumount ${DST}
-
-    exit
 }
 
-trap clean EXIT TERM INT
+check_source_exists() {
+    if [ ! -b "${DEV_SRC}" ]; then
+        echo "GROOMER: Source device (${DEV_SRC}) does not exist."
+        exit
+    fi
+}
 
-# Check that a device is available on /dev/source_key (symlinked to /dev/sda or sdb)
-if [ ! -b ${DEV_SRC} ]; then
-    echo "GROOMER: Source device (${DEV_SRC}) does not exist."
-    exit
-fi
+check_dest_exists() {
+    if [ ! -b "${DEV_DST}" ]; then
+        echo "GROOMER: Destination device (${DEV_DST}) does not exist."
+        exit
+    fi
+}
 
-# Check that a device is available on /dev/dest_key (symlinked to /dev/sda or sdb)
-if [ ! -b ${DEV_DST} ]; then
-    echo "GROOMER: Destination device (${DEV_DST}) does not exist."
-    exit
-fi
+unmount_dest_if_mounted() {
+    if ${MOUNT}|grep "${DST}"; then
+        ${PUMOUNT} "${DST}" || true
+    fi
+}
 
-# If there is already a device mounted on /media/dst, unmount it
-if ${MOUNT}|grep ${DST}; then
-    ${PUMOUNT} ${DST} || true
-fi
+mount_dest_partition() {
+    if "${PMOUNT}" -w "${DEV_DST}1" "${DST}"; then  # pmount automatically mounts on /media/ (at /media/dst in this case).
+        echo "GROOMER: Destination USB device (${DEV_DST}1) mounted at ${DST_MNT}"
+    else
+        echo "GROOMER: Unable to mount ${DEV_DST}1 on ${DST_MNT}"
+        exit
+    fi
+}
 
-# uid= only works on a vfat FS. What should wedo if we get an ext* FS ?
-# What does this ^ comment mean?
-
-# Mount the first partition of DST (/dev/dest_key1)
-# pmount automatically mounts on /media/ (at /media/dst in this case).
-${PMOUNT} -w "${DEV_DST}1" ${DST}
-if [ ${?} -ne 0 ]; then
-    echo "GROOMER: Unable to mount ${DEV_DST}1 on ${DST_MNT}"
-    exit
-else
-    echo "GROOMER: Destination USB device (${DEV_DST}1) mounted at ${DST_MNT}"
-
-    # Remove any existing "FROM_PARTITION_" directories
-    rm -rf "/media/${DST}/FROM_PARTITION_"*
-
+prepare_dest_partition() {
+    rm -rf "/media/${DST}/FROM_PARTITION_"*  # Remove any existing "FROM_PARTITION_" directories
     # Prepare temp dirs and make sure they're empty if they already exist
     mkdir -p "${TEMP}"
     mkdir -p "${LOGS}"
-    rm -rf "${TEMP}/"*
-    rm -rf "${LOGS}/"*
-fi
+    rm -rf "${TEMP:?}/"*
+    rm -rf "${LOGS:?}/"*
+}
 
-# Now that destination is mounted and prepared, run the groomer
-./groomer.sh
+main() {
+    set -eu  # exit when a line returns non-0 status, treat unset variables as errors
+    trap clean EXIT TERM INT
+    set -x
+    source ./config.sh
+    check_not_root
+    check_source_exists
+    check_dest_exists
+    unmount_dest_if_mounted
+    mount_dest_partition
+    prepare_dest_partition
+    ./groomer.sh
+}
+
+main
