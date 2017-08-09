@@ -28,3 +28,4 @@ readonly PUMOUNT="/usr/bin/pumount"
 
 # Config flags
 readonly DEBUG=false
+readonly MUSIC=true
