@@ -17,11 +17,11 @@ set -x
 
 # Double check the path and offsets as noted above!
 # Path to the image
-IMAGE='2017-02-02_CIRCLean.img'
+IMAGE='New_Circlean.img'
 # Start sector of boot (first) partition
 BOOT_START=8192
 # Start sector of root (second) partition
-ROOT_START=137216
+ROOT_START=92160
 # Locations you'd like the partitions mounted
 BOOT_PATH='/mnt/rpi-boot'
 ROOTFS_PATH='/mnt/rpi-root'
