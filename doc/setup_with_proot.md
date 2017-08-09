@@ -120,9 +120,9 @@ to fill the new larger partition using resize2fs:
 Installing the dependencies
 ===========================
 
-* Copy circlean_fs/root_partition/systemd/system/rc-local.service into the equivalent location in the image.
+* Copy circlean_fs/root_partition/etc/systemd/system/rc-local.service into the equivalent location in the image.
 ```
-    cp circlean_fs/root_partition/systemd/system/rc-local.service /mnt/rpi-root/etc/systemd/system/rc-local.service
+    sudo cp circlean_fs/root_partition/etc/systemd/system/rc-local.service /mnt/rpi-root/etc/systemd/system/rc-local.service
 ```
 * Use [proot](https://proot-me.github.io/) to enter the equivalent of a chroot inside
 the mounted image.
@@ -152,7 +152,9 @@ raspbian-sys-mods related installs may fail - you can ignore them:
 ```
     cd /home/pi
     mkdir rar && cd rar/
+    apt-get update
     apt-get build-dep p7zip-rar
+    apt-get source -b p7zip-rar
     dpkg -i ${path to p7zip-rar .deb file}
 ```
 * Install the Python dependencies for PyCIRCLean/filecheck.py. PyCIRCLean is 3.3+
@@ -220,5 +222,5 @@ copying process:
 ```
 * Use fsck to verify the root partition:
 ```
-    sudo e2fsck -f /dev/sd<number>2
+    sudo e2fsck -f /dev/sd<letter>2
 ```
