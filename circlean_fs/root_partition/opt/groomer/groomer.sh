@@ -22,7 +22,6 @@ clean(){
 
     # Remove temporary files from destination key
     rm -rf ${TEMP}
-    rm -rf ${ZIPTEMP}
 }
 
 trap clean EXIT TERM INT
@@ -57,12 +56,12 @@ do
         echo "GROOMER: ${partition} mounted at /media/${SRC}"
 
         # Put the filenames from the current partition in a logfile
-        find "/media/${SRC}" -fls "${LOGS}/contents_partition_${PARTCOUNT}.txt"
+        find "/media/${SRC}" -fls "${LOGS_DIR}/contents_partition_${PARTCOUNT}.txt"
 
         # Create a directory on ${DST} named PARTION_$PARTCOUNT
         target_dir="/media/${DST}/FROM_PARTITION_${PARTCOUNT}"
         mkdir -p "${target_dir}"
-        LOGFILE="${LOGS}/processing_log.txt"
+        LOGFILE="${LOGS_DIR}/processing_log.txt"
 
         # Run the current partition through filecheck.py
         echo "==== Starting processing of /media/${SRC} to ${target_dir}. ====" >> ${LOGFILE}

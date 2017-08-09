@@ -14,7 +14,7 @@ trap killed EXIT TERM INT
 # Force output on analog
 amixer cset numid=3 1
 
-files=(${MUSIC}*)
+files=(${MUSIC_DIR}*)
 
 while true; do
     # -id flags set interface to "dumb" and -qq silences most/all terminal output

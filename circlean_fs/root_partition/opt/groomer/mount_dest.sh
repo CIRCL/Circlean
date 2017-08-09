@@ -69,10 +69,8 @@ else
 
     # Prepare temp dirs and make sure they're empty if they already exist
     mkdir -p "${TEMP}"
-    mkdir -p "${ZIPTEMP}"
     mkdir -p "${LOGS}"
     rm -rf "${TEMP}/"*
-    rm -rf "${ZIPTEMP}/"*
     rm -rf "${LOGS}/"*
 fi
 
