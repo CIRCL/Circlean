@@ -69,7 +69,9 @@ run_groomer() {
             # echo "==== Done with /media/${SRC} to ${target_dir}. ====" >> "${logfile}"
 
             # List destination files (recursively) for debugging
-            # ls -lR "${target_dir}"
+            if [ "${DEBUG}" = true ]; then
+                ls -lR "${target_dir}"
+            fi
         else
             # Previous command (mounting current partition) failed
             echo "GROOMER: Unable to mount ${partition} on /media/${SRC}"

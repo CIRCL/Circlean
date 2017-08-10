@@ -13,7 +13,7 @@ clean(){
         pumount "${SRC}"
         pumount "${DST}"
         exit
-    }
+}
 
 check_not_root() {
     if ! [ "${ID}" -ge "1000" ]; then
