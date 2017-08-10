@@ -7,6 +7,7 @@ clean(){
             cp "${DEBUG_LOG}" "${DST_MNT}/groomer_debug_log.txt"
         fi
         echo "GROOMER: Cleaning up in mount_keys.sh."
+        rm -rf "/media/${DST}/IN_PROGRESS"*
         ${SYNC}  # Write anything in memory to disk
         # Unmount source and destination
         pumount "${SRC}"
@@ -50,7 +51,11 @@ mount_dest_partition() {
     fi
 }
 
-prepare_dest_partition() {
+copy_in_progress_file() {
+    cp "/opt/groomer/IN_PROGRESS" "/media/${DST}/IN_PROGRESS"
+}
+
+prepare_dest_key() {
     rm -rf "/media/${DST}/FROM_PARTITION_"*  # Remove any existing "FROM_PARTITION_" directories
     # Prepare temp dirs and make sure they're empty if they already exist
     mkdir -p "${TEMP}"
@@ -70,7 +75,8 @@ main() {
     check_source_exists
     check_dest_exists
     unmount_dest_if_mounted
-    mount_dest_partition
+    mount_dest_key
+    copy_in_progress_file
     prepare_dest_partition
     ./groomer.sh
 }

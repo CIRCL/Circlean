@@ -56,20 +56,20 @@ run_groomer() {
             echo "GROOMER: ${partition} mounted at /media/${SRC}"
 
             # Put the filenames from the current partition in a logfile
-            find "/media/${SRC}" -fls "${LOGS_DIR}/contents_partition_${partcount}.txt"
+            # find "/media/${SRC}" -fls "${LOGS_DIR}/contents_partition_${partcount}.txt"
 
             # Create a directory on ${DST} named PARTION_$PARTCOUNT
             local target_dir="/media/${DST}/FROM_PARTITION_${partcount}"
             mkdir -p "${target_dir}"
-            local logfile="${LOGS_DIR}/processing_log.txt"
+            # local logfile="${LOGS_DIR}/processing_log.txt"
 
             # Run the current partition through filecheck.py
-            echo "==== Starting processing of /media/${SRC} to ${target_dir}. ====" >> "${logfile}"
+            # echo "==== Starting processing of /media/${SRC} to ${target_dir}. ====" >> "${logfile}"
             filecheck.py --source /media/"${SRC}" --destination "${target_dir}" || true
-            echo "==== Done with /media/${SRC} to ${target_dir}. ====" >> "${logfile}"
+            # echo "==== Done with /media/${SRC} to ${target_dir}. ====" >> "${logfile}"
 
             # List destination files (recursively) for debugging
-            ls -lR "${target_dir}"
+            # ls -lR "${target_dir}"
         else
             # Previous command (mounting current partition) failed
             echo "GROOMER: Unable to mount ${partition} on /media/${SRC}"
@@ -77,7 +77,6 @@ run_groomer() {
         let partcount=$((partcount + 1))
     done
 }
-
 
 main() {
     set -eu  # exit when a line returns non-0 status, treat unset variables as errors
