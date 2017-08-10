@@ -61,9 +61,11 @@ prepare_dest_partition() {
 
 main() {
     set -eu  # exit when a line returns non-0 status, treat unset variables as errors
-    trap clean EXIT TERM INT
-    set -x
-    source ./config.sh
+    trap clean EXIT TERM INT  # run clean when the script ends or is interrupted
+    source ./config.sh  # get config values
+    if [ "${DEBUG}" = true ]; then
+        set -x
+    fi
     check_not_root
     check_source_exists
     check_dest_exists

@@ -1,19 +1,7 @@
 #!/bin/bash
 
-# set -e (exit when a line returns non-0 status) and -x (xtrace) flags
-set -e
-set -x
-
-# Import constants from config file
-source ./config.sh
-
-if ! [ "${ID}" -ge "1000" ]; then
-    echo "GROOMER: groomer.sh cannot run as root."
-    exit
-fi
-
 clean(){
-    if [ ${DEBUG} = true ]; then
+    if [ "${DEBUG}" = true ]; then
         sleep 20
     fi
 
@@ -21,58 +9,84 @@ clean(){
     ${SYNC}
 
     # Remove temporary files from destination key
-    rm -rf ${TEMP}
+    rm -rf "${TEMP}"
 }
 
-trap clean EXIT TERM INT
+check_not_root() {
+    if ! [ "${ID}" -ge "1000" ]; then
+        echo "GROOMER: groomer.sh cannot run as root."
+        exit
+    fi
+}
 
-# Find the partition names on the device available at /dev/source_key
-DEV_PARTITIONS=`ls "${DEV_SRC}"* | grep "${DEV_SRC}[1-9][0-6]*" || true`
-if [ -z "${DEV_PARTITIONS}" ]; then
-    echo "GROOMER: ${DEV_SRC} does not have any partitions."
-    exit
-fi
+check_partitions_not_empty () {
+    local partitions=$1
+    if [ -z "${partitions}" ]; then
+        echo "GROOMER: ${DEV_SRC} does not have any partitions."
+        exit
+    fi
+}
 
-PARTCOUNT=1
-for partition in ${DEV_PARTITIONS}
-do
-    echo "GROOMER: Processing partition ${partition}"
+unmount_source_partition() {
     # Unmount anything that is mounted on /media/src
-    if [ `${MOUNT} | grep -c ${SRC}` -ne 0 ]; then
-        ${PUMOUNT} ${SRC}
+    if [ "$(${MOUNT} | grep -c "${SRC}")" -ne 0 ]; then
+            ${PUMOUNT} "${SRC}"
     fi
+}
 
-    # Mount the current partition in write mode
-    ${PMOUNT} -w ${partition} ${SRC}
-    # Mark any autorun.inf files as dangerous on the source device
-    ls ${SRC_MNT} | grep -i autorun.inf | xargs -I {} mv "${SRC_MNT}"/{} "{SRC_MNT}"/DANGEROUS_{}_DANGEROUS || true
-    # Unmount and remount the current partition in read-only mode
-    ${PUMOUNT} ${SRC}
-    ${PMOUNT} -r ${partition} ${SRC}
-    if [ ${?} -ne 0 ]; then
-        # Previous command (mounting current partition) failed
-        echo "GROOMER: Unable to mount ${partition} on /media/${SRC}"
-    else
-        echo "GROOMER: ${partition} mounted at /media/${SRC}"
+run_groomer() {
+    local dev_partitions
+    # Find the partition names on the device
+    let dev_partitions=$(ls "${DEV_SRC}"* | grep "${DEV_SRC}[1-9][0-6]*" || true)
+    check_has_partitions dev_partitions
+    local partcount=1
+    local partition
+    for partition in ${dev_partitions}
+    do
+        echo "GROOMER: Processing partition ${partition}"
+        unmount_source_partition
+        # Mount the current partition in write mode
+        ${PMOUNT} -w ${partition} "${SRC}"
+        # Mark any autorun.inf files as dangerous on the source device to be extra careful
+        ls "${SRC_MNT}" | grep -i autorun.inf | xargs -I {} mv "${SRC_MNT}"/{} "{SRC_MNT}"/DANGEROUS_{}_DANGEROUS || true
+        # Unmount and remount the current partition in read-only mode
+        ${PUMOUNT} "${SRC}"
 
-        # Put the filenames from the current partition in a logfile
-        find "/media/${SRC}" -fls "${LOGS_DIR}/contents_partition_${PARTCOUNT}.txt"
+        if ${PMOUNT} -r "${partition}" "${SRC}"; then
+            echo "GROOMER: ${partition} mounted at /media/${SRC}"
 
-        # Create a directory on ${DST} named PARTION_$PARTCOUNT
-        target_dir="/media/${DST}/FROM_PARTITION_${PARTCOUNT}"
-        mkdir -p "${target_dir}"
-        LOGFILE="${LOGS_DIR}/processing_log.txt"
+            # Put the filenames from the current partition in a logfile
+            find "/media/${SRC}" -fls "${LOGS_DIR}/contents_partition_${partcount}.txt"
 
-        # Run the current partition through filecheck.py
-        echo "==== Starting processing of /media/${SRC} to ${target_dir}. ====" >> ${LOGFILE}
-        filecheck.py --source /media/${SRC} --destination ${target_dir} || true
-        echo "==== Done with /media/${SRC} to ${target_dir}. ====" >> ${LOGFILE}
+            # Create a directory on ${DST} named PARTION_$PARTCOUNT
+            local target_dir="/media/${DST}/FROM_PARTITION_${partcount}"
+            mkdir -p "${target_dir}"
+            local logfile="${LOGS_DIR}/processing_log.txt"
 
-        # List destination files (recursively) for debugging
-        ls -lR "${target_dir}"
+            # Run the current partition through filecheck.py
+            echo "==== Starting processing of /media/${SRC} to ${target_dir}. ====" >> "${logfile}"
+            filecheck.py --source /media/"${SRC}" --destination "${target_dir}" || true
+            echo "==== Done with /media/${SRC} to ${target_dir}. ====" >> "${logfile}"
+
+            # List destination files (recursively) for debugging
+            ls -lR "${target_dir}"
+        else
+            # Previous command (mounting current partition) failed
+            echo "GROOMER: Unable to mount ${partition} on /media/${SRC}"
+        fi
+        let partcount=$((partcount + 1))
+    done
+}
+
+
+main() {
+    set -eu  # exit when a line returns non-0 status, treat unset variables as errors
+    trap clean EXIT TERM INT  # run clean when the script ends or is interrupted
+    source ./config.sh  # get config values
+    if [ "${DEBUG}" = true ]; then
+        set -x
     fi
-    let PARTCOUNT=`expr $PARTCOUNT + 1`
-done
+    run_groomer
+}
 
-# The cleanup is automatically done in the function clean called when
-# the program exits
+main
