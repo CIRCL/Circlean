@@ -49,7 +49,10 @@ IN ALL CASES, PLEASE READ THE COMMENTS IN THE SCRIPTS AT LEAST ONCE.
 Running the tests
 =================
 
-To emulate the Raspberry Pi hardware for testing, we'll be using
+* If you've made changes to the shell scripts, start by installing and running
+[Shellcheck](https://github.com/koalaman/shellcheck).
+
+* To emulate the Raspberry Pi hardware for testing, we'll be using
 [Qemu](http://wiki.qemu.org/Main_Page), an open source machine emulator.
 The "qemu" package available for Ubuntu/Debian includes all of the required
 packages (including qemu-system-arm) except for qemu-user-static, which must
