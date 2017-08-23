@@ -7,11 +7,11 @@ clean(){
             cp "${DEBUG_LOG}" "${DST_MNT}/groomer_debug_log.txt"
         fi
         echo "GROOMER: Cleaning up in mount_keys.sh."
-        rm -rf "/media/${DST}/IN_PROGRESS"*
+        rm -rf "${DST_MNT}/IN_PROGRESS"*
         ${SYNC}  # Write anything in memory to disk
         # Unmount source and destination
-        pumount "${SRC}"
-        pumount "${DST}"
+        pumount "${SRC_MNT}"
+        pumount "${DST_MNT}"
         exit
 }
 
@@ -37,13 +37,13 @@ check_dest_exists() {
 }
 
 unmount_dest_if_mounted() {
-    if ${MOUNT}|grep "${DST}"; then
-        ${PUMOUNT} "${DST}" || true
+    if ${MOUNT}|grep "${DST_MNT}"; then
+        ${PUMOUNT} "${DST_MNT}" || true
     fi
 }
 
 mount_dest_partition() {
-    if "${PMOUNT}" -w "${DEV_DST}1" "${DST}"; then  # pmount automatically mounts on /media/ (at /media/dst in this case).
+    if "${PMOUNT}" -w "${DEV_DST}1" "${DST_MNT}"; then  # pmount automatically mounts on /media/ (at /media/dst in this case).
         echo "GROOMER: Destination USB device (${DEV_DST}1) mounted at ${DST_MNT}"
     else
         echo "GROOMER: Unable to mount ${DEV_DST}1 on ${DST_MNT}"
@@ -52,11 +52,11 @@ mount_dest_partition() {
 }
 
 copy_in_progress_file() {
-    cp "/opt/groomer/IN_PROGRESS" "/media/${DST}/IN_PROGRESS"
+    cp "/opt/groomer/IN_PROGRESS" "${DST_MNT}/IN_PROGRESS"
 }
 
-prepare_dest_key() {
-    rm -rf "/media/${DST}/FROM_PARTITION_"*  # Remove any existing "FROM_PARTITION_" directories
+prepare_dest_partition() {
+    rm -rf "${DST_MNT}/FROM_PARTITION_"*  # Remove any existing "FROM_PARTITION_" directories
     # Prepare temp dirs and make sure they're empty if they already exist
     mkdir -p "${TEMP}"
     mkdir -p "${LOGS}"
@@ -75,7 +75,7 @@ main() {
     check_source_exists
     check_dest_exists
     unmount_dest_if_mounted
-    mount_dest_key
+    mount_dest_partition
     copy_in_progress_file
     prepare_dest_partition
     ./groomer.sh

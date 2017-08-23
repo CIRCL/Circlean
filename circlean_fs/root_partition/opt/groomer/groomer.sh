@@ -29,8 +29,8 @@ check_partitions_not_empty () {
 
 unmount_source_partition() {
     # Unmount anything that is mounted on /media/src
-    if [ "$(${MOUNT} | grep -c "${SRC}")" -ne 0 ]; then
-            ${PUMOUNT} "${SRC}"
+    if [ "$(${MOUNT} | grep -c "${SRC_MNT}")" -ne 0 ]; then
+            ${PUMOUNT} "${SRC_MNT}"
     fi
 }
 
@@ -46,27 +46,27 @@ run_groomer() {
         echo "GROOMER: Processing partition ${partition}"
         unmount_source_partition
         # Mount the current partition in write mode
-        ${PMOUNT} -w ${partition} "${SRC}"
+        ${PMOUNT} -w ${partition} "${SRC_MNT}"
         # Mark any autorun.inf files as dangerous on the source device to be extra careful
         ls "${SRC_MNT}" | grep -i autorun.inf | xargs -I {} mv "${SRC_MNT}"/{} "{SRC_MNT}"/DANGEROUS_{}_DANGEROUS || true
         # Unmount and remount the current partition in read-only mode
-        ${PUMOUNT} "${SRC}"
+        ${PUMOUNT} "${SRC_MNT}"
 
-        if ${PMOUNT} -r "${partition}" "${SRC}"; then
-            echo "GROOMER: ${partition} mounted at /media/${SRC}"
+        if ${PMOUNT} -r "${partition}" "${SRC_MNT}"; then
+            echo "GROOMER: ${partition} mounted at ${SRC_MNT}"
 
             # Put the filenames from the current partition in a logfile
             # find "/media/${SRC}" -fls "${LOGS_DIR}/contents_partition_${partcount}.txt"
 
-            # Create a directory on ${DST} named PARTION_$PARTCOUNT
-            local target_dir="/media/${DST}/FROM_PARTITION_${partcount}"
+            # Create a directory on ${DST_MNT} named PARTION_$PARTCOUNT
+            local target_dir="${DST_MNT}/FROM_PARTITION_${partcount}"
             mkdir -p "${target_dir}"
             # local logfile="${LOGS_DIR}/processing_log.txt"
 
             # Run the current partition through filecheck.py
-            # echo "==== Starting processing of /media/${SRC} to ${target_dir}. ====" >> "${logfile}"
-            filecheck.py --source /media/"${SRC}" --destination "${target_dir}" || true
-            # echo "==== Done with /media/${SRC} to ${target_dir}. ====" >> "${logfile}"
+            # echo "==== Starting processing of ${SRC_MNT} to ${target_dir}. ====" >> "${logfile}"
+            filecheck.py --source "${SRC_MNT}" --destination "${target_dir}" || true
+            # echo "==== Done with ${SRC_MNT} to ${target_dir}. ====" >> "${logfile}"
 
             # List destination files (recursively) for debugging
             if [ "${DEBUG}" = true ]; then
@@ -74,7 +74,7 @@ run_groomer() {
             fi
         else
             # Previous command (mounting current partition) failed
-            echo "GROOMER: Unable to mount ${partition} on /media/${SRC}"
+            echo "GROOMER: Unable to mount ${partition} on ${SRC_MNT}"
         fi
         let partcount=$((partcount + 1))
     done
