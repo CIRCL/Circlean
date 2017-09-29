@@ -1,3 +1,15 @@
+Version 2.3 - 2017-09-08
+
+TODO
+
+Version 2.2 - 2017-04-18
+
+New features:
+- Filecheck.py configuration information is now conveniently held in a Config object instead of in globals
+- New easier to read text-based logger (removed twiggy dependency)
+- Various filetypes in filecheck.py now have improved descriptions for log
+- Improved the interface for adding file descriptions to files
+
 Version 2.1 - 2017-02-02
 - Updated to the newest version of Raspbian Jessie lite (January 11th 2017 release)
 - NTFS files can now be mounted as source or destination keys
