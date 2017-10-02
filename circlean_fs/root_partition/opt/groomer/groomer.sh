@@ -19,10 +19,10 @@ check_not_root() {
     fi
 }
 
-check_partitions_not_empty () {
+check_has_partitions () {
     local partitions=$1
     if [ -z "${partitions}" ]; then
-        echo "GROOMER: ${DEV_SRC} does not have any partitions."
+        echo "GROOMER: ${SRC_DEV} does not have any partitions."
         exit
     fi
 }
@@ -37,7 +37,7 @@ unmount_source_partition() {
 run_groomer() {
     local dev_partitions
     # Find the partition names on the device
-    let dev_partitions=$(ls "${DEV_SRC}"* | grep "${DEV_SRC}[1-9][0-6]*" || true)
+    dev_partitions=$(ls "${SRC_DEV}"* | grep "${SRC_DEV}[1-9][0-6]*" || true)
     check_has_partitions dev_partitions
     local partcount=1
     local partition
@@ -48,25 +48,19 @@ run_groomer() {
         # Mount the current partition in write mode
         ${PMOUNT} -w ${partition} "${SRC_MNT}"
         # Mark any autorun.inf files as dangerous on the source device to be extra careful
-        ls "${SRC_MNT}" | grep -i autorun.inf | xargs -I {} mv "${SRC_MNT}"/{} "{SRC_MNT}"/DANGEROUS_{}_DANGEROUS || true
+        ls "${SRC_MNT}" | grep -i autorun.inf | xargs -I {} mv "${SRC_MNT}"/{} "${SRC_MNT}"/DANGEROUS_{}_DANGEROUS || true
         # Unmount and remount the current partition in read-only mode
         ${PUMOUNT} "${SRC_MNT}"
 
         if ${PMOUNT} -r "${partition}" "${SRC_MNT}"; then
             echo "GROOMER: ${partition} mounted at ${SRC_MNT}"
 
-            # Put the filenames from the current partition in a logfile
-            # find "/media/${SRC}" -fls "${LOGS_DIR}/contents_partition_${partcount}.txt"
-
             # Create a directory on ${DST_MNT} named PARTION_$PARTCOUNT
             local target_dir="${DST_MNT}/FROM_PARTITION_${partcount}"
             mkdir -p "${target_dir}"
-            # local logfile="${LOGS_DIR}/processing_log.txt"
 
             # Run the current partition through filecheck.py
-            # echo "==== Starting processing of ${SRC_MNT} to ${target_dir}. ====" >> "${logfile}"
             filecheck.py --source "${SRC_MNT}" --destination "${target_dir}" || true
-            # echo "==== Done with ${SRC_MNT} to ${target_dir}. ====" >> "${logfile}"
 
             # List destination files (recursively) for debugging
             if [ "${DEBUG}" = true ]; then

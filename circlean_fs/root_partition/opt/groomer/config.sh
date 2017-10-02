@@ -6,10 +6,10 @@ readonly USERNAME="kitten"
 readonly ID=$(/usr/bin/id -u)
 
 # Paths used in multiple scripts
-readonly DEV_SRC="/dev/source_key"
+readonly SRC_DEV="/dev/source_key"
 readonly SRC_MNT="/media/src"
 
-readonly DEV_DST="/dev/dest_key"
+readonly DST_DEV="/dev/dest_key"
 readonly DST_MNT="/media/dst"
 
 readonly TEMP="${DST_MNT}/temp"

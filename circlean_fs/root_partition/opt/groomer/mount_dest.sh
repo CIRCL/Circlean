@@ -7,7 +7,7 @@ clean(){
             cp "${DEBUG_LOG}" "${DST_MNT}/groomer_debug_log.txt"
         fi
         echo "GROOMER: Cleaning up in mount_keys.sh."
-        rm -rf "${DST_MNT}/IN_PROGRESS"*
+        rm -rf "${DST_MNT}/IN_PROGRESS.txt"*
         ${SYNC}  # Write anything in memory to disk
         # Unmount source and destination
         pumount "${SRC_MNT}"
@@ -23,15 +23,15 @@ check_not_root() {
 }
 
 check_source_exists() {
-    if [ ! -b "${DEV_SRC}" ]; then
-        echo "GROOMER: Source device (${DEV_SRC}) does not exist."
+    if [ ! -b "${SRC_DEV}" ]; then
+        echo "GROOMER: Source device (${SRC_DEV}) does not exist."
         exit
     fi
 }
 
 check_dest_exists() {
-    if [ ! -b "${DEV_DST}" ]; then
-        echo "GROOMER: Destination device (${DEV_DST}) does not exist."
+    if [ ! -b "${DST_DEV}" ]; then
+        echo "GROOMER: Destination device (${DST_DEV}) does not exist."
         exit
     fi
 }
@@ -43,25 +43,23 @@ unmount_dest_if_mounted() {
 }
 
 mount_dest_partition() {
-    if "${PMOUNT}" -w "${DEV_DST}1" "${DST_MNT}"; then  # pmount automatically mounts on /media/ (at /media/dst in this case).
-        echo "GROOMER: Destination USB device (${DEV_DST}1) mounted at ${DST_MNT}"
+    if ${PMOUNT} -w "${DST_DEV}1" "${DST_MNT}"; then  # pmount automatically mounts on /media/ (at /media/dst in this case).
+        echo "GROOMER: Destination USB device (${DST_DEV}1) mounted at ${DST_MNT}"
     else
-        echo "GROOMER: Unable to mount ${DEV_DST}1 on ${DST_MNT}"
+        echo "GROOMER: Unable to mount ${DST_DEV}1 on ${DST_MNT}"
         exit
     fi
 }
 
 copy_in_progress_file() {
-    cp "/opt/groomer/IN_PROGRESS" "${DST_MNT}/IN_PROGRESS"
+    cp "/opt/groomer/IN_PROGRESS.txt" "${DST_MNT}/IN_PROGRESS.txt"
 }
 
 prepare_dest_partition() {
     rm -rf "${DST_MNT}/FROM_PARTITION_"*  # Remove any existing "FROM_PARTITION_" directories
-    # Prepare temp dirs and make sure they're empty if they already exist
+    # Prepare temp dir and make sure it's empty if it already exists:
     mkdir -p "${TEMP}"
-    mkdir -p "${LOGS}"
     rm -rf "${TEMP:?}/"*
-    rm -rf "${LOGS:?}/"*
 }
 
 main() {
