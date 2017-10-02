@@ -144,7 +144,9 @@ raspbian-sys-mods related installs may fail - you can ignore them:
     apt-get dist-upgrade
     apt-get autoremove
 ```
-* Install the linux dependencies (see CONTRIBUTING.md for more details):
+* Install the linux dependencies (see CONTRIBUTING.md for more details). If you see warnings that
+from qemu about "Unsupported syscall: 384", you can ignore them. `getrandom(2)` was implemented in
+kernel 3.17 and apt will use /dev/urandom when it fails:
 ```
     apt-get install timidity git p7zip-full python3 python3-pip python3-lxml pmount ntfs-3g libjpeg-dev libtiff-dev libwebp-dev tk-dev python3-tk liblcms2-dev tcl-dev
 ```
@@ -163,8 +165,7 @@ have to edit your PATH variable or use pip3 to get the correct pip. You also mig
 verify that these dependencies are current by checking in the PyCIRCLean git repo.
 ```
     pip install -U pip
-    pip install oletools exifread Pillow
-    pip install git+https://github.com/decalage2/oletools.git
+    pip install olefile oletools exifread Pillow
     pip install git+https://github.com/Rafiot/officedissector.git
     pip install git+https://github.com/CIRCL/PyCIRCLean.git
 ```
@@ -197,7 +198,7 @@ manpage for more details. Make sure to include the trailing slashes on the paths
     exit
     sudo rsync -vri circlean_fs/boot/ /mnt/rpi-boot/
     sudo rsync -vri circlean_fs/root_partition/ /mnt/rpi-root/
-    cp -rf midi /mnt/rpi-root/opt/
+    sudo cp -rf midi /mnt/rpi-root/opt/
 ```
 * If have an external hardware led and you're using the led functionality, copy
 the led files from diode_controller/ as well.

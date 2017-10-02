@@ -31,7 +31,7 @@
     - exifread
     - pillow
     - olefile
-    - git+https://github.com/decalage2/oletools.git
+    - oletools
     - git+https://github.com/grierforensics/officedissector.git
     - git+https://github.com/CIRCL/PyCIRCLean.git
 * Add a user named "kitten"
