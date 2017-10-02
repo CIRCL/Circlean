@@ -120,9 +120,9 @@ to fill the new larger partition using resize2fs:
 Installing the dependencies
 ===========================
 
-* Copy circlean_fs/root_partition/systemd/system/rc-local.service into the equivalent location in the image.
+* Copy circlean_fs/root_partition/etc/systemd/system/rc-local.service into the equivalent location in the image.
 ```
-    cp circlean_fs/root_partition/systemd/system/rc-local.service /mnt/rpi-root/etc/systemd/system/rc-local.service
+    sudo cp circlean_fs/root_partition/etc/systemd/system/rc-local.service /mnt/rpi-root/etc/systemd/system/rc-local.service
 ```
 * Use [proot](https://proot-me.github.io/) to enter the equivalent of a chroot inside
 the mounted image.
@@ -144,15 +144,19 @@ raspbian-sys-mods related installs may fail - you can ignore them:
     apt-get dist-upgrade
     apt-get autoremove
 ```
-* Install the linux dependencies (see CONTRIBUTING.md for more details):
+* Install the linux dependencies (see CONTRIBUTING.md for more details). If you see warnings that
+from qemu about "Unsupported syscall: 384", you can ignore them. `getrandom(2)` was implemented in
+kernel 3.17 and apt will use /dev/urandom when it fails:
 ```
-    apt-get install timidity git p7zip-full python3 python3-pip python3-lxml pmount ntfs-3g libjpeg-dev libtiff-dev libwebp-dev tk-dev python-tk liblcms2-dev tcl-dev
+    apt-get install timidity git p7zip-full python3 python3-pip python3-lxml pmount ntfs-3g libjpeg-dev libtiff-dev libwebp-dev tk-dev python3-tk liblcms2-dev tcl-dev
 ```
 * Compile p7zip-rar from source. First, uncomment out the second line in /etc/apt/sources.list. Then:
 ```
     cd /home/pi
     mkdir rar && cd rar/
+    apt-get update
     apt-get build-dep p7zip-rar
+    apt-get source -b p7zip-rar
     dpkg -i ${path to p7zip-rar .deb file}
 ```
 * Install the Python dependencies for PyCIRCLean/filecheck.py. PyCIRCLean is 3.3+
@@ -161,8 +165,7 @@ have to edit your PATH variable or use pip3 to get the correct pip. You also mig
 verify that these dependencies are current by checking in the PyCIRCLean git repo.
 ```
     pip install -U pip
-    pip install oletools exifread Pillow
-    pip install git+https://github.com/decalage2/oletools.git
+    pip install olefile oletools exifread Pillow
     pip install git+https://github.com/Rafiot/officedissector.git
     pip install git+https://github.com/CIRCL/PyCIRCLean.git
 ```
@@ -195,7 +198,7 @@ manpage for more details. Make sure to include the trailing slashes on the paths
     exit
     sudo rsync -vri circlean_fs/boot/ /mnt/rpi-boot/
     sudo rsync -vri circlean_fs/root_partition/ /mnt/rpi-root/
-    cp -rf midi /mnt/rpi-root/opt/
+    sudo cp -rf midi /mnt/rpi-root/opt/
 ```
 * If have an external hardware led and you're using the led functionality, copy
 the led files from diode_controller/ as well.
@@ -220,5 +223,5 @@ copying process:
 ```
 * Use fsck to verify the root partition:
 ```
-    sudo e2fsck -f /dev/sd<number>2
+    sudo e2fsck -f /dev/sd<letter>2
 ```

@@ -1,14 +1,20 @@
 Version 2.3 - 2017-09-08
-
-TODO
+- Updated to the newest version of Raspbian Stretch lite (2017-08-16 release)
+- Using the newest version of PyCIRCLean, including several vulnerability and bug fixes
+- Refactored CIRCLean bash scripts according to [Defensive Bash Programming](http://www.kfirlavi.com/blog/2012/11/14/defensive-bash-programming/)
+- Added IN_PROGRESS.txt canary file that gets added and then deleted from destination key
+- Various smaller bug fixes
 
 Version 2.2 - 2017-04-18
-
-New features:
+- Updated to newest version of Raspbian Jessie lite (April 10th 2017 release)
+- Using the newest version of PyCIRCLean, which includes a new log format and
+various bug fixes
 - Filecheck.py configuration information is now conveniently held in a Config object instead of in globals
 - New easier to read text-based logger (removed twiggy dependency)
 - Various filetypes in filecheck.py now have improved descriptions for log
-- Improved the interface for adding file descriptions to files
+
+Version 2.1.1 - 2017-02-28
+- Fix copying PDF documents to the destination key
 
 Version 2.1 - 2017-02-02
 - Updated to the newest version of Raspbian Jessie lite (January 11th 2017 release)

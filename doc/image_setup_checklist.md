@@ -19,7 +19,7 @@
     - pmount ntfs-3g
     - python3 python3-pip
     - python3-lxml
-    - libjpeg-dev libtiff-dev libwebp-dev liblcms2-dev tcl-dev tk-dev python-tk
+    - libjpeg-dev libtiff-dev libwebp-dev liblcms2-dev tcl-dev tk-dev python3-tk
 * Compile p7zip-rar from source
     - Change your source.list file
     - Make a new directory and cd to it
@@ -31,7 +31,7 @@
     - exifread
     - pillow
     - olefile
-    - git+https://github.com/decalage2/oletools.git
+    - oletools
     - git+https://github.com/grierforensics/officedissector.git
     - git+https://github.com/CIRCL/PyCIRCLean.git
 * Add a user named "kitten"
