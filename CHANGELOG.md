@@ -1,3 +1,7 @@
+Version 2.3.1 - 2017-10-25
+- Bugfix for Raspberry Pi 3 that was causing rc.local to fail to boot
+- Turned off several networking related services: startup is much faster
+
 Version 2.3 - 2017-09-08
 - Updated to the newest version of Raspbian Stretch lite (2017-08-16 release)
 - Using the newest version of PyCIRCLean, including several vulnerability and bug fixes
