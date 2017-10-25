@@ -185,6 +185,13 @@ This is what triggers CIRCLean to run.
 ```
     systemctl enable rc-local.service
 ```
+* Turn off several networking related services. This speeds up boot and reduces the
+attack surface:
+```
+    systemctl disable networking.service
+    systemctl disable bluetooth.service
+    systemctl disable dhcpcd.service
+```
 * Clean up:
 ```
     apt-get clean
