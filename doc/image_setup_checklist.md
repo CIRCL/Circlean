@@ -38,6 +38,7 @@
 * Symlink /proc/mounts to /etc/mtab
 * Turn on rc-local.service `systemctl enable rc-local.service`
     - If it doesn't work, read these instructions: https://www.linuxbabe.com/linux-server/how-to-enable-etcrc-local-with-systemd
+* Disable networking.service, bluetooth.service, and dchpcd.service
 * apt-get autoclean
 * apt-get autoremove
 * Exit from proot
