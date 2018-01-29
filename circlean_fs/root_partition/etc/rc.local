@@ -15,6 +15,8 @@
 ## been modified to start the grooming process after booting.
 
 clean(){
+    echo "GROOMER: Copy over, sleeping 15s before shutdown."
+    sleep 15
     echo "GROOMER: rc.local done, shutting down."
     /sbin/shutdown -P -h now
 }

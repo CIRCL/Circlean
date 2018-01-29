@@ -100,7 +100,8 @@ Installing the dependencies
 * Use [proot](https://proot-me.github.io/) to enter the equivalent of a chroot inside
 the mounted image.
 ```
-    sudo proot -q qemu-arm -S /mnt/rpi-root -b /mnt/rpi-boot:/boot /bin/bash
+    sudo proot -q qemu-arm -0 -r /mnt/rpi-root -b /mnt/rpi-boot:/boot -b /etc/resolv.conf:/etc/resolv.conf \
+		-b /dev/:/dev/ -b /sys/:/sys/ -b /proc/:/proc/ -b/run/shm:/run/shm  /bin/bash
 ```
 * Change your locales (remove "en_GB.UTF-8 UTF-8", add "en_US.UTF-8 UTF-8"). The
 arrow keys move the cursor, spacebar selects/deselects a locale, tab moves the cursor
@@ -121,7 +122,7 @@ raspbian-sys-mods related installs may fail - you can ignore them:
 from qemu about "Unsupported syscall: 384", you can ignore them. `getrandom(2)` was implemented in
 kernel 3.17 and apt will use /dev/urandom when it fails:
 ```
-    apt-get install timidity git p7zip-full python3 python3-pip python3-lxml pmount ntfs-3g libjpeg-dev libtiff-dev libwebp-dev tk-dev python3-tk liblcms2-dev tcl-dev
+    apt-get install timidity git p7zip-full python3 python3-pip python3-lxml pmount ntfs-3g libjpeg-dev libtiff-dev libwebp-dev tk-dev python3-tk liblcms2-dev tcl-dev libopenjp2-7
 ```
 * Compile p7zip-rar from source. First, uncomment out the second line in /etc/apt/sources.list. Then:
 ```
@@ -132,15 +133,15 @@ kernel 3.17 and apt will use /dev/urandom when it fails:
     apt-get source -b p7zip-rar
     dpkg -i ${path to p7zip-rar .deb file}
 ```
-* Install the Python dependencies for PyCIRCLean/filecheck.py. PyCIRCLean is 3.3+
+* Install the Python dependencies for PyCIRCLean/filecheck.py. PyCIRCLean is 3.5+
 compatible, so use pip -V to make sure you're using the right version of pip. You might
 have to edit your PATH variable or use pip3 to get the correct pip. You also might want to
 verify that these dependencies are current by checking in the PyCIRCLean git repo.
 ```
-    pip install -U pip
-    pip install olefile oletools exifread Pillow
-    pip install git+https://github.com/Rafiot/officedissector.git
-    pip install git+https://github.com/CIRCL/PyCIRCLean.git
+    pip3 install -U pip
+    pip3 install olefile oletools exifread Pillow
+    pip3 install git+https://github.com/Rafiot/officedissector.git
+    pip3 install git+https://github.com/CIRCL/PyCIRCLean.git
 ```
 * Create a new user named "kitten":
 ```
