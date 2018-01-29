@@ -56,66 +56,39 @@ file yields an unlimited number of "0x00" bytes.
 ```
     > dd if=/dev/zero bs=1024k count=2048 >> XXXX-XX-XX-raspbian-jessie-lite.img
 ```
-* Expand the root (second) partition using fdisk. The first partition listed is the boot
-partition, which shouldn't be changed. In the new partition, the "First sector" should be
-the value that was the "start" sector of the old root partition (137216 in the example
-below, but this varies depending on the version of the Raspbian image). The "Last sector"
-should be the default, and it should be significantly larger than it was before (6909951 vs.
-2715647 in the example).
 
+* Expand the root (second) partition using sfdisk:
 ```
-    > fdisk XXXX-XX-XX-raspbian-jessie-lite.img
+	> echo ", +" | sfdisk -N 2 XXXX-XX-XX-raspbian-jessie-lite.img
+	Checking that no-one is using this disk right now ... OK
 
-    Command (m for help): *p*
-    Disk XXXX-XX-XX-raspbian-jessie-lite.img: 3.3 GiB, 3537895424 bytes, 6909952 sectors
-    Units: sectors of 1 * 512 = 512 bytes
-    Sector size (logical/physical): 512 bytes / 512 bytes
-    I/O size (minimum/optimal): 512 bytes / 512 bytes
-    Disklabel type: dos
-    Disk identifier: 0x244b8248
+	Disk 2017-11-29-raspbian-stretch-lite.img: 3.7 GiB, 4005560320 bytes, 7823360 sectors
+	Units: sectors of 1 * 512 = 512 bytes
+	Sector size (logical/physical): 512 bytes / 512 bytes
+	I/O size (minimum/optimal): 512 bytes / 512 bytes
+	Disklabel type: dos
+	Disk identifier: 0x37665771
 
-    Device                               Boot  Start     End Sectors  Size Id Type
-    XXXX-XX-XX-raspbian-jessie-lite.img1        8192  137215  129024   63M  c W95 FAT32 (LBA)
-    XXXX-XX-XX-raspbian-jessie-lite.img2      137216 2715647 2578432  1.2G 83 Linux
+	Old situation:
 
-    Command (m for help): *d*
-    Partition number (1,2, default 2): *2*
+	Device                                Boot Start     End Sectors  Size Id Type
+	2017-11-29-raspbian-stretch-lite.img1       8192   93236   85045 41.5M  c W95 FAT32 (LBA)
+	2017-11-29-raspbian-stretch-lite.img2      94208 3629055 3534848  1.7G 83 Linux
 
-    Partition 2 has been deleted.
+	2017-11-29-raspbian-stretch-lite.img2:
+	New situation:
+	Disklabel type: dos
+	Disk identifier: 0x37665771
 
-    Command (m for help): *n*
-    Partition type
-       p   primary (1 primary, 0 extended, 3 free)
-       e   extended (container for logical partitions)
-    Select (default p):
+	Device                                Boot Start     End Sectors  Size Id Type
+	2017-11-29-raspbian-stretch-lite.img1       8192   93236   85045 41.5M  c W95 FAT32 (LBA)
+	2017-11-29-raspbian-stretch-lite.img2      94208 7823359 7729152  3.7G 83 Linux
 
-    Using default response p.
-    Partition number (2-4, default 2):
-    First sector (2048-6852607, default 2048): *137216*
-    Last sector, +sectors or +size{K,M,G,T,P} (131216-6909951, default 6909951):
-
-    Created a new partition 2 of type 'Linux' and of size 3.2 GiB.
-
-    Command (m for help): *w*
-    The partition table has been altered.
-    Syncing disks.
+	The partition table has been altered.
+	Syncing disks.
 ```
-* Mount the image in loop mode: first, edit shell_utils/basic_mount_image.sh to use the
-proper values for $BOOT_START and $ROOT_START, which you can obtain using fdisk and "p"
-as in the previous step. You must also change $IMAGE to the correct path. Then run:
-```
-    sudo ./shell_utils/basic_mount_image.md
-```
-* Verify the path to the mounted partitions in /dev, and resize the root (larger) filesystem
-to fill the new larger partition using resize2fs:
-```
-    > df | grep /mnt/arm
 
-    /dev/loop0                3927752   1955672   1794172  53% /mnt/rpi-root
-    /dev/loop1                  57288     18960     38328  34% /mnt/rpi-boot
-
-    > sudo resize2fs /dev/loop0
-```
+* Edit shell_utils/basic_mount_image.sh to use the correct image path ($IMAGE)
 
 Installing the dependencies
 ===========================
