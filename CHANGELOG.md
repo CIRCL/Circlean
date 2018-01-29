@@ -1,3 +1,8 @@
+Version 2.4 - 2018-01-29
+- Bump Raspbian
+- Bump PyCIRCLean
+- Wait 15s before shutdown (simplify debug)
+
 Version 2.3.1 - 2017-10-25
 - Bugfix for Raspberry Pi 3 that was causing rc.local to fail to boot
 - Turned off several networking related services: startup is much faster
