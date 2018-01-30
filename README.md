@@ -21,6 +21,17 @@ If you'd like to contribute to the project or build the image yourself, see
 [contributing.md](CONTRIBUTING.md) and the [setup instructions](doc/setup_with_proot.md).
 This is a work in progress - contributions are welcome.
 
+FAQ
+===
+
+**Question**: I can't login, what is the password? 
+
+**Answer**: For security reasons, it is **not possible** to login on the default image runinng CIRCLean/KittenGroomer (an attacker could exploit that functionality). 
+
+The only thing the default image does is booting, processing the content of the source key, copying over the files to the destination key, and finally shutting down.
+
+
+
 Why/What
 ========
 
