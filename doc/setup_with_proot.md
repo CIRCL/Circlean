@@ -88,7 +88,12 @@ file yields an unlimited number of "0x00" bytes.
 	Syncing disks.
 ```
 
-* Edit shell_utils/basic_mount_image.sh to use the correct image path ($IMAGE)
+* Edit `shell_utils/basic_mount_image.sh` to use the correct image path ($IMAGE)
+* Run the script
+```
+shell_utils/basic_mount_image.sh
+```
+
 
 Installing the dependencies
 ===========================
@@ -101,8 +106,11 @@ Installing the dependencies
 the mounted image.
 ```
     sudo proot -q qemu-arm -0 -r /mnt/rpi-root -b /mnt/rpi-boot:/boot -b /etc/resolv.conf:/etc/resolv.conf \
-		-b /dev/:/dev/ -b /sys/:/sys/ -b /proc/:/proc/ -b/run/shm:/run/shm  /bin/bash
+		-b /dev/:/dev/ -b /sys/:/sys/ -b /proc/:/proc/ -b /run/shm:/run/shm  /bin/bash
 ```
+
+**WARNING**: if you have a permission error, make sure the `/tmp` directory is mointed with the `exec` flag.
+
 * Change your locales (remove "en_GB.UTF-8 UTF-8", add "en_US.UTF-8 UTF-8"). The
 arrow keys move the cursor, spacebar selects/deselects a locale, tab moves the cursor
 to a different context, and enter lets you select "ok". This step might take some time,
@@ -133,12 +141,13 @@ kernel 3.17 and apt will use /dev/urandom when it fails:
     apt-get source -b p7zip-rar
     dpkg -i ${path to p7zip-rar .deb file}
 ```
-* Install the Python dependencies for PyCIRCLean/filecheck.py. PyCIRCLean is 3.5+
-compatible, so use pip -V to make sure you're using the right version of pip. You might
+* Install the Python dependencies for `PyCIRCLean/filecheck.py`. PyCIRCLean is 3.5+
+compatible, so use `pip -V` to make sure you're using the right version of pip. You might
 have to edit your PATH variable or use pip3 to get the correct pip. You also might want to
 verify that these dependencies are current by checking in the PyCIRCLean git repo.
 ```
     pip3 install -U pip
+    hash -r
     pip3 install olefile oletools exifread Pillow
     pip3 install git+https://github.com/Rafiot/officedissector.git
     pip3 install git+https://github.com/CIRCL/PyCIRCLean.git
@@ -148,19 +157,18 @@ verify that these dependencies are current by checking in the PyCIRCLean git rep
     useradd -m kitten
     chown -R kitten:kitten /home/kitten
 ```
-* Symlinking /proc/mounts to /etc/mtab is necessary because /etc/mtab cannot be edited by
-pmount if root is read-only. /proc/mounts is maintained by the kernel and is guaranteed to
+* (if needed) Symlinking `/proc/mounts` to `/etc/mtab` is necessary because `/etc/mtab` cannot be edited by
+`pmount` if root is read-only. `/proc/mounts` is maintained by the kernel and is guaranteed to
 be accurate.
 ```
     ln -s /proc/mounts /etc/mtab
 ```
-* Enable rc.local, which ensures that the code in /etc/rc.local is run on boot.
+* Enable `rc.local`, which ensures that the code in `/etc/rc.local` is run on boot.
 This is what triggers CIRCLean to run.
 ```
     systemctl enable rc-local.service
 ```
-* Turn off several networking related services. This speeds up boot and reduces the
-attack surface:
+* Turn off several networking related services. This speeds up boot and reduces the attack surface:
 ```
     systemctl disable networking.service
     systemctl disable bluetooth.service
@@ -184,6 +192,11 @@ manpage for more details. Make sure to include the trailing slashes on the paths
 * If have an external hardware led and you're using the led functionality, copy
 the led files from diode_controller/ as well.
 
+* Unmount the image
+```
+sudo umount /mnt/rpi-boot /mnt/rpi-root
+```
+
 Write the image on a SD card
 ============================
 
@@ -204,5 +217,6 @@ copying process:
 ```
 * Use fsck to verify the root partition:
 ```
-    sudo e2fsck -f /dev/sd<letter>2
+    sudo fsck.vfat -f /dev/<partition>1
+    sudo e2fsck -f /dev/<partition>2
 ```
