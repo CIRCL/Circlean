@@ -17,15 +17,15 @@ set -x
 
 # Double check the path and offsets as noted above!
 # Path to the image
-IMAGE='2018-01-29_CIRCLean.img'
+IMAGE='2018-11-13_CIRCLean.img'
 # Start sector of boot (first) partition
-BOOT_START=`sfdisk -J ${IMAGE} | grep img1 | sed -n 's/.*"start": \([[:digit:]]*\).*/\1/p'`
+BOOT_START=`sfdisk -J ${IMAGE} | grep img1 | sed -n 's/.*"start":*\([[:digit:]]*\).*/\1/p'`
 # Amount of sectors of boot (first) partition
-BOOT_SIZE=`sfdisk -J ${IMAGE} | grep img1 | sed -n 's/.*"size": \([[:digit:]]*\).*/\1/p'`
+BOOT_SIZE=`sfdisk -J ${IMAGE} | grep img1 | sed -n 's/.*"size":*\([[:digit:]]*\).*/\1/p'`
 # Start sector of root (second) partition
-ROOT_START=`sfdisk -J ${IMAGE} | grep img2 | sed -n 's/.*"start": \([[:digit:]]*\).*/\1/p'`
+ROOT_START=`sfdisk -J ${IMAGE} | grep img2 | sed -n 's/.*"start":*\([[:digit:]]*\).*/\1/p'`
 # Amount of sectors of root (second) partition
-ROOT_SIZE=`sfdisk -J ${IMAGE} | grep img2 | sed -n 's/.*"size": \([[:digit:]]*\).*/\1/p'`
+ROOT_SIZE=`sfdisk -J ${IMAGE} | grep img2 | sed -n 's/.*"size":*\([[:digit:]]*\).*/\1/p'`
 
 # Locations you'd like the partitions mounted
 BOOT_PATH='/mnt/rpi-boot'

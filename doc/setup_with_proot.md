@@ -28,7 +28,7 @@ Preparation
 ```
 * Install qemu, qemu-user-static, and proot if not already installed:
 ```
-    apt-get install qemu qemu-user-static proot
+    apt-get install qemu qemu-user-static qemu-user proot
 ```
 
 Download the Raspbian image
@@ -116,7 +116,10 @@ arrow keys move the cursor, spacebar selects/deselects a locale, tab moves the c
 to a different context, and enter lets you select "ok". This step might take some time,
 be patient:
 ```
-    dpkg-reconfigure locales
+    sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g' /etc/locale.gen
+    sed -i -e 's/en_GB.UTF-8 UTF-8/# en_US.UTF-8 UTF-8/g' /etc/locale.gen
+    locale-gen en_US.UTF-8
+    update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
 ```
 * In the image, make sure everything is up-to-date and remove old packages. You may have to
 run dist-upgrade and autoremove several times for everything to be installed, and a few
