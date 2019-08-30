@@ -91,7 +91,13 @@ file yields an unlimited number of "0x00" bytes.
 * Edit `shell_utils/basic_mount_image.sh` to use the correct image path ($IMAGE)
 * Run the script
 ```
-shell_utils/basic_mount_image.sh
+sudo shell_utils/basic_mount_image.sh
+```
+
+* Resize the filesystem
+
+```
+sudo resize2fs /dev/loop<ID of the loop FS mounted as /mnt/rpi-root>
 ```
 
 
@@ -102,8 +108,7 @@ Installing the dependencies
 ```
     sudo cp circlean_fs/root_partition/etc/systemd/system/rc-local.service /mnt/rpi-root/etc/systemd/system/rc-local.service
 ```
-* Use [proot](https://proot-me.github.io/) to enter the equivalent of a chroot inside
-the mounted image.
+* Use [proot](https://proot-me.github.io/) to enter the equivalent of a chroot inside the mounted image.
 ```
     sudo proot -q qemu-arm -0 -r /mnt/rpi-root -b /mnt/rpi-boot:/boot -b /etc/resolv.conf:/etc/resolv.conf \
 		-b /dev/:/dev/ -b /sys/:/sys/ -b /proc/:/proc/ -b /run/shm:/run/shm  /bin/bash
@@ -133,7 +138,9 @@ raspbian-sys-mods related installs may fail - you can ignore them:
 from qemu about "Unsupported syscall: 384", you can ignore them. `getrandom(2)` was implemented in
 kernel 3.17 and apt will use /dev/urandom when it fails:
 ```
-    apt-get install timidity git p7zip-full python3 python3-pip python3-lxml pmount ntfs-3g libjpeg-dev libtiff-dev libwebp-dev tk-dev python3-tk liblcms2-dev tcl-dev libopenjp2-7
+    apt-get install timidity git p7zip-full python3 python3-pip pmount ntfs-3g libjpeg-dev libtiff-dev \
+                    libwebp-dev tk-dev python3-tk liblcms2-dev tcl-dev libopenjp2-7 libxml2-dev \
+                    libssl-dev libffi-dev libxslt1-dev
 ```
 * Compile p7zip-rar from source. First, uncomment out the second line in /etc/apt/sources.list. Then:
 ```
@@ -144,27 +151,22 @@ kernel 3.17 and apt will use /dev/urandom when it fails:
     apt-get source -b p7zip-rar
     dpkg -i ${path to p7zip-rar .deb file}
 ```
-* Install the Python dependencies for `PyCIRCLean/filecheck.py`. PyCIRCLean is 3.5+
+* Install the Python dependencies for `PyCIRCLean/filecheck.py`. PyCIRCLean is 3.6+
 compatible, so use `pip -V` to make sure you're using the right version of pip. You might
 have to edit your PATH variable or use pip3 to get the correct pip. You also might want to
 verify that these dependencies are current by checking in the PyCIRCLean git repo.
 ```
     pip3 install -U pip
     hash -r
-    pip3 install olefile oletools exifread Pillow
-    pip3 install git+https://github.com/Rafiot/officedissector.git
-    pip3 install git+https://github.com/CIRCL/PyCIRCLean.git
+    cd /home/pi
+    git clone https://github.com/CIRCL/PyCIRCLean.git
+    cd PyCIRCLean
+    pip install -r requirements.txt
 ```
 * Create a new user named "kitten":
 ```
     useradd -m kitten
     chown -R kitten:kitten /home/kitten
-```
-* (if needed) Symlinking `/proc/mounts` to `/etc/mtab` is necessary because `/etc/mtab` cannot be edited by
-`pmount` if root is read-only. `/proc/mounts` is maintained by the kernel and is guaranteed to
-be accurate.
-```
-    ln -s /proc/mounts /etc/mtab
 ```
 * Enable `rc.local`, which ensures that the code in `/etc/rc.local` is run on boot.
 This is what triggers CIRCLean to run.
