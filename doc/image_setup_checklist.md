@@ -16,7 +16,7 @@
     - timidity
     - git
     - p7zip-full
-    - pmount ntfs-3g
+    - ntfs-3g exfat-fuse exfat-utils
     - python3 python3-pip
     - python3-lxml
     - libjpeg-dev libtiff-dev libwebp-dev liblcms2-dev tcl-dev tk-dev python3-tk

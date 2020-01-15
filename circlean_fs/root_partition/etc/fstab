@@ -4,3 +4,4 @@ proc            /proc           proc    defaults          0       0
 tmpfs   /tmp    tmpfs  rw,size=64M,noexec,nodev,nosuid,mode=1777   0  0
 tmpfs   /media  tmpfs  rw,size=64M,noexec,nodev,nosuid,mode=1777   0  0
 # a swapfile is not a swap partition, so no using swapon|off from here on, use  dphys-swapfile swap[on|off]  for that
+/dev/dest_key1 /media/kitten/dest_key auto rw,user,noauto,uid=1001 0 2

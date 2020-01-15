@@ -41,11 +41,11 @@ Download the Raspbian image
 ```
 * Verify the hash of the downloaded file and compare it to the hash on the server:
 ```
-    shasum XXXX-XX-XX-raspbian-jessie-lite.zip
+    shasum XXXX-XX-XX-raspbian-buster-lite.zip
 ```
 * Unpack it:
 ```
-    unzip XXXX-XX-XX-raspbian-jessie-lite.zip
+    unzip XXXX-XX-XX-raspbian-buster-lite.zip
 ```
 
 Add space to the image
@@ -96,6 +96,8 @@ sudo shell_utils/basic_mount_image.sh
 
 * Resize the filesystem
 
+Find the loop device of the root filesystem by running `losetup`, and it is the biggest one related to the image you mounted
+
 ```
 sudo resize2fs /dev/loop<ID of the loop FS mounted as /mnt/rpi-root>
 ```
@@ -138,9 +140,9 @@ raspbian-sys-mods related installs may fail - you can ignore them:
 from qemu about "Unsupported syscall: 384", you can ignore them. `getrandom(2)` was implemented in
 kernel 3.17 and apt will use /dev/urandom when it fails:
 ```
-    apt-get install timidity git p7zip-full python3 python3-pip pmount ntfs-3g libjpeg-dev libtiff-dev \
+    apt-get install timidity git p7zip-full python3 python3-pip ntfs-3g libjpeg-dev libtiff-dev \
                     libwebp-dev tk-dev python3-tk liblcms2-dev tcl-dev libopenjp2-7 libxml2-dev \
-                    libssl-dev libffi-dev libxslt1-dev
+                    libssl-dev libffi-dev libxslt1-dev exfat-fuse exfat-utils udisks2
 ```
 * Compile p7zip-rar from source. First, uncomment out the second line in /etc/apt/sources.list. Then:
 ```
@@ -161,7 +163,7 @@ verify that these dependencies are current by checking in the PyCIRCLean git rep
     cd /home/pi
     git clone https://github.com/CIRCL/PyCIRCLean.git
     cd PyCIRCLean
-    pip install -r requirements.txt
+    pip3 install -r requirements.txt
 ```
 * Create a new user named "kitten":
 ```

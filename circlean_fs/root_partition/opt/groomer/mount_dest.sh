@@ -9,9 +9,8 @@ clean(){
         echo "GROOMER: Cleaning up in mount_keys.sh."
         rm -rf "${DST_MNT}/IN_PROGRESS.txt"*
         ${SYNC}  # Write anything in memory to disk
-        # Unmount source and destination
-        pumount "${SRC_MNT}"
-        pumount "${DST_MNT}"
+        # Unmount destination
+        ${UMOUNT} -b "${DST_DEV}"
         exit
 }
 
@@ -37,13 +36,13 @@ check_dest_exists() {
 }
 
 unmount_dest_if_mounted() {
-    if ${MOUNT}|grep "${DST_MNT}"; then
-        ${PUMOUNT} "${DST_MNT}" || true
+    if /bin/mount|grep "${DST_MNT}"; then
+        ${UMOUNT} -b "${DST_DEV}" || true
     fi
 }
 
 mount_dest_partition() {
-    if ${PMOUNT} -w "${DST_DEV}1" "${DST_MNT}"; then  # pmount automatically mounts on /media/ (at /media/dst in this case).
+    if ${MOUNT} -o rw -b "${DST_DEV}1"; then  # mount automatically mounts on /media/ (at /media/dst in this case).
         echo "GROOMER: Destination USB device (${DST_DEV}1) mounted at ${DST_MNT}"
     else
         echo "GROOMER: Unable to mount ${DST_DEV}1 on ${DST_MNT}"

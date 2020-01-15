@@ -27,13 +27,6 @@ check_has_partitions () {
     fi
 }
 
-unmount_source_partition() {
-    # Unmount anything that is mounted on /media/src
-    if [ "$(${MOUNT} | grep -c "${SRC_MNT}")" -ne 0 ]; then
-            ${PUMOUNT} "${SRC_MNT}"
-    fi
-}
-
 run_groomer() {
     local dev_partitions
     # Find the partition names on the device
@@ -44,15 +37,18 @@ run_groomer() {
     for partition in ${dev_partitions}
     do
         echo "GROOMER: Processing partition ${partition}"
-        unmount_source_partition
         # Mount the current partition in write mode
-        ${PMOUNT} -w ${partition} "${SRC_MNT}"
+        SRC_MNT=`${MOUNT} -o rw -b ${partition}| sed -ne 's/Mounted \(.*\) at \(\/media\/kitten\/.*\).$/\2/p'`
+        if [ -z "$SRC_MNT" ]; then
+            echo "Unable to mount source partition (${partition})."
+            continue
+        fi
         # Mark any autorun.inf files as dangerous on the source device to be extra careful
         ls "${SRC_MNT}" | grep -i autorun.inf | xargs -I {} mv "${SRC_MNT}"/{} "${SRC_MNT}"/DANGEROUS_{}_DANGEROUS || true
         # Unmount and remount the current partition in read-only mode
-        ${PUMOUNT} "${SRC_MNT}"
+        ${UMOUNT} -b "${partition}"
 
-        if ${PMOUNT} -r "${partition}" "${SRC_MNT}"; then
+        if ${MOUNT} -o ro -b "${partition}"; then
             echo "GROOMER: ${partition} mounted at ${SRC_MNT}"
 
             # Create a directory on ${DST_MNT} named PARTION_$PARTCOUNT
@@ -66,6 +62,7 @@ run_groomer() {
             if [ "${DEBUG}" = true ]; then
                 ls -lR "${target_dir}"
             fi
+            ${UMOUNT} -b "${partition}"
         else
             # Previous command (mounting current partition) failed
             echo "GROOMER: Unable to mount ${partition} on ${SRC_MNT}"

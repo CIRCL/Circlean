@@ -24,9 +24,9 @@ This is a work in progress - contributions are welcome.
 FAQ
 ===
 
-**Question**: I can't login, what is the password? 
+**Question**: I can't login, what is the password?
 
-**Answer**: For security reasons, it is **not possible** to login on the default image runinng CIRCLean/KittenGroomer (an attacker could exploit that functionality). 
+**Answer**: For security reasons, it is **not possible** to login on the default image runinng CIRCLean/KittenGroomer (an attacker could exploit that functionality).
 
 The only thing the default image does is booting, processing the content of the source key, copying over the files to the destination key, and finally shutting down.
 
@@ -42,31 +42,31 @@ your computer directly. The official project page can be found at [https://www.c
 The Raspberry Pi Foundation has a [blog post](https://www.raspberrypi.org/blog/kittengroomercirclean-data-security-for-journalists-and-activists/) with more information
 about an older version of the project and details of the inspiration behind it.
 
-CIRCLean is currently tested to work with USB keys that have FAT32, NTFS, or
-ext2/3/4 filesystems (ext* filesystems can only be used as source keys, not destination
-keys). Currently, exFAT is not supported due to lack of support for this format in pmount.
-The vast majority of USB keys will be FAT32 or NTFS.
+CIRCLean is currently tested to work with USB keys that have FAT32, NTFS, exFAT or
+ext2/3/4 filesystems (ext\* filesystems can only be used as source keys, not destination
+keys).
+The vast majority of USB keys will be FAT32, NTFS, and exFAT.
 
 The content of the untrusted key will be copied or/and converted to the second
 (blank) key following these rules (based on the mime type as determined by libmagic):
 - Direct copy of:
-  - Plain text files (mime type: text/*)
-  - Audio files (mime type: audio/*)
-  - Video files (mime type: video/*)
-  - Example files (mime type: example/*)
-  - Multipart files (mime type: multipart/*)
+  - Plain text files (mime type: text/\*)
+  - Audio files (mime type: audio/\*)
+  - Video files (mime type: video/\*)
+  - Example files (mime type: example/\*)
+  - Multipart files (mime type: multipart/\*)
   - xml files, after being converted to text files
   - Octet-stream files
 - Copied after verification:
-  - Image files after verifying that they are not compression bombs (mime type: image/*)
+  - Image files after verifying that they are not compression bombs (mime type: image/\*)
   - PDF files, after marking as dangerous if they contain malicious content
-  - msword|vnd.openxmlformats-officedocument.*|vnd.ms-*|vnd.oasis.opendocument*, after
+  - msword|vnd.openxmlformats-officedocument.\*|vnd.ms-\*|vnd.oasis.opendocument\*, after
     parsing with oletools/olefile and marking as dangerous if the parsing fails.
-- Copied but marked as dangerous (DANGEROUS_filename_DANGEROUS)
-  - Message files (mime type: message/*)
-  - Model files (mime type: model/*)
+- Copied but marked as dangerous (DANGEROUS\_filename\_DANGEROUS)
+  - Message files (mime type: message/\*)
+  - Model files (mime type: model/\*)
   - x-dosexec (executable)
-- Compressed files (zip|x-rar|x-bzip2|x-lzip|x-lzma|x-lzop|x-xz|x-compress|x-gzip|x-tar|*compressed):
+- Compressed files (zip|x-rar|x-bzip2|x-lzip|x-lzma|x-lzop|x-xz|x-compress|x-gzip|x-tar|\*compressed):
   - Archives are unpacked, with the unpacking process stopped after 2 levels of archives
     to prevent archive bombs.
   - The above rules are applied recursively to the unpacked files.

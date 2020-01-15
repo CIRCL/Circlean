@@ -21,7 +21,7 @@ Dependencies
 * Timidity for playing midi files
 * Git for installing some Python dependencies
 * 7Zip for unpacking archives
-* Pmount and ntfs-3g for mounting usb key partitions
+* ntfs-3g, exfat-fuse for mounting usb key partitions
 * Python 3 and pip for installing and running Python dependencies
 * Python3-lxml for handling ooxml and other Office files in filecheck.py
 * libjpeg-dev, libtiff-dev, libwebp-dev, liblcms2-dev, tcl-dev, tk-dev, and python-tk for various image formats (dependencies for pillow)

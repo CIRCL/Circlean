@@ -17,7 +17,7 @@ set -x
 
 # Double check the path and offsets as noted above!
 # Path to the image
-IMAGE='2019-07-10-raspbian-buster-lite.img'
+IMAGE='2019-09-26-raspbian-buster-lite.img'
 # Start sector of boot (first) partition
 BOOT_START=`sfdisk -J ${IMAGE} | grep img1 | sed -n 's/.*"start":*\([[:digit:]]*\).*/\1/p'`
 # Amount of sectors of boot (first) partition
