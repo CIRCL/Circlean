@@ -158,8 +158,6 @@ compatible, so use `pip -V` to make sure you're using the right version of pip. 
 have to edit your PATH variable or use pip3 to get the correct pip. You also might want to
 verify that these dependencies are current by checking in the PyCIRCLean git repo.
 ```
-    pip3 install -U pip
-    hash -r
     cd /home/pi
     git clone https://github.com/CIRCL/PyCIRCLean.git
     cd PyCIRCLean
