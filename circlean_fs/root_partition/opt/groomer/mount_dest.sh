@@ -10,7 +10,7 @@ clean(){
         rm -rf "${DST_MNT}/IN_PROGRESS.txt"*
         ${SYNC}  # Write anything in memory to disk
         # Unmount destination
-        ${UMOUNT} -b "${DST_DEV}"
+        ${UMOUNT} -b "${DST_DEV}1"
         exit
 }
 
@@ -37,7 +37,7 @@ check_dest_exists() {
 
 unmount_dest_if_mounted() {
     if /bin/mount|grep "${DST_MNT}"; then
-        ${UMOUNT} -b "${DST_DEV}" || true
+        ${UMOUNT} -b "${DST_DEV}1" || true
     fi
 }
 
