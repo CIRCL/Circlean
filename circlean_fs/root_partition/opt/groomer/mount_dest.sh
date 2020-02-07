@@ -22,15 +22,15 @@ check_not_root() {
 }
 
 check_source_exists() {
-    if [ ! -b "${SRC_DEV}" ]; then
-        echo "GROOMER: Source device (${SRC_DEV}) does not exist."
+    if [ ! -b "${SRC_DEV}1" ]; then
+        echo "GROOMER: Source device (${SRC_DEV}1) does not exist."
         exit
     fi
 }
 
 check_dest_exists() {
-    if [ ! -b "${DST_DEV}" ]; then
-        echo "GROOMER: Destination device (${DST_DEV}) does not exist."
+    if [ ! -b "${DST_DEV}1" ]; then
+        echo "GROOMER: Destination device (${DST_DEV}1) does not exist."
         exit
     fi
 }
