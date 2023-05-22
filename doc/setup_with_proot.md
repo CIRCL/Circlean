@@ -5,7 +5,7 @@ There is always a prebuilt image available for download and installation as
 described in the [README](../README.md). If you'd like to build the project yourself,
 there are several steps involved:
 
-* Downloading a generic Raspbian Lite image
+* Downloading a generic RaspiOS Lite image
 * Resizing the image and partition
 * Downloading and building the dependencies
 * Modifying the image configuration
@@ -28,13 +28,13 @@ Preparation
 ```
 * Install qemu, qemu-user-static, and proot if not already installed:
 ```
-    apt-get install qemu qemu-user-static qemu-user proot
+    apt-get install qemu qemu-user-static qemu-user proot xz-utils
 ```
 
 Download the Raspbian image
 ==============================
 
-* Get the most recent version of Raspbian Jessie Lite from https://downloads.raspberrypi.org/raspbian_lite/images/:
+* Get the most recent version of RaspiOS Lite from [here.](https://downloads.raspberrypi.org/raspios_lite_armhf/images/):
 
 ```
    wget https://downloads.raspberrypi.org/raspbian_lite_latest
