@@ -59,7 +59,7 @@ file yields an unlimited number of "0x00" bytes.
 
 * Expand the root (second) partition using sfdisk:
 ```	
-	echo ", +" | sfdisk -N 2 2023-05-03-raspios-bullseye-armhf-lite.img 
+	echo ", +" | sfdisk -N 2 XXXX-XX-XX-raspios-bullseye-armhf-lite.img 
 
 Checking that no-one is using this disk right now ... OK
 
