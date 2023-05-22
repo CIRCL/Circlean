@@ -74,7 +74,7 @@ Old situation:
 
 Device                                      Boot  Start     End Sectors  Size Id Type
 2023-05-03-raspios-bullseye-armhf-lite.img1        8192  532479  524288  256M  c W95 FAT32 (LBA)
-2023-05-03-raspios-bullseye-armhf-lite.img2      532480 8036351 7503872  3.6G 83 Linux
+2023-05-03-raspios-bullseye-armhf-lite.img2      532480 8036351 7503872  1.6G 83 Linux
 
 2023-05-03-raspios-bullseye-armhf-lite.img2: 
 New situation:
