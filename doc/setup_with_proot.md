@@ -163,7 +163,7 @@ verify that these dependencies are current by checking in the PyCIRCLean git rep
     cd /home/pi
     git clone https://github.com/CIRCL/PyCIRCLean.git
     cd PyCIRCLean
-    pip3 install -r requirements.txt
+    #pip3 install -r requirements.txt
 ```
 * Create a new user named "kitten":
 ```
