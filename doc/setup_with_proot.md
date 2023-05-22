@@ -34,7 +34,7 @@ Preparation
 Download the Raspbian image
 ==============================
 
-* Get the most recent version of RaspiOS Lite from [here.](https://downloads.raspberrypi.org/raspios_lite_armhf/images/):
+* Get the most recent version of RaspiOS Lite from [here](https://downloads.raspberrypi.org/raspios_lite_armhf/images/):
 
 ```
    wget https://downloads.raspberrypi.org/raspbian_lite_latest
@@ -45,7 +45,7 @@ Download the Raspbian image
 ```
 * Unpack it:
 ```
-    unzip XXXX-XX-XX-raspbian-buster-lite.zip
+    unxz XXXX-XX-XX-raspios-bullseye-armhf-lite.img.xz 
 ```
 
 Add space to the image
@@ -54,38 +54,40 @@ Add space to the image
 * Use dd to add 2GB (2048 blocks of 1024k each). Using /dev/zero as the input
 file yields an unlimited number of "0x00" bytes.
 ```
-    > dd if=/dev/zero bs=1024k count=2048 >> XXXX-XX-XX-raspbian-jessie-lite.img
+    dd if=/dev/zero bs=1024k count=2048 >> XXXX-XX-XX-raspios-bullseye-armhf-lite.img
 ```
 
 * Expand the root (second) partition using sfdisk:
-```
-	> echo ", +" | sfdisk -N 2 XXXX-XX-XX-raspbian-jessie-lite.img
-	Checking that no-one is using this disk right now ... OK
+```	
+	echo ", +" | sfdisk -N 2 2023-05-03-raspios-bullseye-armhf-lite.img 
 
-	Disk 2017-11-29-raspbian-stretch-lite.img: 3.7 GiB, 4005560320 bytes, 7823360 sectors
-	Units: sectors of 1 * 512 = 512 bytes
-	Sector size (logical/physical): 512 bytes / 512 bytes
-	I/O size (minimum/optimal): 512 bytes / 512 bytes
-	Disklabel type: dos
-	Disk identifier: 0x37665771
+Checking that no-one is using this disk right now ... OK
 
-	Old situation:
+Disk 2023-05-03-raspios-bullseye-armhf-lite.img: 3.83 GiB, 4114612224 bytes, 8036352 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0x4c4e106f
 
-	Device                                Boot Start     End Sectors  Size Id Type
-	2017-11-29-raspbian-stretch-lite.img1       8192   93236   85045 41.5M  c W95 FAT32 (LBA)
-	2017-11-29-raspbian-stretch-lite.img2      94208 3629055 3534848  1.7G 83 Linux
+Old situation:
 
-	2017-11-29-raspbian-stretch-lite.img2:
-	New situation:
-	Disklabel type: dos
-	Disk identifier: 0x37665771
+Device                                      Boot  Start     End Sectors  Size Id Type
+2023-05-03-raspios-bullseye-armhf-lite.img1        8192  532479  524288  256M  c W95 FAT32 (LBA)
+2023-05-03-raspios-bullseye-armhf-lite.img2      532480 8036351 7503872  3.6G 83 Linux
 
-	Device                                Boot Start     End Sectors  Size Id Type
-	2017-11-29-raspbian-stretch-lite.img1       8192   93236   85045 41.5M  c W95 FAT32 (LBA)
-	2017-11-29-raspbian-stretch-lite.img2      94208 7823359 7729152  3.7G 83 Linux
+2023-05-03-raspios-bullseye-armhf-lite.img2: 
+New situation:
+Disklabel type: dos
+Disk identifier: 0x4c4e106f
 
-	The partition table has been altered.
-	Syncing disks.
+Device                                      Boot  Start     End Sectors  Size Id Type
+2023-05-03-raspios-bullseye-armhf-lite.img1        8192  532479  524288  256M  c W95 FAT32 (LBA)
+2023-05-03-raspios-bullseye-armhf-lite.img2      532480 8036351 7503872  3.6G 83 Linux
+
+The partition table has been altered.
+Syncing disks.
+
 ```
 
 * Edit `shell_utils/basic_mount_image.sh` to use the correct image path ($IMAGE)
