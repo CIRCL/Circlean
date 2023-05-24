@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-# Last update 16/05/2023 (dd/mm/yyyy) by Léo DONATH-ILIC
+# Last update 16/05/2023 (dd/mm/yyyy)
 
 # This script will mount a given image in loop mode.
 # Make sure to change the path and offsets for the image you use. You can get
@@ -22,10 +22,9 @@ set -e
 
 # Double check the path and offsets as noted above!
 # Path to the image
-IMAGE='/home/leo/Downloads/2023-05-03-raspios-bullseye-arm64-lite.img' 
+IMAGE='' 
 
 
-######################### NEW ######################### 
 # Start sector of boot (first) partition
 BOOT_START=`sfdisk -J ${IMAGE} | grep -m 1 start | sed 's/"start":\|"\|,//g'`
 # Amount of sectors of boot (first) partition
@@ -34,28 +33,13 @@ BOOT_SIZE=`sfdisk -J ${IMAGE} | grep -m 2 size | tail -n +2 | sed 's/"size":\|"\
 ROOT_START=`sfdisk -J ${IMAGE} | grep -m 2 start | tail -n +2 | sed 's/"start":\|"\|,//g'`
 # Amount of sectors of root (second) partition
 ROOT_SIZE=`sfdisk -J ${IMAGE} | grep -m 3 size | tail -n +3 | sed 's/"size":\|"\|,//g'`
-######################### OLD #########################
-# Start sector of boot (first) partition
-#BOOT_START=`sfdisk -J ${IMAGE} | grep img1 | sed -n 's/.*"start":*\([[:digit:]]*\).*/\1/p'`
-# Amount of sectors of boot (first) partition
-#BOOT_SIZE=`sfdisk -J ${IMAGE} | grep img1 | sed -n 's/.*"size":*\([[:digit:]]*\).*/\1/p'`
-# Start sector of root (second) partition
-#ROOT_START=`sfdisk -J ${IMAGE} | grep img2 | sed -n 's/.*"start":*\([[:digit:]]*\).*/\1/p'`
-# Amount of sectors of root (second) partition
-#ROOT_SIZE=`sfdisk -J ${IMAGE} | grep img2 | sed -n 's/.*"size":*\([[:digit:]]*\).*/\1/p'`
+
 
 # Locations you'd like the partitions mounted
 BOOT_PATH='/mnt/rpi-boot'
 ROOTFS_PATH='/mnt/rpi-root'
 
 # Calculate offsets for each partition
-
-############# OLD ############# 
-#offset_boot=$((${BOOT_START} * 512))
-#sizelimit_boot=$((${BOOT_SIZE} * 512))
-#offset_rootfs=$((${ROOT_START} * 512))
-#sizelimit_rootfs=$((${ROOT_SIZE} * 512))
-############# NEW #############
 offset_boot=$[BOOT_START * 512]
 sizelimit_boot=$[BOOT_SIZE * 512]
 offset_rootfs=$[ROOT_START * 512]
